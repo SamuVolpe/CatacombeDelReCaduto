@@ -8,8 +8,8 @@ public class Enemy extends Entity{
         itemsDrop=new ArrayList<Item>();
     }
 
-    public Enemy(int currentlyLifePoints, int attack, int defense, int maxLifePoints, String name, String description) {
-        super(currentlyLifePoints, attack, defense, maxLifePoints, name, description);
+    public Enemy(int defense, String description, String name, Room room, int maxLifePoints, int attack, int currentlyLifePoints) {
+        super(defense, description, name, room, maxLifePoints, attack, currentlyLifePoints);
         itemsDrop=new ArrayList<Item>();
     }
 
