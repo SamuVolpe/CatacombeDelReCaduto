@@ -4,23 +4,20 @@ public class Player extends Entity{
     private Weapon weapon;
     private Armor armor;
     private int score;
-    private Room room;
 
-    public Player(Inventory inventory, Weapon weapon, Armor armor, int score, Room room) {
+    public Player(Inventory inventory, Weapon weapon, Armor armor, int score) {
         this.inventory = inventory;
         this.weapon = weapon;
         this.armor = armor;
         this.score = score;
-        this.room = room;
     }
 
-    public Player(int currentlyLifePoints, int attack, int defense, int maxLifePoints, String name, String description, Inventory inventory, Weapon weapon, Armor armor, int score, Room room) {
-        super(currentlyLifePoints, attack, defense, maxLifePoints, name, description);
+    public Player(int defense, String description, String name, Room room, int maxLifePoints, int attack, int currentlyLifePoints, Inventory inventory, Weapon weapon, Armor armor, int score) {
+        super(defense, description, name, room, maxLifePoints, attack, currentlyLifePoints);
         this.inventory = inventory;
         this.weapon = weapon;
         this.armor = armor;
         this.score = score;
-        this.room = room;
     }
 
     public Inventory getInventory() {
@@ -61,13 +58,4 @@ public class Player extends Entity{
         this.score += score;
     }
 
-    public Room getRoom() {
-        return room;
-    }
-
-    public void setRoom(Room room) {
-        if( room != null ){
-            this.room = room;
-        }
-    }
 }

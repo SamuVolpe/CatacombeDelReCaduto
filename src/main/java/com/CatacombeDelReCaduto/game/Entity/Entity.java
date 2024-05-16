@@ -3,19 +3,22 @@ public class Entity {
 
     private int currentlyLifePoints, attack, defense, maxLifePoints;
 
+    private Room room;
+
     private String name, description;
 
     public Entity() {
 
     }
 
-    public Entity(int currentlyLifePoints, int attack, int defense, int maxLifePoints, String name, String description) {
-        this.currentlyLifePoints = maxLifePoints;
-        this.attack = attack;
+    public Entity(int defense, String description, String name, Room room, int maxLifePoints, int attack, int currentlyLifePoints) {
         this.defense = defense;
-        this.maxLifePoints = maxLifePoints;
-        this.name = name;
         this.description = description;
+        this.name = name;
+        this.room = room;
+        this.maxLifePoints = maxLifePoints;
+        this.attack = attack;
+        this.currentlyLifePoints = currentlyLifePoints;
     }
 
     public int getMaxLifePoints() {
@@ -78,5 +81,15 @@ public class Entity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Room getRoom() {
+        return room;
+    }
+
+    public void setRoom(Room room) {
+        if( room != null ){
+            this.room = room;
+        }
     }
 }
