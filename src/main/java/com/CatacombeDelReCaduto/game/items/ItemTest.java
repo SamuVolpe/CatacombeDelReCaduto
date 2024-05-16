@@ -1,4 +1,4 @@
-package com.CatacombeDelReCaduto.game.item;
+package com.CatacombeDelReCaduto.game.items;
 
 public class ItemTest {
     public static void main(String[] args){

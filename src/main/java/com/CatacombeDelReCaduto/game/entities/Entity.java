@@ -1,4 +1,7 @@
-package com.CatacombeDelReCaduto.game.Entity;
+package com.CatacombeDelReCaduto.game.entities;
+
+import com.CatacombeDelReCaduto.game.rooms.*;
+
 public class Entity {
 
     private int currentlyLifePoints, attack, defense, maxLifePoints;

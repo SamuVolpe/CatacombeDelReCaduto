@@ -1,4 +1,4 @@
-package com.CatacombeDelReCaduto.game.Entity;
+package com.CatacombeDelReCaduto.game.items;
 
 public class Weapon extends Item {
     private int damage;

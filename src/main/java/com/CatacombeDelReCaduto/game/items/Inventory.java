@@ -1,4 +1,4 @@
-package com.CatacombeDelReCaduto.game.item;
+package com.CatacombeDelReCaduto.game.items;
 
 import java.util.ArrayList;
 import java.util.HashMap;

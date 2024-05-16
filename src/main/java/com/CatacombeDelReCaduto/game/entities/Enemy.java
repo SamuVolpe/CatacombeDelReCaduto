@@ -1,4 +1,7 @@
-package com.CatacombeDelReCaduto.game.Entity;
+package com.CatacombeDelReCaduto.game.entities;
+
+import com.CatacombeDelReCaduto.game.items.Item;
+import com.CatacombeDelReCaduto.game.rooms.*;
 import java.util.ArrayList;
 
 public class Enemy extends Entity{
