@@ -1,3 +1,4 @@
+package com.CatacombeDelReCaduto.game.Entity;
 public class Entity {
 
     private int currentlyLifePoints, attack, defense, maxLifePoints;

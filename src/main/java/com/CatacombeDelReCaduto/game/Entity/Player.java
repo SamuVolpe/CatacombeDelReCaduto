@@ -1,3 +1,4 @@
+package com.CatacombeDelReCaduto.game.Entity;
 public class Player extends Entity{
     private Inventory inventory;
     private Weapon weapon;
