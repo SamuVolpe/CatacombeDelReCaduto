@@ -12,10 +12,11 @@ public class Enemy extends Entity{
         itemsDrop=new ArrayList<Item>();
     }
 
-    public void addItem(Item item){
+    public boolean addItem(Item item){
         if( item != null ){
-            itemsDrop.add(item);
+            return itemsDrop.add(item);
         }
+        return false;
     }
 
     public boolean removeItem(Item item){

@@ -1,5 +1,3 @@
-import java.lang.Math;
-
 public class Entity {
 
     private int currentlyLifePoints, attack, defense, maxLifePoints;
