@@ -3,6 +3,9 @@ package com.CatacombeDelReCaduto.game.items;
 public class Food extends Item{
     private int healthRecoveryAmount;
 
+    public Food() {
+    }
+
     public Food(String description, String name, int weight, int healthRecoveryAmount) {
         super(description, name, weight);
         this.healthRecoveryAmount = healthRecoveryAmount;

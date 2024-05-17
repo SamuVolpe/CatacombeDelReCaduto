@@ -4,28 +4,25 @@ import com.CatacombeDelReCaduto.game.rooms.*;
 
 public class Entity {
 
-    private int currentlyLifePoints, attack, defense, maxLifePoints;
-
-    private Room room;
-
     private String name, description;
+
+    private int health, maxHealth, attack, defense;
 
     public Entity() {
 
     }
 
-    public Entity(int defense, String description, String name, Room room, int maxLifePoints, int attack, int currentlyLifePoints) {
+    public Entity(String name, String description, int maxHealth, int attack, int defense) {
         this.defense = defense;
         this.description = description;
         this.name = name;
-        this.room = room;
-        this.maxLifePoints = maxLifePoints;
+        this.maxHealth = maxHealth;
         this.attack = attack;
-        this.currentlyLifePoints = currentlyLifePoints;
+        this.health = maxHealth;
     }
 
-    public int getMaxLifePoints() {
-        return maxLifePoints;
+    public int getMaxHealth() {
+        return maxHealth;
     }
 
     public int getAttack() {
@@ -41,19 +38,19 @@ public class Entity {
         }
     }
 
-    public int getCurrentlyLifePoints() {
-        return currentlyLifePoints;
+    public int getHealth() {
+        return health;
     }
 
-    public void setCurrentlyLifePoints(int lifePoints) {
-        if( (currentlyLifePoints + lifePoints) > maxLifePoints){
-            this.currentlyLifePoints = maxLifePoints;
+    public void setHealth(int lifePoints) {
+        if( (health + lifePoints) > maxHealth){
+            this.health = maxHealth;
         }
-        else if( (currentlyLifePoints + lifePoints) < 0){
-            this.currentlyLifePoints = 0;
+        else if( (health + lifePoints) < 0){
+            this.health = 0;
         }
         else{
-            this.currentlyLifePoints += lifePoints;
+            this.health += lifePoints;
         }
     }
 
@@ -84,15 +81,5 @@ public class Entity {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Room getRoom() {
-        return room;
-    }
-
-    public void setRoom(Room room) {
-        if( room != null ){
-            this.room = room;
-        }
     }
 }

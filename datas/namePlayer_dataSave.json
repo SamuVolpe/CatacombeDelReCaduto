@@ -1,0 +1,18 @@
+{
+	"player" : {
+		"health" : 50,
+		//altro
+		"inventory" : ["item1", "item2"],
+	},
+	"rooms" : [
+		"nome stanza" : {
+			"items" : ["spada", "ancora"],
+			"enemies" : ["scheletro", "scheletro"]
+		},
+	]
+	"npcs" : [
+		"nome npc" : {
+			"missionComplete" : true
+		},
+	]
+}

@@ -5,15 +5,10 @@ import com.CatacombeDelReCaduto.game.rooms.*;
 import java.util.ArrayList;
 
 public class Enemy extends Entity{
-    private ArrayList<Item> itemsDrop;
+    private ArrayList<Item> itemsDrop = new ArrayList<Item>();
 
-    public Enemy() {
-        itemsDrop=new ArrayList<Item>();
-    }
-
-    public Enemy(int defense, String description, String name, Room room, int maxLifePoints, int attack, int currentlyLifePoints) {
-        super(defense, description, name, room, maxLifePoints, attack, currentlyLifePoints);
-        itemsDrop=new ArrayList<Item>();
+    public Enemy(String name, String description, int maxHealth, int attack, int defense) {
+        super(name, description, maxHealth, attack, defense);
     }
 
     public boolean addItem(Item item){

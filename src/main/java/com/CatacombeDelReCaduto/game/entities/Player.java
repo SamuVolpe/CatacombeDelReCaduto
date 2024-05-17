@@ -4,24 +4,16 @@ import com.CatacombeDelReCaduto.game.items.*;
 import com.CatacombeDelReCaduto.game.rooms.*;
 
 public class Player extends Entity{
-    private Inventory inventory;
+    private int score = 0;
     private Weapon weapon;
     private Armor armor;
-    private int score;
+    private Inventory inventory = new Inventory();
+    private Room room = null;
 
-    public Player(Inventory inventory, Weapon weapon, Armor armor, int score) {
-        this.inventory = inventory;
+    public Player(String name, String description, int maxHealth, int attack, int defense, Weapon weapon, Armor armor) {
+        super(name, description, maxHealth, attack, defense);
         this.weapon = weapon;
         this.armor = armor;
-        this.score = score;
-    }
-
-    public Player(int defense, String description, String name, Room room, int maxLifePoints, int attack, int currentlyLifePoints, Inventory inventory, Weapon weapon, Armor armor, int score) {
-        super(defense, description, name, room, maxLifePoints, attack, currentlyLifePoints);
-        this.inventory = inventory;
-        this.weapon = weapon;
-        this.armor = armor;
-        this.score = score;
     }
 
     public Inventory getInventory() {
@@ -58,8 +50,15 @@ public class Player extends Entity{
         return score;
     }
 
-    public void setScore(int score) {
+    public void addScore(int score) {
         this.score += score;
     }
 
+    public Room getRoom() {
+        return room;
+    }
+
+    public void setRoom(Room room) {
+        this.room = room;
+    }
 }

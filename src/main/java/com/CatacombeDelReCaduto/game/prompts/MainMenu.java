@@ -1,5 +1,9 @@
 package com.CatacombeDelReCaduto.game.prompts;
 
+import com.CatacombeDelReCaduto.game.Game;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.TreeMap;
@@ -19,7 +23,6 @@ public class MainMenu {
     }
 
     public void run() {
-        System.out.println("Benvenuto nelle Catacombe!\n");
         Command command = null;
 
         try (Scanner scanner = new Scanner(System.in)) {
@@ -36,7 +39,7 @@ public class MainMenu {
                 try {
                     int choice = Integer.parseInt(userCommand.trim());
                     if (choice > 0 && choice <= COMMANDS.size())
-                        command = COMMANDS.get(choice);
+                        command = COMMANDS.get(choice-1);
                 } catch (NumberFormatException e) {
                     command = null;
                 }
@@ -45,17 +48,15 @@ public class MainMenu {
                 if (command == null)
                     command = parse(userCommand);
 
-            }while (command == null);
-        } catch (Exception ex) {
-            logger.severe(ex.getMessage());
-        }
+            } while (command == null);
 
-        switch (command.getCommandId()) {
-            case CommandId.NEW_GAME -> commandStartNewGame();
-            case CommandId.LOAD_GAME -> commandLoadGame();
-            case CommandId.DELETE_GAME -> commandDeleteGame();
-            case CommandId.EXIT_GAME -> commandExit();
-            default -> throw new RuntimeException("Command not implemented");
+            switch (command.getCommandId()) {
+                case CommandId.NEW_GAME -> commandStartNewGame();
+                case CommandId.LOAD_GAME -> commandLoadGame();
+                case CommandId.DELETE_GAME -> commandDeleteGame();
+                case CommandId.EXIT_GAME -> commandExit();
+                default -> throw new RuntimeException("Command not implemented");
+            }
         }
     }
 
@@ -99,19 +100,28 @@ public class MainMenu {
     private void commandStartNewGame() {
         // inizia una nuova partita
         logger.info("start");
+
+        // carica dati gioco
+        Game game = new Game();
+        // carica dati nuovo gioco
+        game.startNew();
+        // avvia gioco
+        game.run();
     }
 
     private void commandLoadGame() {
+        logger.info("load");
         // guarda partite salvate
         // mostra menu per decidere quale partita caricare
         // carica la partita scelta
-        logger.info("load");
+        // avvia partita
     }
 
     private void commandDeleteGame() {
+        logger.info("delete");
         // mostra menu partite
         // elimina partita scelta
-        logger.info("delete");
+        // rimostra menu iniziale??
     }
 
     private void commandExit() {
