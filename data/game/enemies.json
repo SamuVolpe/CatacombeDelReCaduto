@@ -1,0 +1,17 @@
+{
+	"scheletro" : {
+		"name": "scheletro",
+		"description": "un non morto invocato dal lich",
+		"maxHealth": 1,
+		"attack": 10,
+		"defense" : 10,
+		"drop" : ["coltello", "pane"]
+	},
+	"spettro" :{
+		"name": "spettro",
+		"description": "umano ucciso dal lich la cui anima e` legata al labirinto e che cerca salvezza",
+		"maxHealth": 1,
+		"attack": 10,
+		"defense" : 10
+	}
+}

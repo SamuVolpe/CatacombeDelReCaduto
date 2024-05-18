@@ -8,15 +8,15 @@ import java.util.Map;
 public class Room {
     private String name;
     private String description;
-    private Room north = null;
-    private Room south = null;
-    private Room east = null;
-    private Room west = null;
+    // nord,sud,est,ovest
+    private Room[] nearRooms = null;
     private Npc npc = null;
     private List<Item> items = null;
     private List<Enemy> enemies = null;
     private Map<String, String> examinables = null; //todo ancora da implementare, key nome oggetto esaminabile, value dialogo di risposta
-    // todo da capire come fare per le robe esaminabili
+
+    public Room() {
+    }
 
     public Room(String name, String description) {
         this.name = name;
@@ -31,36 +31,12 @@ public class Room {
         return description;
     }
 
-    public Room getNorth() {
-        return north;
+    public Room[] getNearRooms() {
+        return nearRooms;
     }
 
-    public void setNorth(Room north) {
-        this.north = north;
-    }
-
-    public Room getSouth() {
-        return south;
-    }
-
-    public void setSouth(Room south) {
-        this.south = south;
-    }
-
-    public Room getEast() {
-        return east;
-    }
-
-    public void setEast(Room east) {
-        this.east = east;
-    }
-
-    public Room getWest() {
-        return west;
-    }
-
-    public void setWest(Room west) {
-        this.west = west;
+    public void setNearRooms(Room[] nearRooms) {
+        this.nearRooms = nearRooms;
     }
 
     public Npc getNpc() {
@@ -85,5 +61,13 @@ public class Room {
 
     public void setEnemies(List<Enemy> enemies) {
         this.enemies = enemies;
+    }
+
+    public Map<String, String> getExaminables() {
+        return examinables;
+    }
+
+    public void setExaminables(Map<String, String> examinables) {
+        this.examinables = examinables;
     }
 }

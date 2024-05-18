@@ -1,17 +1,17 @@
-[
-	{
+{
+	"pane" : {
 		"type": "food",
 		"name": "pane",
 		"description": "del pane",
 		"weight": 1,
 		"healthRecoveryAmount": 10
 	},
-	{
+	"coltello" :{
 		"type": "weapon",
 		"name": "coltello",
 		"description": "un coltello arrugginito",
 		"weight": 1,
 		"damage": 5
 	}
-]
+}
 

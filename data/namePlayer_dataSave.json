@@ -7,7 +7,7 @@
 	"rooms" : [
 		"nome stanza" : {
 			"items" : ["spada", "ancora"],
-			"enemies" : ["scheletro", "scheletro"]
+			"enemies" : ["scheletro", "scheletro armato"]
 		},
 	]
 	"npcs" : [

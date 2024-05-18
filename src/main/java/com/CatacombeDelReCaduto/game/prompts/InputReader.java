@@ -4,15 +4,13 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.logging.Logger;
 
-public class CmdHandler {
-    private static final Logger logger =  Logger.getLogger(CmdHandler.class.getName());
-
-    public static void sendOutput(String msg){
-        System.out.println(msg);
-    }
+public class InputReader {
+    private static final Logger logger =  Logger.getLogger(InputReader.class.getName());
 
     public static String getInput(){
         try {
+            System.out.print("> ");
+
             Scanner scanner = new Scanner(System.in);
             return scanner.nextLine();
         }

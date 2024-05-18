@@ -1,0 +1,18 @@
+{
+	"inizio" : {
+		"name": "stanza inziale",
+		"description": "L'aria e' fredda...",
+		"nearRooms": ["fine", null, null, null],
+		"examinables" : {
+			"muro" : "oooh che bel muro",
+			"tavolo" : "oooh che bel tavolo"
+		},
+		"items" : ["coltello", "pane"],
+		"enemies" : ["scheletro", "spettro", "spettro"]
+	},
+	"fine" :{
+		"name": "stanza due",
+		"description": "L'aria e' calda...",
+		"nearRooms": [null, "inizio", null, null]
+	}
+}

@@ -1,18 +1,18 @@
 package com.CatacombeDelReCaduto.game.items;
 
 public class Armor extends Item {
-    private int defence;
+    private int defense;
 
-    public Armor(String description, String name, int weight, int defence) {
+    public Armor(String description, String name, int weight, int defense) {
         super(description, name, weight);
-        this.defence = defence;
+        this.defense = defense;
     }
 
-    public int getDefence() {
-        return defence;
+    public int getDefense() {
+        return defense;
     }
 
-    public void setDefence(int defence) {
-        this.defence = defence;
+    public void setDefense(int defense) {
+        this.defense = defense;
     }
 }

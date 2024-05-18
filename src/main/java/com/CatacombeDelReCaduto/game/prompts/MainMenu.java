@@ -3,7 +3,6 @@ package com.CatacombeDelReCaduto.game.prompts;
 import com.CatacombeDelReCaduto.game.Game;
 
 import java.util.List;
-import java.util.Scanner;
 import java.util.TreeMap;
 import java.util.logging.Logger;
 
@@ -29,7 +28,7 @@ public class MainMenu {
             print();
 
             // prendo input
-            userCommand = CmdHandler.getInput();
+            userCommand = InputReader.getInput();
 
             // verifico se l'utente ha inputato il numero del menu
             try {
@@ -73,20 +72,6 @@ public class MainMenu {
         }
 
         System.out.print(menu);
-    }
-
-    // traduce il comando dato in un Command
-    private Command parse(String userCommand) {
-        String command = Command.removeNaturalText(userCommand.toLowerCase().trim());
-
-        if (!command.isEmpty())
-            for (var entry : commandMap.entrySet()) {
-                if (command.equals(entry.getKey()))
-                    return entry.getValue();
-            }
-
-        System.out.println("Comando non riconosciuto");
-        return null;
     }
 
     // region comandi MainMenu
