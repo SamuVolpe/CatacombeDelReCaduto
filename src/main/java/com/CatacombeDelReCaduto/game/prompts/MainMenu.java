@@ -2,8 +2,6 @@ package com.CatacombeDelReCaduto.game.prompts;
 
 import com.CatacombeDelReCaduto.game.Game;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.TreeMap;
@@ -25,38 +23,34 @@ public class MainMenu {
     public void run() {
         Command command = null;
 
-        try (Scanner scanner = new Scanner(System.in)) {
-            String userCommand = "";
-            do {
-                // stampo menu
-                print();
+        String userCommand = "";
+        do {
+            // stampo menu
+            print();
 
-                // prendo input
-                if (scanner.hasNextLine())
-                    userCommand = scanner.nextLine();
+            // prendo input
+            userCommand = CmdHandler.getInput();
 
-                // verifico se l'utente ha inputato il numero del menu
-                try {
-                    int choice = Integer.parseInt(userCommand.trim());
-                    if (choice > 0 && choice <= COMMANDS.size())
-                        command = COMMANDS.get(choice-1);
-                } catch (NumberFormatException e) {
-                    command = null;
-                }
-
-                // se comando non trovato parso il linguaggio
-                if (command == null)
-                    command = parse(userCommand);
-
-            } while (command == null);
-
-            switch (command.getCommandId()) {
-                case CommandId.NEW_GAME -> commandStartNewGame();
-                case CommandId.LOAD_GAME -> commandLoadGame();
-                case CommandId.DELETE_GAME -> commandDeleteGame();
-                case CommandId.EXIT_GAME -> commandExit();
-                default -> throw new RuntimeException("Command not implemented");
+            // verifico se l'utente ha inputato il numero del menu
+            try {
+                int choice = Integer.parseInt(userCommand.trim());
+                if (choice > 0 && choice <= COMMANDS.size())
+                    command = COMMANDS.get(choice - 1);
+            } catch (NumberFormatException _) {
             }
+
+            // se comando non trovato parso il linguaggio
+            if (command == null)
+                command = Command.parse(userCommand, commandMap);
+
+        } while (command == null);
+
+        switch (command.getId()) {
+            case CommandId.NEW_GAME -> commandStartNewGame();
+            case CommandId.LOAD_GAME -> commandLoadGame();
+            case CommandId.DELETE_GAME -> commandDeleteGame();
+            case CommandId.EXIT_GAME -> commandExit();
+            default -> throw new RuntimeException("Command not implemented");
         }
     }
 

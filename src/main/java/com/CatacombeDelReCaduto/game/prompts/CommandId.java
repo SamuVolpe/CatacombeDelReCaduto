@@ -5,4 +5,5 @@ public enum CommandId {
     LOAD_GAME,
     DELETE_GAME,
     EXIT_GAME,
+    MOVE,
 }

@@ -3,17 +3,19 @@ package com.CatacombeDelReCaduto.game.rooms;
 import com.CatacombeDelReCaduto.game.entities.*;
 import com.CatacombeDelReCaduto.game.items.*;
 import java.util.List;
+import java.util.Map;
 
 public class Room {
     private String name;
     private String description;
-    private Room nord = null;
-    private Room sud = null;
-    private Room est = null;
-    private Room ovest = null;
+    private Room north = null;
+    private Room south = null;
+    private Room east = null;
+    private Room west = null;
     private Npc npc = null;
     private List<Item> items = null;
     private List<Enemy> enemies = null;
+    private Map<String, String> examinables = null; //todo ancora da implementare, key nome oggetto esaminabile, value dialogo di risposta
     // todo da capire come fare per le robe esaminabili
 
     public Room(String name, String description) {
@@ -29,36 +31,36 @@ public class Room {
         return description;
     }
 
-    public Room getNord() {
-        return nord;
+    public Room getNorth() {
+        return north;
     }
 
-    public void setNord(Room nord) {
-        this.nord = nord;
+    public void setNorth(Room north) {
+        this.north = north;
     }
 
-    public Room getSud() {
-        return sud;
+    public Room getSouth() {
+        return south;
     }
 
-    public void setSud(Room sud) {
-        this.sud = sud;
+    public void setSouth(Room south) {
+        this.south = south;
     }
 
-    public Room getEst() {
-        return est;
+    public Room getEast() {
+        return east;
     }
 
-    public void setEst(Room est) {
-        this.est = est;
+    public void setEast(Room east) {
+        this.east = east;
     }
 
-    public Room getOvest() {
-        return ovest;
+    public Room getWest() {
+        return west;
     }
 
-    public void setOvest(Room ovest) {
-        this.ovest = ovest;
+    public void setWest(Room west) {
+        this.west = west;
     }
 
     public Npc getNpc() {
