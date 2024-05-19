@@ -107,6 +107,14 @@ public class Game {
         rooms = GameLoader.loadRooms(items, enemies);
         player.setRoom(rooms.get("inizio"));
 
+        // crea cartella di salvataggio se non esiste
+        File directory = new File("data\\player");
+        if (!directory.exists()) {
+            boolean maked = directory.mkdir();
+            if (!maked)
+                throw new RuntimeException("Impossibile creare la cartella per il salvataggio dei dati, verificare i permessi del programma");
+        }
+
         // salvataggio iniziale (file save)
         save();
 

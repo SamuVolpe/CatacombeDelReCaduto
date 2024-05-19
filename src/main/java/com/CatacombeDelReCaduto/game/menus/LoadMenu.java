@@ -27,6 +27,7 @@ public class LoadMenu extends Menu {
     public Save display() {
         if (games.isEmpty()){
             System.out.println("Nessuna partita esistente");
+            return null;
         }
 
         int choice = -1;

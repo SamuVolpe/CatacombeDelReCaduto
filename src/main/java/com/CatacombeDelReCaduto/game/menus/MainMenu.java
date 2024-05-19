@@ -53,6 +53,9 @@ public class MainMenu extends CommandMenu {
         LoadMenu loadMenu = new LoadMenu();
         Save loadedGameData = loadMenu.display();
 
+        if (loadedGameData == null)
+            return;
+
         // handle save into game con un metodo di game
     }
 

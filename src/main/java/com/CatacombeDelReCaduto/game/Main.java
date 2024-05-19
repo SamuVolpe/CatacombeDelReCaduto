@@ -13,8 +13,12 @@ public class Main {
     public static void main(String[] args){
         // qua magari fare un pre check della connessione con il cloud
 
-        // avvio menu iniziale
-        MainMenu mainMenu = new MainMenu();
-        mainMenu.display();
+        try {
+            // avvio menu iniziale
+            MainMenu mainMenu = new MainMenu();
+            mainMenu.display();
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
     }
 }
