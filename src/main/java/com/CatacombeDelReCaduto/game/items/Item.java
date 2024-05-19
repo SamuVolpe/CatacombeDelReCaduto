@@ -11,7 +11,7 @@ public class Item implements Cloneable {
     public Item() {
     }
 
-    public Item(String description, String name, int weight) {
+    public Item(String name, String description, int weight) {
         this.description = description;
         this.name = name;
         this.weight = weight;

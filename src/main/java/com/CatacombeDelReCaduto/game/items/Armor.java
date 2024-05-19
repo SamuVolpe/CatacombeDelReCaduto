@@ -3,8 +3,8 @@ package com.CatacombeDelReCaduto.game.items;
 public class Armor extends Item {
     private int defense;
 
-    public Armor(String description, String name, int weight, int defense) {
-        super(description, name, weight);
+    public Armor(String name, String description, int weight, int defense) {
+        super(name, description, weight);
         this.defense = defense;
     }
 

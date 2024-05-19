@@ -31,7 +31,7 @@ public class Game {
             ,new Command(CommandId.MOVE, List.of("v", "vai"), "vai <direzione> - Spostati in un'altra stanza", 1)
             ,new Command(CommandId.TAKE, List.of("p", "prendi"), "Prendi oggetto", 1));
     // mappa per il parse dei comandi
-    private Map<String, Command> commandMap = null;
+    private TreeMap<String, Command> commandMap = null;
 
     private Player player = null;
 
@@ -187,47 +187,6 @@ public class Game {
         for (var command : COMMANDS)
             for (var alias : command.getAliases())
                 commandMap.put(alias, command);
-    }
-
-    // carica dati stanze
-    private void loadRooms() {
-        // stanze todo manca roba esaminabile
-        Room uno = new Room("Iniziale", "L'aria e' fredda...");
-        Room due = new Room("Seconda", "L'aria e' calda...");
-
-        // stanze adiacenti
-        //uno.setNorth(due);
-        //due.setSouth(uno);
-
-        // oggetti in stanza
-        // mostri in stanza
-        // esaminabili in stanza
-
-        // carica in lista
-//        rooms.add(uno);
-//        rooms.add(due);
-    }
-
-    // riempie stanze con la roba per un nuovo gioco
-    private void setupNewGameRooms(){
-//        ArrayList<Item> itemsToAdd = new ArrayList<>();
-//        ArrayList<Enemy> enemiesToAdd = new ArrayList<>();
-//
-//        // trova stanza a cui aggiungere roba
-//        Room uno = rooms.stream().filter(x -> x.getName().equalsIgnoreCase("iniziale")).findFirst().get();
-//
-//        // clear liste di supporto
-//        itemsToAdd.clear();
-//        enemiesToAdd.clear();
-//
-//        // aggiungo oggetti
-//        //itemsToAdd.add(items.stream().filter(x -> x.getName().equalsIgnoreCase("pane")).findFirst().get().clone());
-//        // aggiungo mostri
-//        //enemiesToAdd.add(enemies.stream().filter(x -> x.getName().equalsIgnoreCase("scheletro")).findFirst().get().clone());
-//
-//        // aggiungo a stanza
-//        uno.setItems(itemsToAdd);
-//        uno.setEnemies(enemiesToAdd);
     }
 
     // region COMMAND HANDLER
