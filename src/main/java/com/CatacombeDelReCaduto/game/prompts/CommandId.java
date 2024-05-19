@@ -13,4 +13,5 @@ public enum CommandId {
     EQUIP,
     UNEQUIP,
     EXAMINE,
+    VIEW,
 }

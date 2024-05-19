@@ -34,7 +34,8 @@ public class Game {
             ,new Command(CommandId.THROW, List.of("b", "butta"), "b <oggetto> - Butta oggetto", 1)
             ,new Command(CommandId.EQUIP, List.of("e", "equipaggia"), "e <oggetto> - Equipaggia oggetto", 1)
             ,new Command(CommandId.UNEQUIP, List.of("d", "disequipaggia"), "d <oggetto> - Togli oggetto dall'equipaggiamento", 1)
-            ,new Command(CommandId.EXAMINE, List.of("e", "esamina"), "e <oggetto> - Esamina oggetto", 1));
+            ,new Command(CommandId.EXAMINE, List.of("e", "esamina"), "e <oggetto> - Esamina oggetto", 1)
+            ,new Command(CommandId.VIEW, List.of("visualizza"), "visualizza <'inventario'/'stato'> - Visualizza l'inventario o lo stato del giocatore", 1));
     // mappa per il parse dei comandi
     private TreeMap<String, Command> commandMap = null;
 
@@ -218,6 +219,7 @@ public class Game {
             case CommandId.EQUIP -> commandEquip(command.getArgs()[0]);
             case CommandId.UNEQUIP -> commandUnequip(command.getArgs()[0]);
             case CommandId.EXAMINE -> commandExamine(command.getArgs()[0]);
+            case CommandId.VIEW -> commandView(command.getArgs()[0]);
             default -> throw new RuntimeException("Command not implemented");
         }
     }
@@ -272,8 +274,9 @@ public class Game {
         boolean flag = inventory.addItem(toTake);
         if (flag) {
             currentRoomItems.remove(toTake);
+            System.out.println("Oggetto raccolto con successo");
         } else {
-            System.out.println("Impossibile raccogliere l'oggetto: l'oggetto e' troppo pesante per l'inventario, e' necessario alleggerirlo");
+            System.out.println("Impossibile raccogliere l'oggetto: l'oggetto e' troppo pesante (peso=" + toTake.getWeight() + ") per l'inventario, e' necessario alleggerirlo");
         }
     }
 
@@ -290,6 +293,14 @@ public class Game {
     }
 
     private void commandExamine(String arg) {
+    }
+
+    private void commandView(String arg) {
+        if (arg.equalsIgnoreCase("inventario")) {
+            System.out.println(player.getInventory());
+        } else if (arg.equalsIgnoreCase("stato")) {
+            System.out.println(player);
+        }
     }
 
     // endregion

@@ -3,9 +3,9 @@ package com.CatacombeDelReCaduto.game.items;
 public class ItemTest {
     public static void main(String[] args){
         Inventory inventario = new Inventory();
-        Food mela = new Food("mela nutriente", "mela", 1, 5);
-        Armor helmet = new Armor("forte elmo", "elmo", 5, 10);
-        Item lanterna = new Item("utile", "lanterna", 2);
+        Food mela = new Food("mela", "mela nutriente", 1, 5);
+        Armor helmet = new Armor("elmo", "forte elmo", 5, 10);
+        Item lanterna = new Item("lanterna", "utile", 2);
         inventario.addItem(mela);
         inventario.addItem(lanterna);
         inventario.addItem(helmet);

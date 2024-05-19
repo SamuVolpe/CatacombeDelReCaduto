@@ -82,4 +82,12 @@ public class Entity {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    @Override
+    public String toString() {
+        return "health=" + health +
+                "/" + maxHealth +
+                ", attack=" + attack +
+                ", defense=" + defense;
+    }
 }

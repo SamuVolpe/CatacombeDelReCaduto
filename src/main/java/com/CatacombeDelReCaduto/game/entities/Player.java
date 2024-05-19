@@ -61,4 +61,12 @@ public class Player extends Entity{
     public void setRoom(Room room) {
         this.room = room;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() +
+                " score=" + score +
+                ", weapon=" + weapon +
+                ", armor=" + armor;
+    }
 }
