@@ -21,17 +21,17 @@ public class MainMenu extends CommandMenu {
 
     // region comandi MainMenu
 
-    protected void commandsHandler(Command command){
-        switch (command.getId()) {
+    protected boolean commandsHandler(Command command){
+        return switch (command.getId()) {
             case CommandId.NEW_GAME -> commandStartNewGame();
             case CommandId.LOAD_GAME -> commandLoadGame();
             case CommandId.DELETE_GAME -> commandDeleteGame();
-            case CommandId.EXIT_GAME -> commandExit();
+            case CommandId.EXIT_GAME -> true;
             default -> throw new RuntimeException("Command not implemented");
-        }
+        };
     }
 
-    private void commandStartNewGame() {
+    private boolean commandStartNewGame() {
         // inizia una nuova partita
         logger.info("start");
 
@@ -41,9 +41,11 @@ public class MainMenu extends CommandMenu {
         game.startNew();
         // avvia gioco
         game.run();
+
+        return true;
     }
 
-    private void commandLoadGame() {
+    private boolean commandLoadGame() {
         logger.info("load");
         // guarda partite salvate
         // mostra menu per decidere quale partita caricare
@@ -54,21 +56,22 @@ public class MainMenu extends CommandMenu {
         Save loadedGameData = loadMenu.display();
 
         if (loadedGameData == null)
-            return;
+            return false;
 
         // handle save into game con un metodo di game
+
+        return true;
     }
 
-    private void commandDeleteGame() {
+    private boolean commandDeleteGame() {
         logger.info("delete");
         // mostra menu partite
         // elimina partita scelta
         // rimostra menu iniziale??
-    }
 
-    private void commandExit() {
-        // esce dal gioco
-        logger.info("exit");
+        DeleteMenu deleteMenu = new DeleteMenu();
+        deleteMenu.display();
+        return false;
     }
 
     // endregion

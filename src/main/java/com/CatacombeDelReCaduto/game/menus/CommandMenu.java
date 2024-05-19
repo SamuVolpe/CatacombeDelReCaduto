@@ -23,15 +23,14 @@ public abstract class CommandMenu extends Menu {
     }
 
     public void display() {
-        Command command = null;
-
-        String userCommand = "";
+        boolean handled = false;
         do {
             // stampo menu
             print();
 
             // prendo input
-            userCommand = InputReader.getInput();
+            String userCommand = InputReader.getInput();
+            Command command = null;
 
             // verifico se l'utente ha inputato il numero del menu
             int choice = userChoice(userCommand);
@@ -39,20 +38,23 @@ public abstract class CommandMenu extends Menu {
             // se comando non trovato parso il linguaggio
             if (choice < 1)
                 command = Command.parse(userCommand, commandMap);
-            // se comando trovato get command
+                // se comando trovato get command
             else
                 command = commands.get(choice - 1);
 
-        } while (command == null);
+            // gestisco comando
+            if (command != null)
+                handled = commandsHandler(command);
 
-        commandsHandler(command);
+        } while (!handled);
     }
 
     /**
      * implementare switch che chiama il metodo corretto in base al comando
      * @param command comando dato dall'utente
+     * @return true se il comando e` stato gestito correttamente
      */
-    protected abstract void commandsHandler(Command command);
+    protected abstract boolean commandsHandler(Command command);
 
     private void initCommandMap() {
         commandMap = new TreeMap<>();

@@ -1,7 +1,8 @@
 package com.CatacombeDelReCaduto.game.menus;
 
-import com.CatacombeDelReCaduto.game.jsonHandlers.*;
-
+import com.CatacombeDelReCaduto.game.jsonHandlers.FilesPath;
+import com.CatacombeDelReCaduto.game.jsonHandlers.GameLoader;
+import com.CatacombeDelReCaduto.game.jsonHandlers.Save;
 import com.CatacombeDelReCaduto.game.prompts.InputReader;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,25 +10,26 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Logger;
 
-public class LoadMenu extends Menu {
+public class DeleteMenu extends Menu {
     private final Logger logger =  Logger.getLogger(this.getClass().getName());
     private Map<Long, String> games = new TreeMap<>();
 
-    public LoadMenu(){
+    public DeleteMenu(){
         // carica giochi da file
         games = GameLoader.loadGames();
         // inizializza lista da visualizzare nel menu
         initMenuItems(new ArrayList<>(games.values()));
     }
 
-    public Save display() {
+    public void display() {
         if (games.isEmpty()){
             System.out.println("Nessuna partita esistente");
-            return null;
+            return;
         }
 
         int choice = -1;
@@ -41,7 +43,7 @@ public class LoadMenu extends Menu {
             String userCommand = InputReader.getInput();
 
             if (userCommand.equalsIgnoreCase("esci"))
-                return null;
+                return;
 
             // verifico se l'utente ha inputato il numero del menu
             choice = userChoice(userCommand);
@@ -50,11 +52,23 @@ public class LoadMenu extends Menu {
 
         // trova gioco scelto e lo carica nella classe
         Map.Entry<Long, String> game = new ArrayList<>(games.entrySet()).get(choice - 1);
-        return loadGame(game.getKey(), game.getValue());
+        deleteGame(game.getKey(), game.getValue());
     }
 
-    private Save loadGame(Long gameId, String playerName){
-        // carica gioco dal file
-        return new Save();
+    private void deleteGame(Long gameId, String playerName){
+        // elimina gioco da mappa
+        games.remove(gameId);
+
+        // init file
+        File file = new File(FilesPath.SAVES_FILE_PATH);
+        ObjectMapper mapper = new ObjectMapper();
+
+        // Scrivi la mappa aggiornata nel file JSON
+        try {
+            mapper.writeValue(file, games);
+            logger.info("saves updated");
+        } catch (IOException ex) {
+            logger.severe(ex.getMessage());
+        }
     }
 }

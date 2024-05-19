@@ -13,9 +13,26 @@ import java.io.IOException;
 import java.util.*;
 import java.util.logging.Logger;
 
-// classe che carica i dati del gioco
+// classe che carica i dati del gioco da file
 public class GameLoader {
     public static final Logger logger =  Logger.getLogger(GameLoader.class.getName());
+
+    public static Map<Long, String> loadGames(){
+        File file = new File(FilesPath.SAVES_FILE_PATH);
+        // Controlla se il file esiste
+        if (file.exists()) {
+            ObjectMapper mapper = new ObjectMapper();
+
+            // Leggi il file JSON e deserializza nella mappa
+            try {
+                return mapper.readValue(file, new TypeReference<Map<Long, String>>() {
+                });
+            } catch (IOException ex) {
+                logger.severe(ex.getMessage());
+            }
+        }
+        return new TreeMap<>();
+    }
 
     public static Map<String, Item> loadItems(){
         // Path del file JSON
