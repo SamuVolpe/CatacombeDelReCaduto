@@ -27,10 +27,15 @@ public class Game {
 
     // comandi di gioco
     public static final List<Command> COMMANDS = List.of(
-            new Command(CommandId.EXIT_GAME, List.of("esci", "esci partita"), "Inizia una nuova partita")
-            ,new Command(CommandId.HELP, List.of("aiuto", "comandi", "lista comandi"), "Mostra tutti i comandi")
-            ,new Command(CommandId.MOVE, List.of("v", "vai"), "vai <direzione> - Spostati in un'altra stanza", 1)
-            ,new Command(CommandId.TAKE, List.of("p", "prendi"), "Prendi oggetto", 1));
+            new Command(CommandId.EXIT_GAME, List.of("esci", "esci partita"), "esci - Inizia una nuova partita")
+            ,new Command(CommandId.HELP, List.of("aiuto", "comandi", "lista comandi"), "aiuto - Mostra tutti i comandi")
+            ,new Command(CommandId.MOVE, List.of("v", "vai"), "v <direzione> - Spostati in un'altra stanza", 1)
+            ,new Command(CommandId.TAKE, List.of("p", "prendi"), "p <oggetto> - Prendi oggetto", 1)
+            ,new Command(CommandId.USE, List.of("u", "usa"), "u <oggetto> - Usa oggetto", 1)
+            ,new Command(CommandId.THROW, List.of("b", "butta"), "b <oggetto> - Butta oggetto", 1)
+            ,new Command(CommandId.EQUIP, List.of("e", "equipaggia"), "e <oggetto> - Equipaggia oggetto", 1)
+            ,new Command(CommandId.UNEQUIP, List.of("d", "disequipaggia"), "d <oggetto> - Togli oggetto dall'equipaggiamento", 1)
+            ,new Command(CommandId.EXAMINE, List.of("e", "esamina"), "e <oggetto> - Esamina oggetto", 1));
     // mappa per il parse dei comandi
     private TreeMap<String, Command> commandMap = null;
 
@@ -205,6 +210,12 @@ public class Game {
         //due.setSouth(uno);
 
         // oggetti in stanza
+        List<Item> RoomUnoItemsList = new ArrayList<Item>();
+        Food mela = new Food("mela nutriente", "mela", 1, 5);
+        Armor helmet = new Armor("forte elmo", "elmo", 5, 10);
+        Item lanterna = new Item("utile", "lanterna", 2);
+        due.setItems(RoomUnoItemsList);
+
         // mostri in stanza
         // esaminabili in stanza
 
@@ -246,15 +257,24 @@ public class Game {
             case CommandId.HELP -> commandHelp();
             case CommandId.MOVE -> commandMove(command.getArgs()[0]);
             case CommandId.TAKE -> commandTake(command.getArgs()[0]);
+            case CommandId.USE -> commandUse(command.getArgs()[0]);
+            case CommandId.THROW -> commandThrow(command.getArgs()[0]);
+            case CommandId.EQUIP -> commandEquip(command.getArgs()[0]);
+            case CommandId.UNEQUIP -> commandUnequip(command.getArgs()[0]);
+            case CommandId.EXAMINE -> commandExamine(command.getArgs()[0]);
             default -> throw new RuntimeException("Command not implemented");
         }
     }
+
+
+
+
 
     private void commandHelp() {
         String output = "Lista di tutti i comandi possibili\n\n";
         // todo in caso aggiungi name a command per roba tipo >> v <direzione> - descrizione
         for (var command : COMMANDS)
-            output += command.getAliases().getFirst() + " - " + command.getDescription() + "\n";
+            output += command.getDescription() + "\n";
 
         System.out.print(output);
     }
@@ -285,8 +305,39 @@ public class Game {
         }
     }
 
-    private void commandTake(String arg){
+    private void commandTake(String arg) {
+        //se in player.getroom.items c'è l'item da prendere faccio un inventory.addItem e un Room.removeItem (se non è troppo pesante)
+        Room currentRoom = player.getRoom();
+        List<Item> currentRoomItems = currentRoom.getItems();
+        Item toTake;
+        try {
+            toTake = currentRoomItems.stream().filter(x -> x.getName().equalsIgnoreCase(arg)).findFirst().get();
+        } catch (NullPointerException | NoSuchElementException a) {
+            System.out.println("Impossibile raccogliere l'oggetto: l'oggetto non e' presente nella stanza");
+            return;
+        }
+        Inventory inventory = player.getInventory();
+        boolean flag = inventory.addItem(toTake);
+        if (flag) {
+            currentRoomItems.remove(toTake);
+        } else {
+            System.out.println("Impossibile raccogliere l'oggetto: l'oggetto e' troppo pesante per l'inventario, e' necessario alleggerirlo");
+        }
+    }
 
+    private void commandUse(String arg) {
+    }
+
+    private void commandThrow(String arg) {
+    }
+
+    private void commandEquip(String arg) {
+    }
+
+    private void commandUnequip(String arg) {
+    }
+
+    private void commandExamine(String arg) {
     }
 
     // endregion

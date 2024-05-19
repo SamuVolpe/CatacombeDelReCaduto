@@ -8,4 +8,9 @@ public enum CommandId {
     HELP,
     MOVE,
     TAKE,
+    USE,
+    THROW,
+    EQUIP,
+    UNEQUIP,
+    EXAMINE,
 }
