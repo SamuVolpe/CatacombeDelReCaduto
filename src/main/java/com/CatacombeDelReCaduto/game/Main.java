@@ -1,9 +1,7 @@
 package com.CatacombeDelReCaduto.game;
 
-import com.CatacombeDelReCaduto.game.prompts.MainMenu;
+import com.CatacombeDelReCaduto.game.menus.MainMenu;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.logging.Logger;
 
 /**
@@ -17,6 +15,6 @@ public class Main {
 
         // avvio menu iniziale
         MainMenu mainMenu = new MainMenu();
-        mainMenu.run();
+        mainMenu.display();
     }
 }

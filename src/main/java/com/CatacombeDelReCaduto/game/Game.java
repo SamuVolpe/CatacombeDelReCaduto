@@ -11,7 +11,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.io.File;
@@ -23,7 +22,7 @@ public class Game {
     public static final Logger logger =  Logger.getLogger(Game.class.getName());
 
     // data file di salvataggio
-    long creationDate;
+    private long creationDate;
 
     // comandi di gioco
     public static final List<Command> COMMANDS = List.of(
@@ -32,7 +31,7 @@ public class Game {
             ,new Command(CommandId.MOVE, List.of("v", "vai"), "vai <direzione> - Spostati in un'altra stanza", 1)
             ,new Command(CommandId.TAKE, List.of("p", "prendi"), "Prendi oggetto", 1));
     // mappa per il parse dei comandi
-    private TreeMap<String, Command> commandMap = null;
+    private Map<String, Command> commandMap = null;
 
     private Player player = null;
 
@@ -95,18 +94,16 @@ public class Game {
         // todo controllo non inserisca un nome strano in quando dovra' essere parte del fileName
         String name = InputReader.getInput();
 
-        logger.info(name);
-
         // crea player
         player = new Player(name, "giocatore", 30, 5, 5, null, null);
         creationDate = System.currentTimeMillis();
 
         // setup stanze
         rooms = GameLoader.loadRooms(items, enemies);
-        player.setRoom(rooms.values().stream().findFirst().get());
+        player.setRoom(rooms.get("inizio"));
 
         // salvataggio iniziale (file save)
-        //save();
+        save();
 
         // crea record in file giochi
         saveNewGame();
@@ -128,17 +125,15 @@ public class Game {
 
     private void saveNewGame (){
         ObjectMapper mapper = new ObjectMapper();
-        mapper.enable(SerializationFeature.INDENT_OUTPUT);
-
         Map<Long, String> map = new HashMap<>();
 
         // Controlla se il file esiste
-        File file = new File("data\\saves.json");
+        File file = new File(FilesPath.SAVES_FILE_PATH);
         if (file.exists()) {
             // Leggi il file JSON e deserializza nella mappa
             try {
                 map = mapper.readValue(file, new TypeReference<Map<Long, String>>() {});
-                logger.info("File letto con successo");
+                logger.info("saves file readed");
             } catch (IOException ex) {
                 logger.severe(ex.getMessage());
             }
@@ -150,7 +145,7 @@ public class Game {
         // Scrivi la mappa aggiornata nel file JSON
         try {
             mapper.writeValue(file, map);
-            logger.info("Mappa aggiornata e scritta nel file con successo.");
+            logger.info("saves updated");
         } catch (IOException ex) {
             logger.severe(ex.getMessage());
         }
@@ -158,7 +153,7 @@ public class Game {
 
     private void save() {
         // path todo da ritoccare in base a menu di load
-        String filePath = "datas\\" + player.getName() + "_" + creationDate + ".json";
+        String filePath = FilesPath.PLAYER_ROOT + "\\" + player.getName() + "_" + creationDate + ".json";
 
         // salva gioco su file
 
