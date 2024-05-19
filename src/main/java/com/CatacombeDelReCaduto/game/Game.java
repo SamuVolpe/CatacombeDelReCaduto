@@ -11,7 +11,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.io.File;
@@ -23,7 +22,7 @@ public class Game {
     public static final Logger logger =  Logger.getLogger(Game.class.getName());
 
     // data file di salvataggio
-    long creationDate;
+    private long creationDate;
 
     // comandi di gioco
     public static final List<Command> COMMANDS = List.of(
@@ -100,18 +99,16 @@ public class Game {
         // todo controllo non inserisca un nome strano in quando dovra' essere parte del fileName
         String name = InputReader.getInput();
 
-        logger.info(name);
-
         // crea player
         player = new Player(name, "giocatore", 30, 5, 5, null, null);
         creationDate = System.currentTimeMillis();
 
         // setup stanze
         rooms = GameLoader.loadRooms(items, enemies);
-        player.setRoom(rooms.values().stream().findFirst().get());
+        player.setRoom(rooms.get("inizio"));
 
         // salvataggio iniziale (file save)
-        //save();
+        save();
 
         // crea record in file giochi
         saveNewGame();
@@ -133,17 +130,15 @@ public class Game {
 
     private void saveNewGame (){
         ObjectMapper mapper = new ObjectMapper();
-        mapper.enable(SerializationFeature.INDENT_OUTPUT);
-
         Map<Long, String> map = new HashMap<>();
 
         // Controlla se il file esiste
-        File file = new File("data\\saves.json");
+        File file = new File(FilesPath.SAVES_FILE_PATH);
         if (file.exists()) {
             // Leggi il file JSON e deserializza nella mappa
             try {
                 map = mapper.readValue(file, new TypeReference<Map<Long, String>>() {});
-                logger.info("File letto con successo");
+                logger.info("saves file readed");
             } catch (IOException ex) {
                 logger.severe(ex.getMessage());
             }
@@ -155,7 +150,7 @@ public class Game {
         // Scrivi la mappa aggiornata nel file JSON
         try {
             mapper.writeValue(file, map);
-            logger.info("Mappa aggiornata e scritta nel file con successo.");
+            logger.info("saves updated");
         } catch (IOException ex) {
             logger.severe(ex.getMessage());
         }
@@ -163,7 +158,7 @@ public class Game {
 
     private void save() {
         // path todo da ritoccare in base a menu di load
-        String filePath = "datas\\" + player.getName() + "_" + creationDate + ".json";
+        String filePath = FilesPath.PLAYER_ROOT + "\\" + player.getName() + "_" + creationDate + ".json";
 
         // salva gioco su file
 
@@ -199,53 +194,6 @@ public class Game {
                 commandMap.put(alias, command);
     }
 
-    // carica dati stanze
-    private void loadRooms() {
-        // stanze todo manca roba esaminabile
-        Room uno = new Room("Iniziale", "L'aria e' fredda...");
-        Room due = new Room("Seconda", "L'aria e' calda...");
-
-        // stanze adiacenti
-        //uno.setNorth(due);
-        //due.setSouth(uno);
-
-        // oggetti in stanza
-        List<Item> RoomUnoItemsList = new ArrayList<Item>();
-        Food mela = new Food("mela nutriente", "mela", 1, 5);
-        Armor helmet = new Armor("forte elmo", "elmo", 5, 10);
-        Item lanterna = new Item("utile", "lanterna", 2);
-        due.setItems(RoomUnoItemsList);
-
-        // mostri in stanza
-        // esaminabili in stanza
-
-        // carica in lista
-//        rooms.add(uno);
-//        rooms.add(due);
-    }
-
-    // riempie stanze con la roba per un nuovo gioco
-    private void setupNewGameRooms(){
-//        ArrayList<Item> itemsToAdd = new ArrayList<>();
-//        ArrayList<Enemy> enemiesToAdd = new ArrayList<>();
-//
-//        // trova stanza a cui aggiungere roba
-//        Room uno = rooms.stream().filter(x -> x.getName().equalsIgnoreCase("iniziale")).findFirst().get();
-//
-//        // clear liste di supporto
-//        itemsToAdd.clear();
-//        enemiesToAdd.clear();
-//
-//        // aggiungo oggetti
-//        //itemsToAdd.add(items.stream().filter(x -> x.getName().equalsIgnoreCase("pane")).findFirst().get().clone());
-//        // aggiungo mostri
-//        //enemiesToAdd.add(enemies.stream().filter(x -> x.getName().equalsIgnoreCase("scheletro")).findFirst().get().clone());
-//
-//        // aggiungo a stanza
-//        uno.setItems(itemsToAdd);
-//        uno.setEnemies(enemiesToAdd);
-    }
-
     // region COMMAND HANDLER
 
     private void handleCommand(Command command){
@@ -265,10 +213,6 @@ public class Game {
             default -> throw new RuntimeException("Command not implemented");
         }
     }
-
-
-
-
 
     private void commandHelp() {
         String output = "Lista di tutti i comandi possibili\n\n";

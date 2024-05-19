@@ -6,8 +6,8 @@ public class Food extends Item{
     public Food() {
     }
 
-    public Food(String description, String name, int weight, int healthRecoveryAmount) {
-        super(description, name, weight);
+    public Food(String name, String description, int weight, int healthRecoveryAmount) {
+        super(name, description, weight);
         this.healthRecoveryAmount = healthRecoveryAmount;
     }
 

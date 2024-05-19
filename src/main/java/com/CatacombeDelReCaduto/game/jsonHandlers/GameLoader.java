@@ -19,7 +19,7 @@ public class GameLoader {
 
     public static Map<String, Item> loadItems(){
         // Path del file JSON
-        final String FILE_PATH = "data\\game\\items.json";
+        final String FILE_PATH = FilesPath.ITEMS_FILE_PATH;
 
         Map<String, Item> result = new TreeMap<>();
 
@@ -60,7 +60,7 @@ public class GameLoader {
 
     public static Map<String, Enemy> loadEnemies(Map<String, Item> items){
         // Path del file JSON
-        final String FILE_PATH = "data\\game\\enemies.json";
+        final String FILE_PATH = FilesPath.ENEMIES_FILE_PATH;
 
         Map<String, Enemy> result = new TreeMap<>();
 
@@ -116,9 +116,6 @@ public class GameLoader {
     // carica tutto
     public static Map<String, Room> loadRooms(Map<String, Item> items, Map<String, Enemy> enemies)
     {
-        // Path del file JSON
-        final String FILE_PATH = "data\\game\\rooms.json";
-
         Map<String, Room> result = new TreeMap<>();
         // mappa di supporto salvataggio nearRooms
         Map<String, String[]> nearRooms = new TreeMap<>();
@@ -129,7 +126,7 @@ public class GameLoader {
         try {
 
             // Leggi il file JSON e converti in JsonNode
-            JsonNode rootNode = mapper.readTree(new File(FILE_PATH));
+            JsonNode rootNode = mapper.readTree(new File(FilesPath.ROOMS_FILE_PATH));
 
             // Itera attraverso i nodi figli
             Iterator<Map.Entry<String, JsonNode>> fields = rootNode.fields();
