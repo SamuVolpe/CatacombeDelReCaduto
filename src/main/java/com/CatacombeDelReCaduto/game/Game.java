@@ -29,7 +29,8 @@ public class Game {
     public static final List<Command> COMMANDS = List.of(
             new Command(CommandId.EXIT_GAME, List.of("esci", "esci partita"), "Inizia una nuova partita")
             ,new Command(CommandId.HELP, List.of("aiuto", "comandi", "lista comandi"), "Mostra tutti i comandi")
-            ,new Command(CommandId.MOVE, List.of("v", "vai"), "Spostati in un'altra stanza", 1));
+            ,new Command(CommandId.MOVE, List.of("v", "vai"), "vai <direzione> - Spostati in un'altra stanza", 1)
+            ,new Command(CommandId.TAKE, List.of("p", "prendi"), "Prendi oggetto", 1));
     // mappa per il parse dei comandi
     private TreeMap<String, Command> commandMap = null;
 
@@ -115,7 +116,7 @@ public class Game {
         // carica gioco esistete da json
 
         // path todo da ritoccare in base a menu di load
-        String filePath = "datas\\" + player.getName() + "_" + creationDate + ".json";
+        String filePath = "data\\" + player.getName() + "_" + creationDate + ".json";
 
         try {
             ObjectMapper mapper = new ObjectMapper();
@@ -244,6 +245,7 @@ public class Game {
         switch (command.getId()) {
             case CommandId.HELP -> commandHelp();
             case CommandId.MOVE -> commandMove(command.getArgs()[0]);
+            case CommandId.TAKE -> commandTake(command.getArgs()[0]);
             default -> throw new RuntimeException("Command not implemented");
         }
     }
@@ -281,6 +283,10 @@ public class Game {
         else {
             System.out.println("Non c'e` nessuna stanza in questa direzione, provane un'altra");
         }
+    }
+
+    private void commandTake(String arg){
+
     }
 
     // endregion

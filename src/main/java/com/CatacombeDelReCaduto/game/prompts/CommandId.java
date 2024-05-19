@@ -7,4 +7,5 @@ public enum CommandId {
     EXIT_GAME,
     HELP,
     MOVE,
+    TAKE,
 }
