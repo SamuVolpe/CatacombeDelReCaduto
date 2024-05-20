@@ -1,16 +1,13 @@
 package com.CatacombeDelReCaduto.game.menus;
 
 import com.CatacombeDelReCaduto.game.jsonHandlers.FilesPath;
-import com.CatacombeDelReCaduto.game.jsonHandlers.GameLoader;
-import com.CatacombeDelReCaduto.game.jsonHandlers.Save;
+import com.CatacombeDelReCaduto.game.jsonHandlers.FilesManager;
 import com.CatacombeDelReCaduto.game.prompts.InputReader;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Logger;
@@ -21,7 +18,7 @@ public class DeleteMenu extends Menu {
 
     public DeleteMenu(){
         // carica giochi da file
-        games = GameLoader.loadGames();
+        games = FilesManager.loadGames();
         // inizializza lista da visualizzare nel menu
         initMenuItems(new ArrayList<>(games.values()));
     }
@@ -39,7 +36,7 @@ public class DeleteMenu extends Menu {
             print();
 
             // prendo input
-            System.out.println("Digita un numero del menu, 'esci' per tornare al menu principale");
+            System.out.println("Digita un numero del menu, 'esci' per tornare al menu principale (le partite sono mostrate in ordine di creazione)");
             String userCommand = InputReader.getInput();
 
             if (userCommand.equalsIgnoreCase("esci"))
@@ -70,5 +67,11 @@ public class DeleteMenu extends Menu {
         } catch (IOException ex) {
             logger.severe(ex.getMessage());
         }
+
+        // elimina il file di gioco
+        file = new File(FilesPath.PLAYER_ROOT + "\\" + playerName + "_" + gameId + ".json");
+        boolean isDeleted = file.delete();
+        if (!isDeleted)
+            logger.severe("impossibile eliminare il file : " + file);
     }
 }

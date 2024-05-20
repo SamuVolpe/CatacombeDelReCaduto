@@ -1,5 +1,8 @@
 package com.CatacombeDelReCaduto.game.prompts;
 
+/**
+ * Enum contenente id dei comandi
+ */
 public enum CommandId {
     NEW_GAME,
     LOAD_GAME,
@@ -13,4 +16,7 @@ public enum CommandId {
     EQUIP,
     UNEQUIP,
     EXAMINE,
+    ATTACK,
+    ESCAPE,
+    VIEW,
 }

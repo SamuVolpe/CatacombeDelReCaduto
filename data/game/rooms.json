@@ -1,6 +1,5 @@
 {
 	"inizio" : {
-		"name": "stanza inziale",
 		"description": "L'aria e' fredda...",
 		"nearRooms": ["fine", null, null, null],
 		"examinables" : {
@@ -11,7 +10,6 @@
 		"enemies" : ["scheletro", "spettro", "spettro"]
 	},
 	"fine" :{
-		"name": "stanza due",
 		"description": "L'aria e' calda...",
 		"nearRooms": [null, "inizio", null, null]
 	}

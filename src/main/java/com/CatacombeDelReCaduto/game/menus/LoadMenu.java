@@ -3,11 +3,7 @@ package com.CatacombeDelReCaduto.game.menus;
 import com.CatacombeDelReCaduto.game.jsonHandlers.*;
 
 import com.CatacombeDelReCaduto.game.prompts.InputReader;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
@@ -19,7 +15,7 @@ public class LoadMenu extends Menu {
 
     public LoadMenu(){
         // carica giochi da file
-        games = GameLoader.loadGames();
+        games = FilesManager.loadGames();
         // inizializza lista da visualizzare nel menu
         initMenuItems(new ArrayList<>(games.values()));
     }
@@ -37,7 +33,7 @@ public class LoadMenu extends Menu {
             print();
 
             // prendo input
-            System.out.println("Digita un numero del menu, 'esci' per tornare al menu principale");
+            System.out.println("Digita un numero del menu, 'esci' per tornare al menu principale (le partite sono mostrate in ordine di creazione)");
             String userCommand = InputReader.getInput();
 
             if (userCommand.equalsIgnoreCase("esci"))

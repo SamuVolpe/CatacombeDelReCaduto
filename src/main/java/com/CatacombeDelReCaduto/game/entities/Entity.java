@@ -29,7 +29,7 @@ public class Entity {
         return attack;
     }
 
-    public void setAttack(int addattack) {
+    public void addAttack(int addattack) {
         if( (attack + addattack) < 0) {
             attack = 0;
         }
@@ -42,23 +42,20 @@ public class Entity {
         return health;
     }
 
-    public void setHealth(int lifePoints) {
-        if( (health + lifePoints) > maxHealth){
-            this.health = maxHealth;
-        }
-        else if( (health + lifePoints) < 0){
-            this.health = 0;
-        }
-        else{
-            this.health += lifePoints;
-        }
+    public void setHealth(int health) {
+        if (health < 0)
+            health = 0;
+        else if (health > maxHealth)
+            health = maxHealth;
+
+        this.health = health;
     }
 
     public int getDefense() {
         return defense;
     }
 
-    public void setDefense(int addefense) {
+    public void addDefense(int addefense) {
         if( (defense + addefense) < 0) {
             defense = 0;
         }
@@ -82,4 +79,6 @@ public class Entity {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public boolean isAlive() { return health > 0; }
 }

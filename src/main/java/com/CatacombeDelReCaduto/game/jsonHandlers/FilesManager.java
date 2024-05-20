@@ -1,7 +1,7 @@
 package com.CatacombeDelReCaduto.game.jsonHandlers;
 
-import com.CatacombeDelReCaduto.game.Game;
 import com.CatacombeDelReCaduto.game.entities.Enemy;
+import com.CatacombeDelReCaduto.game.entities.Player;
 import com.CatacombeDelReCaduto.game.items.*;
 import com.CatacombeDelReCaduto.game.rooms.Room;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -11,50 +11,102 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
-// classe che carica i dati del gioco da file
-public class GameLoader {
-    public static final Logger logger =  Logger.getLogger(GameLoader.class.getName());
+/**
+ * Classe per la gestione del caricamento/ salvataggio sui files
+ */
+public class FilesManager {
+    public static final Logger logger =  Logger.getLogger(FilesManager.class.getName());
 
-    public static Map<Long, String> loadGames(){
-        File file = new File(FilesPath.SAVES_FILE_PATH);
+    public static void saveGame (String saveFileName, Save save) {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            mapper.writeValue(new File(FilesPath.PLAYER_ROOT + "\\" + saveFileName), save);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void saveNewGame (Player player){
+        ObjectMapper mapper = new ObjectMapper();
+        Map<Long, String> map = new HashMap<>();
+
         // Controlla se il file esiste
+        File file = new File(FilesPath.SAVES_FILE_PATH);
         if (file.exists()) {
-            ObjectMapper mapper = new ObjectMapper();
-
             // Leggi il file JSON e deserializza nella mappa
             try {
-                return mapper.readValue(file, new TypeReference<Map<Long, String>>() {
-                });
+                map = mapper.readValue(file, new TypeReference<Map<Long, String>>() {});
+                logger.info("saves file readed");
             } catch (IOException ex) {
                 logger.severe(ex.getMessage());
             }
         }
+
+        // Aggiungi un nuovo elemento alla mappa
+        map.put(player.CREATION_DATE, player.getName());
+
+        // Scrivi la mappa aggiornata nel file JSON
+        try {
+            mapper.writeValue(file, map);
+            logger.info("saves updated");
+        } catch (IOException ex) {
+            logger.severe(ex.getMessage());
+        }
+    }
+
+    public static Save loadGame(String loadFileName) {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.readValue(new File(FilesPath.PLAYER_ROOT + "\\" + loadFileName), Save.class);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Carica dati partite
+     * @return map - key : data partita, value : nome giocatore
+     */
+    public static Map<Long, String> loadGames(){
+        ObjectMapper mapper = new ObjectMapper();
+
+        // Leggi il file JSON e deserializza nella mappa
+        try {
+            logger.info("load games");
+            return mapper.readValue(new File(FilesPath.SAVES_FILE_PATH), new TypeReference<Map<Long, String>>() {
+            });
+        } catch (IOException ex) {
+            logger.log(Level.SEVERE, "error on games loading", ex);
+            System.out.println("Errore nel caricamento delle partite, il file : '" + FilesPath.SAVES_FILE_PATH + "' potrebbe essere stato compromesso");
+        }
+
         return new TreeMap<>();
     }
 
+    /**
+     * Carica dati oggetti
+     * @return map - key : identificativo oggetto, value : oggetto
+     */
     public static Map<String, Item> loadItems(){
-        // Path del file JSON
-        final String FILE_PATH = FilesPath.ITEMS_FILE_PATH;
-
         Map<String, Item> result = new TreeMap<>();
-
-        // Crea un ObjectMapper
         ObjectMapper mapper = new ObjectMapper();
 
         try {
-            // Leggi il file JSON e converti in JsonNode
-            JsonNode rootNode = mapper.readTree(new File(FILE_PATH));
+            // leggi file json e converti in jsonNode
+            logger.info("load items");
+            JsonNode rootNode = mapper.readTree(new File(FilesPath.ITEMS_FILE_PATH));
 
-            // Itera attraverso i nodi figli
+            // ogni figlio del nodo principale e' un item, converto
             Iterator<Map.Entry<String, JsonNode>> fields = rootNode.fields();
             while (fields.hasNext()) {
                 Map.Entry<String, JsonNode> field = fields.next();
+                String name = field.getKey();
                 JsonNode itemNode = field.getValue();
 
                 // Estrai i dati dell'item
-                String name = itemNode.get("name").asText();
                 String description = itemNode.get("description").asText();
                 int weight = itemNode.get("weight").asInt();
 
@@ -66,10 +118,11 @@ public class GameLoader {
                 };
 
                 // aggiungo a mappa
-                result.put(field.getKey(), item);
+                result.put(name, item);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            logger.log(Level.SEVERE, "error on items loading", ex);
+            System.out.println("Errore nel caricamento degli oggetti di gioco, il file : '" + FilesPath.ITEMS_FILE_PATH + "' potrebbe essere stato compromesso");
         }
 
         return result;
@@ -149,10 +202,10 @@ public class GameLoader {
             Iterator<Map.Entry<String, JsonNode>> fields = rootNode.fields();
             while (fields.hasNext()) {
                 Map.Entry<String, JsonNode> field = fields.next();
+                String name = field.getKey();
                 JsonNode roomNode = field.getValue();
 
                 // Estrae i dati
-                String name = roomNode.get("name").asText();
                 String description = roomNode.get("description").asText();
 
                 Room room = new Room(name, description);
@@ -198,11 +251,11 @@ public class GameLoader {
                 // carica nemici se necessario
                 if (enemies != null) {
                     JsonNode enemiesNode = roomNode.get("enemies");
-                    List<Enemy> inRoomEnemies = new ArrayList<>();
+                    Map<String, Enemy> inRoomEnemies = new TreeMap<>();
                     try {
                         if (enemiesNode != null && enemiesNode.isArray()) {
                             for (JsonNode enemyNode : enemiesNode) {
-                                inRoomEnemies.add(enemies.get(enemyNode.asText()).clone());
+                                inRoomEnemies.put(enemyNode.asText(), enemies.get(enemyNode.asText()).clone());
                             }
                         }
                     } catch (NoSuchElementException ex) {
@@ -213,7 +266,7 @@ public class GameLoader {
                 }
 
                 // aggiungo a mappa
-                result.put(field.getKey(), room);
+                result.put(name, room);
             }
         } catch (IOException e) {
             e.printStackTrace();

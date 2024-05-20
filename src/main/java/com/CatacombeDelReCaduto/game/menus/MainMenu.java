@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 
 public class MainMenu extends CommandMenu {
     // l'ordine dei comandi e' importante per la stampa del menu
-    public static final List<Command> COMMANDS = List.of(
+    private static final List<Command> COMMANDS = List.of(
             new Command(CommandId.NEW_GAME, List.of("inizia", "inizia partita"), "Inizia una nuova partita")
             ,new Command(CommandId.LOAD_GAME, List.of("carica", "carica partita"), "Carica una partita")
             ,new Command(CommandId.DELETE_GAME, List.of("elimina", "elimina partita"), "Elimina una partita")
@@ -18,6 +18,10 @@ public class MainMenu extends CommandMenu {
     private final Logger logger =  Logger.getLogger(this.getClass().getName());
 
     public MainMenu() { super(COMMANDS); }
+
+    public void display(){
+        super.display();
+    }
 
     // region comandi MainMenu
 
@@ -32,9 +36,6 @@ public class MainMenu extends CommandMenu {
     }
 
     private boolean commandStartNewGame() {
-        // inizia una nuova partita
-        logger.info("start");
-
         // carica dati gioco
         Game game = new Game();
         // carica dati nuovo gioco

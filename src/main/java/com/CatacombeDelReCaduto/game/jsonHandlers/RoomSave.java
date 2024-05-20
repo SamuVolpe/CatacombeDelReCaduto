@@ -1,25 +1,27 @@
 package com.CatacombeDelReCaduto.game.jsonHandlers;
 
+import java.util.List;
+
 public class RoomSave {
-    private String[] items;
-    private String[] enemies;
+    private List<String> items;
+    private List<String> enemies;
 
     public RoomSave() {
     }
 
-    public String[] getItems() {
+    public List<String> getItems() {
         return items;
     }
 
-    public void setItems(String[] items) {
+    public void setItems(List<String> items) {
         this.items = items;
     }
 
-    public String[] getEnemies() {
+    public List<String> getEnemies() {
         return enemies;
     }
 
-    public void setEnemies(String[] enemies) {
+    public void setEnemies(List<String> enemies) {
         this.enemies = enemies;
     }
 }

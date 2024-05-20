@@ -2,6 +2,7 @@ package com.CatacombeDelReCaduto.game.items;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Inventory {
@@ -49,6 +50,19 @@ public class Inventory {
         } else {
             return false;
         }
+    }
+
+    /**
+     * Torna nomi di tutti gli oggetti presenti nell'inventario
+     * @return lista dei nomi di tutti gli oggetti
+     */
+    public List<String> getItemsNames() {
+        List<String> result = new ArrayList<>();
+        for (var itemName : inventory.keySet()){
+            for (var item : inventory.get(itemName))
+                result.add(itemName);
+        }
+        return result;
     }
 
     @Override
