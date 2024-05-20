@@ -8,15 +8,13 @@ import com.CatacombeDelReCaduto.game.prompts.Command;
 import com.CatacombeDelReCaduto.game.prompts.CommandId;
 import com.CatacombeDelReCaduto.game.rooms.Room;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 public class Game {
     public static final Logger logger =  Logger.getLogger(Game.class.getName());
@@ -34,11 +32,12 @@ public class Game {
             ,new Command(CommandId.THROW, List.of("b", "butta"), "b <oggetto> - Butta oggetto", 1)
             ,new Command(CommandId.EQUIP, List.of("e", "equipaggia"), "e <oggetto> - Equipaggia oggetto", 1)
             ,new Command(CommandId.UNEQUIP, List.of("d", "disequipaggia"), "d <oggetto> - Togli oggetto dall'equipaggiamento", 1)
-            ,new Command(CommandId.EXAMINE, List.of("e", "esamina"), "e <oggetto> - Esamina oggetto", 1)
+            ,new Command(CommandId.EXAMINE, List.of("e", "esamina"), "e <elemento> - Esamina un elemento nella stanza o la stanza stessa", 1)
             ,new Command(CommandId.VIEW, List.of("visualizza"), "visualizza <'inventario'/'stato'> - Visualizza l'inventario o lo stato del giocatore", 1));
     // mappa per il parse dei comandi
     private TreeMap<String, Command> commandMap = null;
 
+    private final Logger logger =  Logger.getLogger(this.getClass().getName());
     private Player player = null;
 
     // non mutable (da prendere clonati)
@@ -57,15 +56,10 @@ public class Game {
 
         // carica dati comandi
         initCommandMap();
-
-        items = GameLoader.loadItems();
-        enemies = GameLoader.loadEnemies(items);
-        // carica dati oggetti
-        //ItemsLoader itemsLoader = new ItemsLoader();
-        //items = itemsLoader.loadItems();
-        // carica dati mostri
-        //EnemiesLoader enemiesLoader = new EnemiesLoader();
-        //enemies = enemiesLoader.loadEnemies(items);
+        // carica oggetti
+        items = FilesManager.loadItems();
+        // carica nemici
+        enemies = FilesManager.loadEnemies(items);
 
         // npc todo
         // rooms
@@ -97,15 +91,23 @@ public class Game {
         // chiedi nome giocatore
         System.out.println("Benvenuto avventuriero! come ti chiami?");
 
-        // todo controllo non inserisca un nome strano in quando dovra' essere parte del fileName
-        String name = InputReader.getInput();
+        String name = null;
+        // pattern di controllo del nome
+        Pattern pattern = Pattern.compile("[a-zA-Z0-9]{1,10}");
+        // chiedo nome finche` non e` valido
+        do{
+            if (name != null)
+                System.out.println("Nome non valido, il nome deve contenere solo lettere e/o numeri ed essere lungo da 1 a 10 caratteri");
+
+            name = InputReader.getInput();
+        }while (!pattern.matcher(name).matches());
 
         // crea player
-        player = new Player(name, "giocatore", 30, 5, 5, null, null);
-        creationDate = System.currentTimeMillis();
+        player = new Player(System.currentTimeMillis(), name, "un giovane avventuriero in cerca di nuove sfide", null, null);
 
-        // setup stanze
-        rooms = GameLoader.loadRooms(items, enemies);
+        // setup stanze con dati d'inizio
+        rooms = FilesManager.loadRooms(items, enemies);
+        // setup stanza d'inizio
         player.setRoom(rooms.get("inizio"));
 
         // crea cartella di salvataggio se non esiste
@@ -120,78 +122,28 @@ public class Game {
         save();
 
         // crea record in file giochi
-        saveNewGame();
-    }
-
-    public void load() {
-        // carica gioco esistete da json
-
-        // path todo da ritoccare in base a menu di load
-        String filePath = "data\\" + player.getName() + "_" + creationDate + ".json";
-
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            Save save = mapper.readValue(new File(filePath), Save.class);
-            logger.info(save.getPlayer().getHealth() + "");
-        }
-        catch (IOException ex) { logger.severe(ex.getMessage());}
-    }
-
-    private void saveNewGame (){
-        ObjectMapper mapper = new ObjectMapper();
-        Map<Long, String> map = new HashMap<>();
-
-        // Controlla se il file esiste
-        File file = new File(FilesPath.SAVES_FILE_PATH);
-        if (file.exists()) {
-            // Leggi il file JSON e deserializza nella mappa
-            try {
-                map = mapper.readValue(file, new TypeReference<Map<Long, String>>() {});
-                logger.info("saves file readed");
-            } catch (IOException ex) {
-                logger.severe(ex.getMessage());
-            }
-        }
-
-        // Aggiungi un nuovo elemento alla mappa
-        map.put(creationDate, player.getName());
-
-        // Scrivi la mappa aggiornata nel file JSON
-        try {
-            mapper.writeValue(file, map);
-            logger.info("saves updated");
-        } catch (IOException ex) {
-            logger.severe(ex.getMessage());
-        }
+        FilesManager.saveNewGame(player);
     }
 
     private void save() {
-        // path todo da ritoccare in base a menu di load
-        String filePath = FilesPath.PLAYER_ROOT + "\\" + player.getName() + "_" + creationDate + ".json";
-
         // salva gioco su file
 
-        PlayerSave playerSave = new PlayerSave();
-        playerSave.setHealth(10);
-        playerSave.setInventory(new String[] {"spada", "cuscino"});
+        // dati giocatore da salvare
+        PlayerSave playerSave = player.save();
 
-        RoomSave roomSave = new RoomSave();
-        roomSave.setItems(new String[] {"spada", "cuscino"});
-        roomSave.setEnemies(new String[] {"mostro", "scheletro"});
+        // dati stanze da salvare
+        Map<String, RoomSave> roomsSave = new TreeMap<>();
+        for (var entry : rooms.entrySet()){
+            roomsSave.put(entry.getKey(), entry.getValue().save());
+        }
 
-        RoomSave roomSave2 = new RoomSave();
-        roomSave2.setItems(new String[] {"spada", "cuscino"});
-        roomSave2.setEnemies(new String[] {"mostro", "scheletro"});
-
+        // crea Salvataggio
         Save save = new Save();
         save.setPlayer(playerSave);
-        //save.setRooms(new RoomSave[] {roomSave, roomSave2});
+        save.setRooms(roomsSave);
 
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.writeValue(new File(filePath), save);
-        }
-        catch (IOException _) {}
+        // salva sul file
+        FilesManager.saveGame(player.getSaveFileName(), save);
     }
 
     private void initCommandMap() {
@@ -219,7 +171,6 @@ public class Game {
             case CommandId.EQUIP -> commandEquip(command.getArgs()[0]);
             case CommandId.UNEQUIP -> commandUnequip(command.getArgs()[0]);
             case CommandId.EXAMINE -> commandExamine(command.getArgs()[0]);
-            case CommandId.VIEW -> commandView(command.getArgs()[0]);
             default -> throw new RuntimeException("Command not implemented");
         }
     }

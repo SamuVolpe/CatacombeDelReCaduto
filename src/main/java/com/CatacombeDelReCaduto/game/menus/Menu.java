@@ -9,18 +9,33 @@ public abstract class Menu {
     // oggetti da visualizzare nel menu nell'ordine corretto
     protected List<String> menuItems;
 
-    public Menu(){
+    /**
+     * Costruttore di default, se utilizzato poi e` necessario inizializzare i menuItems
+     */
+    protected Menu(){
     }
 
-    public Menu(List<String> menuItems) {
+    /**
+     * Costruttore che inizializza i menuItems
+     * @param menuItems items del menu
+     */
+    protected Menu(List<String> menuItems) {
         initMenuItems(menuItems);
     }
 
+    /**
+     * Inizializza la lista contenente gli items del menu
+     * @param menuItems items del menu
+     */
     protected void initMenuItems(List<String> menuItems){
         this.menuItems = menuItems;
     }
 
-    // return -1 se scelta non valida
+    /**
+     * Riporta numero selezionato nella lista degli oggetti del menu
+     * @param userCommand input utente
+     * @return -1 se numero selezionato non valido
+     */
     protected int userChoice(String userCommand) {
         // verifico se l'utente ha inputato il numero del menu
         try {
@@ -32,6 +47,9 @@ public abstract class Menu {
         return -1;
     }
 
+    /**
+     * Stampa il menu
+     */
     protected void print() {
         String output = "";
 

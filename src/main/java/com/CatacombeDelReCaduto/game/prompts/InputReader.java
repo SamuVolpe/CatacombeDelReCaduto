@@ -2,20 +2,23 @@ package com.CatacombeDelReCaduto.game.prompts;
 
 import java.util.NoSuchElementException;
 import java.util.Scanner;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Classe che gestisce la lettura di input da console
+ */
 public class InputReader {
-    private static final Logger logger =  Logger.getLogger(InputReader.class.getName());
+    /**
+     * Legge input da console
+     * @return input utente
+     * @throws NoSuchElementException se nessun input trovato
+     * @throws IllegalStateException se la console e` stata chiusa
+     */
+    public static String getInput() throws  NoSuchElementException, IllegalStateException{
+        System.out.print("> ");
 
-    public static String getInput(){
-        try {
-            System.out.print("> ");
-
-            Scanner scanner = new Scanner(System.in);
-            return scanner.nextLine();
-        }
-        catch (NoSuchElementException ex){
-            throw ex;
-        }
+        Scanner scanner = new Scanner(System.in);
+        return scanner.nextLine();
     }
 }
