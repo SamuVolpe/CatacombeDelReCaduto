@@ -170,7 +170,7 @@ public class Game {
             case CommandId.EQUIP -> commandEquip(command.getArgs()[0]);
             case CommandId.UNEQUIP -> commandUnequip(command.getArgs()[0]);
             case CommandId.EXAMINE -> commandExamine(command.getArgs()[0]);
-            case CommandId.VIEW -> commandExamine(command.getArgs()[0]);
+            case CommandId.VIEW -> commandView(command.getArgs()[0]);
             default -> throw new RuntimeException("Command not implemented");
         }
     }
