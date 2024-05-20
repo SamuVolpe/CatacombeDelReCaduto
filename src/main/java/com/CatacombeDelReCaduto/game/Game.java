@@ -17,7 +17,6 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 public class Game {
-    public static final Logger logger =  Logger.getLogger(Game.class.getName());
 
     // data file di salvataggio
     private long creationDate;
@@ -171,6 +170,7 @@ public class Game {
             case CommandId.EQUIP -> commandEquip(command.getArgs()[0]);
             case CommandId.UNEQUIP -> commandUnequip(command.getArgs()[0]);
             case CommandId.EXAMINE -> commandExamine(command.getArgs()[0]);
+            case CommandId.VIEW -> commandExamine(command.getArgs()[0]);
             default -> throw new RuntimeException("Command not implemented");
         }
     }
@@ -232,6 +232,19 @@ public class Game {
     }
 
     private void commandUse(String arg) {
+        Inventory inventory = player.getInventory();
+        Item toUse = inventory.removeItem(arg);
+        if (toUse == null) {
+            System.out.println("Impossibile utilizzare l'oggetto: non è presente nell'inventario");
+        } else {
+            if (toUse instanceof Food) {
+                player.setHealth(player.getHealth() + ((Food) toUse).getHealthRecoveryAmount());
+                System.out.println("Vita dopo aver mangiato " + toUse.getName() + ": " + player.getHealth());
+            } else {
+                System.out.println("Impossibile utilizzare l'oggetto: non è cibo");
+                inventory.addItem(toUse);
+            }
+        }
     }
 
     private void commandThrow(String arg) {
