@@ -235,6 +235,16 @@ public class Game {
     }
 
     private void commandThrow(String arg) {
+        Room currentRoom = player.getRoom();
+        List<Item> currentRoomItems = currentRoom.getItems();
+        Inventory inventory = player.getInventory();
+        Item toThrow = inventory.removeItem(arg);
+        if (toThrow == null) {
+            System.out.println("Impossibile buttare l'oggetto: non è presente nell'inventario");
+        } else {
+            currentRoomItems.add(toThrow);
+            System.out.println("Oggetto buttato");
+        }
     }
 
     private void commandEquip(String arg) {

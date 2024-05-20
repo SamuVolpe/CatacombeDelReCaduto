@@ -36,7 +36,7 @@ public class Inventory {
     }
 
     //ritorna false se l'item non c'e', true altrimenti
-    public boolean removeItem(String itemName) {
+    public Item removeItem(String itemName) {
         ArrayList<Item> list = inventory.get(itemName);
         if (list != null) {
             Item it = list.getFirst();
@@ -46,9 +46,9 @@ public class Inventory {
             } else {
                 list.removeFirst();
             }
-            return true;
+            return it;
         } else {
-            return false;
+            return null;
         }
     }
 
