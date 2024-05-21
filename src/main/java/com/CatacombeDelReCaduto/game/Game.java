@@ -8,14 +8,12 @@ import com.CatacombeDelReCaduto.game.prompts.InputReader;
 import com.CatacombeDelReCaduto.game.prompts.Command;
 import com.CatacombeDelReCaduto.game.prompts.CommandId;
 import com.CatacombeDelReCaduto.game.rooms.Room;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class Game {
 
@@ -24,16 +22,17 @@ public class Game {
 
     // comandi di gioco
     public static final List<Command> COMMANDS = List.of(
-            new Command(CommandId.EXIT_GAME, List.of("esci", "esci partita"), "esci - Inizia una nuova partita")
-            ,new Command(CommandId.HELP, List.of("aiuto", "comandi", "lista comandi"), "aiuto - Mostra tutti i comandi")
-            ,new Command(CommandId.MOVE, List.of("v", "vai"), "v <direzione> - Spostati in un'altra stanza", 1)
+            new Command(CommandId.EXIT_GAME, List.of("esci", "esci partita"), "esci - Esci dalla partita")
+            ,new Command(CommandId.HELP, List.of("help", "aiuto", "comandi", "lista comandi"), "aiuto - Mostra tutti i comandi")
+            ,new Command(CommandId.SAVE, List.of("s", "salva", "salva partita"), "salva - Salva la partita")
+            ,new Command(CommandId.MOVE, List.of("vai"), "vai <direzione> - Spostati in un'altra stanza", 1)
             ,new Command(CommandId.TAKE, List.of("p", "prendi"), "p <oggetto> - Prendi oggetto", 1)
             ,new Command(CommandId.USE, List.of("u", "usa"), "u <oggetto> - Usa oggetto", 1)
             ,new Command(CommandId.THROW, List.of("b", "butta"), "b <oggetto> - Butta oggetto", 1)
             ,new Command(CommandId.EQUIP, List.of("e", "equipaggia"), "e <oggetto> - Equipaggia oggetto", 1)
             ,new Command(CommandId.UNEQUIP, List.of("d", "disequipaggia"), "d <oggetto> - Togli oggetto dall'equipaggiamento", 1)
             ,new Command(CommandId.EXAMINE, List.of("esamina"), "esamina <elemento> - Esamina un elemento nella stanza o la stanza stessa", 1)
-            ,new Command(CommandId.VIEW, List.of("visualizza"), "visualizza <'inventario'/'stato'> - Visualizza l'inventario o lo stato del giocatore", 1)
+            ,new Command(CommandId.VIEW, List.of("v","visualizza"), "v <'inventario'/'stato'> - Visualizza l'inventario o lo stato del giocatore", 1)
             ,new Command(CommandId.BACK, List.of("back"), "back - Torna alla stanza precedente", 0)
             ,new Command(CommandId.LOOK, List.of("guarda"), "guarda - Guarda gli oggetti presenti nella stanza", 0)
             ,new Command(CommandId.DETAIL, List.of("dettagli"), "dettagli <oggetto> - Vedi dettagli di un oggetto nella stanza o nell'inventario", 1));
@@ -44,20 +43,25 @@ public class Game {
     private Player player = null;
 
     // non mutable (da prendere clonati)
-    // key -> identificativo puo' essere diverso dal nome
+    // tutti gli oggetti e i nemici del gioco
     private Map<String, Item> items = new TreeMap<>();
     private Map<String, Enemy> enemies = new TreeMap<>();
 
-    // da vedere
-    private List<Npc> npcs = new ArrayList<>();
-
-    // mutable da inserire resto info dal salvataggio, prima stanza e' quella iniziale
+    // mutable da inserire resto info dal salvataggio
     private Map<String, Room> rooms = new TreeMap<>();
 
+    /**
+     * Costruttore per una nuova partita
+     */
     public Game() {
         this(null, null);
     }
 
+    /**
+     * Costruttore per una partita esistente
+     * @param creationDate id partita
+     * @param playerName nome giocatore
+     */
     public Game(Long creationDate, String playerName) {
         // carica dati base di gioco
 
@@ -67,7 +71,6 @@ public class Game {
         items = FilesManager.loadItems();
         // carica nemici
         enemies = FilesManager.loadEnemies(items);
-        // todo npc
 
         if (creationDate == null)
             // carica stanze con dati d'inizio
@@ -80,7 +83,9 @@ public class Game {
         }
     }
 
-    // metodo dove verra' eseguito il gioco
+    /**
+     * Inizia il gioco
+     */
     public void run() {
         // handle start nuovo gioco
         if (player == null)
@@ -92,15 +97,9 @@ public class Game {
         Command command = null;
 
         do {
-            try {
-                // possibile mostro che ti attacca
-                if (player.getRoom().isEnemyEngaging())
-                    player.battle(player.getRoom().getEnemies().values().stream().findFirst().get());
-
-                // todo da gestire vittoria nel caso abbia sconfitto il boss
-            }catch (DeathException death){
-
-            }
+            // possibile mostro che ti attacca todo da gestire caso di vittoria (sconfitta del boss finale)
+            if (player.getRoom().isEnemyEngaging())
+                battle(player.getRoom().getEnemies().values().stream().findFirst().get());
 
             // prendo input
             String userCommand = InputReader.getInput();
@@ -138,11 +137,11 @@ public class Game {
         player.setRoom(rooms.get("inizio"));
 
         // crea cartella di salvataggio se non esiste
-        File directory = new File("data\\player");
+        File directory = new File(FilesPath.PLAYER_ROOT);
         if (!directory.exists()) {
             boolean maked = directory.mkdir();
             if (!maked)
-                throw new RuntimeException("Impossibile creare la cartella per il salvataggio dei dati, verificare i permessi del programma");
+                throw new RuntimeException("Impossibile creare la cartella per il salvataggio dei dati");
         }
 
         // salvataggio iniziale (file save)
@@ -152,6 +151,9 @@ public class Game {
         FilesManager.saveNewGame(player);
     }
 
+    /**
+     * Salva il gioco
+     */
     private void save() {
         // salva gioco su file
 
@@ -171,8 +173,14 @@ public class Game {
 
         // salva sul file
         FilesManager.saveGame(player.getSaveFileName(), save);
+        System.out.println("Gioco salvato");
     }
 
+    /**
+     * Carica il gioco
+     * @param creationDate id gioco
+     * @param playerName nome giocatore
+     */
     private void load(Long creationDate, String playerName){
         // carica gioco
         Save save = FilesManager.loadGame(playerName + "_" + creationDate + ".json");
@@ -185,8 +193,15 @@ public class Game {
         // carica dati giocatore
         Player player = new Player(creationDate, playerName);
         player.load(save.getPlayer(), items ,rooms);
+        // set player
+        this.player = player;
+
+        System.out.println("Gioco caricato");
     }
 
+    /**
+     * Inizializza mappa di supporto comandi
+     */
     private void initCommandMap() {
         commandMap = new TreeMap<>();
 
@@ -196,43 +211,82 @@ public class Game {
                 commandMap.put(alias, command);
     }
 
-    // region COMMAND HANDLER
+    private void battle(Enemy enemy){
+        System.out.println("Sei stato attaccato!");
 
+        // menu combattimento
+        BattleMenu battle = new BattleMenu(player, enemy);
+        boolean ended = battle.battle();
+
+        // player fuggito reset del nemico
+        if (!ended) {
+            enemy.setHealth(enemy.getMaxHealth());
+            System.out.println("Sei scappato con successo");
+            return;
+        }
+
+        // player sconfitto
+        if (!player.isAlive()){
+            System.out.println("Sei morto, ricarica da ultimo salvataggio..");
+            // carico gioco da ultimo salvataggio
+            this.load(player.CREATION_DATE, player.getName());
+        }
+        // nemico sconfitto
+        else if (!enemy.isAlive()){
+            // elimina nemico dalla stanza
+            player.getRoom().removeEnemy(enemy);
+
+            System.out.println("Nemico sconfitto");
+            if (!enemy.getDrop().isEmpty()) {
+                System.out.println("Il nemico ha droppato i seguenti oggetti : "
+                        + enemy.getDrop().stream().map(Item::getName).collect(Collectors.joining(", "))
+                        + "\nRicordati di raccoglierli se ti possono servire");
+            }
+        }
+    }
+
+    /**
+     * Gestisce i comandi del gioco
+     * @param command comando utilizzato
+     */
     private void handleCommand(Command command){
         if (command == null || command.getId() == CommandId.EXIT_GAME)
             return;
 
         // aggiungi comandi su switch
         switch (command.getId()) {
-            case CommandId.HELP -> commandHelp();
-            case CommandId.MOVE -> commandMove(command.getArgs()[0]);
-            case CommandId.TAKE -> commandTake(command.getArgs()[0]);
-            case CommandId.USE -> commandUse(command.getArgs()[0]);
-            case CommandId.THROW -> commandThrow(command.getArgs()[0]);
-            case CommandId.EQUIP -> commandEquip(command.getArgs()[0]);
-            case CommandId.UNEQUIP -> commandUnequip(command.getArgs()[0]);
-            case CommandId.EXAMINE -> commandExamine(command.getArgs()[0]);
-            case CommandId.VIEW -> commandView(command.getArgs()[0]);
-            case CommandId.BACK -> commandBack();
-            case CommandId.LOOK -> commandLook();
-            case CommandId.DETAIL -> commandDetail(command.getArgs()[0]);
-            default -> throw new RuntimeException("Command not implemented");
+            case HELP -> commandHelp();
+            case SAVE -> save();
+            case MOVE -> commandMove(command.getArgs()[0]);
+            case TAKE -> commandTake(command.getArgs()[0]);
+            case USE -> commandUse(command.getArgs()[0]);
+            case THROW -> commandThrow(command.getArgs()[0]);
+            case EQUIP -> commandEquip(command.getArgs()[0]);
+            case UNEQUIP -> commandUnequip(command.getArgs()[0]);
+            case EXAMINE -> commandExamine(command.getArgs()[0]);
+            case VIEW -> commandView(command.getArgs()[0]);
+            case BACK -> commandBack();
+            case LOOK -> commandLook();
+            case DETAIL -> commandDetail(command.getArgs()[0]);
+            default -> throw new IllegalArgumentException("Command not implemented");
         }
     }
 
+    // region commands
+
     private void commandHelp() {
         String output = "Lista di tutti i comandi possibili\n\n";
-        // todo in caso aggiungi name a command per roba tipo >> v <direzione> - descrizione
         for (var command : COMMANDS)
             output += command.getDescription() + "\n";
 
         System.out.print(output);
     }
+
     private void commandMove(String arg){
 
         Room nextRoom = null;
         String prevDir = player.getPreviousRoomDirection();
-        // gestisco spostamento, se voglio fare sinonimi di arg es. 'nord' e 'n' da gestirlo con alias in command
+        // gestisco spostamento
         switch (arg)
         {
             case "nord" :
@@ -288,19 +342,7 @@ public class Game {
     }
 
     private void commandUse(String arg) {
-        Inventory inventory = player.getInventory();
-        Item toUse = inventory.removeItem(arg);
-        if (toUse == null) {
-            System.out.println("Impossibile utilizzare l'oggetto: non è presente nell'inventario");
-        } else {
-            if (toUse instanceof Food) {
-                player.setHealth(player.getHealth() + ((Food) toUse).getHealthRecoveryAmount());
-                System.out.println("Vita dopo aver mangiato " + toUse.getName() + ": " + player.getHealth());
-            } else {
-                System.out.println("Impossibile utilizzare l'oggetto: non è cibo");
-                inventory.addItem(toUse);
-            }
-        }
+        player.use(arg);
     }
 
     private void commandThrow(String arg) {
@@ -386,6 +428,8 @@ public class Game {
         } else if (arg.equalsIgnoreCase("stato")) {
             System.out.println(player);
         }
+        else
+            System.out.println("Comando incorretto : puoi visualizzare 'stato' o 'inventario");
     }
 
     private void commandBack() {

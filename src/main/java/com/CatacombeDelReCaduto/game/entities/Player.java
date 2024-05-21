@@ -1,6 +1,5 @@
 package com.CatacombeDelReCaduto.game.entities;
 
-import com.CatacombeDelReCaduto.game.DeathException;
 import com.CatacombeDelReCaduto.game.items.*;
 import com.CatacombeDelReCaduto.game.jsonHandlers.PlayerSave;
 import com.CatacombeDelReCaduto.game.menus.BattleMenu;
@@ -120,11 +119,6 @@ public class Player extends Entity{
         }
     }
 
-    public void battle(Enemy enemy) throws DeathException {
-        BattleMenu battle = new BattleMenu(this, enemy);
-        battle.battle();
-    }
-
     public String getPreviousRoomDirection() {
         return previousRoomDirection;
     }
@@ -133,11 +127,29 @@ public class Player extends Entity{
         this.previousRoomDirection = previousRoomDirection;
     }
 
+    public boolean use(String itemName){
+        Item toUse = inventory.removeItem(itemName);
+        if (toUse == null) {
+            System.out.println("Impossibile utilizzare l'oggetto: non è presente nell'inventario");
+            return false;
+        } else {
+            if (toUse instanceof Food) {
+                setHealth(getHealth() + ((Food) toUse).getHealthRecoveryAmount());
+                System.out.println("Vita dopo aver mangiato " + toUse.getName() + ": " + getHealth());
+            } else {
+                System.out.println("Impossibile utilizzare l'oggetto: non è cibo");
+                inventory.addItem(toUse);
+                return false;
+            }
+        }
+        return true;
+    }
+
     @Override
     public String toString() {
         return super.toString() +
-                " score=" + score +
-                ", weapon=" + weapon +
-                ", armor=" + armor;
+                ", Arma : " + weapon +
+                ", Armatura : " + armor +
+                ", Score : " + score;
     }
 }

@@ -1,7 +1,7 @@
 package com.CatacombeDelReCaduto.game.items;
 
-public class Armor extends Item implements Cloneable {
-    private int defense;
+public class Armor extends Item {
+    private final int defense;
 
     public Armor(String name, String description, int weight, int defense) {
         super(name, description, weight);
@@ -10,10 +10,6 @@ public class Armor extends Item implements Cloneable {
 
     public int getDefense() {
         return defense;
-    }
-
-    public void setDefense(int defense) {
-        this.defense = defense;
     }
 
     @Override

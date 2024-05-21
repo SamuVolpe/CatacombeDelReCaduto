@@ -57,6 +57,7 @@ public class DeleteMenu extends Menu {
         // trova gioco scelto e lo carica nella classe
         Map.Entry<Long, String> game = new ArrayList<>(games.entrySet()).get(choice - 1);
         deleteGame(game.getKey(), game.getValue());
+        System.out.println("Partita eliminata");
     }
 
     /**

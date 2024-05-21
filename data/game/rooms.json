@@ -1,7 +1,7 @@
 {
 	"inizio" : {
 		"description": "L'aria e' fredda...",
-		"dangerLevel": 0,
+		"dangerLevel": 5,
 		"nearRooms": ["fine", null, null, null],
 		"examinables" : {
 			"muro" : "oooh che bel muro",
@@ -12,7 +12,7 @@
 	},
 	"fine" :{
 		"description": "L'aria e' calda...",
-		"dangerLevel": 5,
+		"dangerLevel": 8,
 		"nearRooms": [null, "inizio", null, null],
 		"enemies" : ["scheletro", "spettro", "spettro"]
 	}

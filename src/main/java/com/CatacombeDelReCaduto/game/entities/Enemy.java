@@ -5,6 +5,9 @@ import com.CatacombeDelReCaduto.game.items.Item;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Rappresenta un nemico
+ */
 public class Enemy extends Entity implements Cloneable{
     private List<Item> drop = new ArrayList<Item>();
 
@@ -17,15 +20,8 @@ public class Enemy extends Entity implements Cloneable{
         this.drop = drop;
     }
 
-    public boolean addItem(Item item){
-        if( item != null ){
-            return drop.add(item);
-        }
-        return false;
-    }
-
-    public boolean removeItem(Item item){
-        return drop.remove(item);
+    public List<Item> getDrop() {
+        return drop;
     }
 
     @Override

@@ -1,8 +1,5 @@
 package com.CatacombeDelReCaduto.game.jsonHandlers;
 
-import com.CatacombeDelReCaduto.game.items.Armor;
-import com.CatacombeDelReCaduto.game.items.Weapon;
-
 import java.util.List;
 
 public class PlayerSave {

@@ -22,18 +22,14 @@ public class MainMenu extends CommandMenu {
 
     public MainMenu() { super(COMMANDS); }
 
-    public void display(){
-        super.display();
-    }
-
     // region comandi MainMenu
 
     protected boolean commandsHandler(Command command){
         return switch (command.getId()) {
-            case CommandId.NEW_GAME -> commandStartNewGame();
-            case CommandId.LOAD_GAME -> commandLoadGame();
-            case CommandId.DELETE_GAME -> commandDeleteGame();
-            case CommandId.EXIT_GAME -> true;
+            case NEW_GAME -> commandStartNewGame();
+            case LOAD_GAME -> commandLoadGame();
+            case DELETE_GAME -> commandDeleteGame();
+            case EXIT_GAME -> true;
             default -> throw new IllegalArgumentException("Command not implemented");
         };
     }

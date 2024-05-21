@@ -17,22 +17,14 @@ public class Room {
     private int dangerLevel;
     // nord,sud,est,ovest
     private Room[] nearRooms = null; //nord sud est ovest
-    private Npc npc = null;
     private List<Item> items = null;
     private Map<String, Enemy> enemies = null;
-    private Map<String, String> examinables = null; //todo ancora da implementare, key nome oggetto esaminabile, value dialogo di risposta
+    private Map<String, String> examinables = null;
 
     public Room(String name, String description, int dangerLevel) {
         this.name = name;
         this.description = description;
         setDangerLevel(dangerLevel);
-    }
-
-    private void setDangerLevel(int dangerLevel){
-        if (dangerLevel > 10)
-            this.dangerLevel = 10;
-        else
-            this.dangerLevel = dangerLevel;
     }
 
     public int getDangerLevel() {
@@ -53,14 +45,6 @@ public class Room {
 
     public void setNearRooms(Room[] nearRooms) {
         this.nearRooms = nearRooms;
-    }
-
-    public Npc getNpc() {
-        return npc;
-    }
-
-    public void setNpc(Npc npc) {
-        this.npc = npc;
     }
 
     public List<Item> getItems() {
@@ -87,6 +71,10 @@ public class Room {
         this.examinables = examinables;
     }
 
+    /**
+     * Calcolo con probabilita` in base al dangerLevel della stanza che il nemico attacchi
+     * @return true - se il nemico attacca
+     */
     public boolean isEnemyEngaging(){
         if (enemies == null || enemies.isEmpty())
             return false;
@@ -96,6 +84,25 @@ public class Room {
         return random.nextInt(10) < dangerLevel;
     }
 
+    /**
+     * Rimuove nemico dalla stanza, aggiungendo il drop agli oggetti della stanza
+     * @param enemy nemico da rimuovere
+     */
+    public void removeEnemy(Enemy enemy){
+        // rimuove nemico dalla stanza
+        boolean removed = enemies.values().remove(enemy);
+        if (!removed)
+            throw new IllegalArgumentException("Can't remove " + enemy + " from the room");
+
+        // aggiunge gli oggetti alla stanza
+        if (!enemy.getDrop().isEmpty())
+            items.addAll(enemy.getDrop());
+    }
+
+    /**
+     * Salva i dati della stanza nell'oggetto apposito
+     * @return oggetto contenente i dati da salvare
+     */
     public RoomSave save(){
         RoomSave roomSave = new RoomSave();
         // dati da salvare
@@ -104,6 +111,12 @@ public class Room {
         return roomSave;
     }
 
+    /**
+     * Carica i dati della stanza dall'oggetto apposito
+     * @param roomSave oggetto da cui caricare i dati
+     * @param allItems lista di tutti gli items di gioco
+     * @param allEnemies lista di tutti i nemici di gioco
+     */
     public void load(RoomSave roomSave, Map<String, Item> allItems, Map<String, Enemy> allEnemies){
         // setto dati stanza
         items = new ArrayList<>();
@@ -113,5 +126,12 @@ public class Room {
         enemies = new TreeMap<>();
         for (String enemyKey : roomSave.getEnemies())
             enemies.put(enemyKey, allEnemies.get(enemyKey).clone());
+    }
+
+    private void setDangerLevel(int dangerLevel){
+        if (dangerLevel > 10)
+            this.dangerLevel = 10;
+        else
+            this.dangerLevel = dangerLevel;
     }
 }

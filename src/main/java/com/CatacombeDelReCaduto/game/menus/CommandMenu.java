@@ -31,7 +31,7 @@ public abstract class CommandMenu extends Menu {
     /**
      * Display del menu
      */
-    protected void display() {
+    public void display() {
         boolean handled = false;
         do {
             // stampo menu

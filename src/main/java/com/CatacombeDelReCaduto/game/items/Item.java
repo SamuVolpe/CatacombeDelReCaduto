@@ -1,15 +1,9 @@
 package com.CatacombeDelReCaduto.game.items;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class Item implements Cloneable {
     private String name;
     private String description;
     private int weight;
-
-    public Item() {
-    }
 
     public Item(String name, String description, int weight) {
         this.description = description;

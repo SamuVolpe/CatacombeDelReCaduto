@@ -1,10 +1,7 @@
 package com.CatacombeDelReCaduto.game.items;
 
-public class Weapon extends Item implements Cloneable {
+public class Weapon extends Item {
     private int damage;
-
-    public Weapon() {
-    }
 
     public Weapon(String name, String description, int weight, int damage) {
         super(name, description, weight);

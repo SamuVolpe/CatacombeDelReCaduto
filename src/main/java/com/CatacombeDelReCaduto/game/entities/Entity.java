@@ -1,16 +1,13 @@
 package com.CatacombeDelReCaduto.game.entities;
 
-import com.CatacombeDelReCaduto.game.rooms.*;
-
+/**
+ * Rappresenta una entita`
+ */
 public class Entity {
 
     private String name, description;
 
     private int health, maxHealth, attack, defense;
-
-    public Entity() {
-
-    }
 
     public Entity(String name, String description, int maxHealth, int attack, int defense) {
         this.defense = defense;
@@ -62,6 +59,9 @@ public class Entity {
         else {
             defense+=addefense;
         }
+        // verifico che la difesa non superi il limite massimo
+        if (defense > 100)
+            defense = 100;
     }
 
     public String getName() {
@@ -82,10 +82,11 @@ public class Entity {
 
     @Override
     public String toString() {
-        return "health=" + health +
-                "/" + maxHealth +
-                ", attack=" + attack +
-                ", defense=" + defense;
+        return "Nome : " + name
+                + "\nInfo : " + description
+                + "\nVita : " + health + "/" + maxHealth
+                + ", Attacco : " + attack
+                + ", Difesa : " + defense;
     }
 
     public boolean isAlive() { return health > 0; }
