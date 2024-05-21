@@ -13,7 +13,7 @@ public class Room {
     private String name;
     private String description;
     // nord,sud,est,ovest
-    private Room[] nearRooms = null;
+    private Room[] nearRooms = null; //nord sud est ovest
     private Npc npc = null;
     private List<Item> items = null;
     private Map<String, Enemy> enemies = null;

@@ -31,7 +31,7 @@ public class Game {
             ,new Command(CommandId.THROW, List.of("b", "butta"), "b <oggetto> - Butta oggetto", 1)
             ,new Command(CommandId.EQUIP, List.of("e", "equipaggia"), "e <oggetto> - Equipaggia oggetto", 1)
             ,new Command(CommandId.UNEQUIP, List.of("d", "disequipaggia"), "d <oggetto> - Togli oggetto dall'equipaggiamento", 1)
-            ,new Command(CommandId.EXAMINE, List.of("e", "esamina"), "e <elemento> - Esamina un elemento nella stanza o la stanza stessa", 1)
+            ,new Command(CommandId.EXAMINE, List.of("esamina"), "esamina <elemento> - Esamina un elemento nella stanza o la stanza stessa", 1)
             ,new Command(CommandId.VIEW, List.of("visualizza"), "visualizza <'inventario'/'stato'> - Visualizza l'inventario o lo stato del giocatore", 1));
     // mappa per il parse dei comandi
     private TreeMap<String, Command> commandMap = null;
@@ -196,6 +196,12 @@ public class Game {
             case "sud" :
                 nextRoom = player.getRoom().getNearRooms()[1];
                 break;
+            case "est" :
+                nextRoom = player.getRoom().getNearRooms()[2];
+                break;
+            case "ovest" :
+                nextRoom = player.getRoom().getNearRooms()[3];
+                break;
             default:
                 System.out.println("Direzione inesistente");
                 return;
@@ -261,12 +267,67 @@ public class Game {
     }
 
     private void commandEquip(String arg) {
+        Inventory inventory = player.getInventory();
+        Item toEquip = inventory.removeItem(arg);
+        if (toEquip == null) {
+            System.out.println("Impossibile equipaggiare l'oggetto: non è presente nell'inventario");
+        } else {
+            if (toEquip instanceof Weapon) {
+                Weapon currentWeapon = player.getWeapon();
+                if (currentWeapon != null) {
+                    System.out.println("Impossibile equipaggiare l'arma: è già quipaggiata un'arma");
+                } else {
+                    player.setWeapon((Weapon) toEquip);
+                    System.out.println(toEquip.getName() + " equipaggiato con successo");
+                }
+            } else if (toEquip instanceof Armor) {
+                Armor currentArmor = player.getArmor();
+                if (currentArmor != null) {
+                    System.out.println("Impossibile equipaggiare l'armatura: è già quipaggiata un'armatura");
+                } else {
+                    player.setArmor((Armor) toEquip);
+                    System.out.println(toEquip.getName() + " equipaggiato con successo");
+                }
+            } else {
+                System.out.println("Impossibile equipaggiare l'oggetto: non è un oggetto equipaggiabile");
+                inventory.addItem(toEquip);
+            }
+        }
     }
 
     private void commandUnequip(String arg) {
+        Weapon currentWeapon = player.getWeapon();
+        Armor currentArmor = player.getArmor();
+        Inventory inventory = player.getInventory();
+        if (currentArmor != null && currentArmor.getName().equalsIgnoreCase(arg)) {
+            boolean flag = inventory.addItem(currentArmor);
+            if (flag) {
+                player.setArmor(null);
+                System.out.println(arg + " rimosso dall'equipaggiamento");
+            } else {
+                System.out.println("Impossibile rimuovere " + arg + " dall'equipaggiamento: non può essere inserito nell'inventario perchè è troppo pesante, è necessario alleggerire l'inventario");
+            }
+        } else if (currentWeapon != null && currentWeapon.getName().equalsIgnoreCase(arg)) {
+            boolean flag = inventory.addItem(currentWeapon);
+            if (flag) {
+                player.setWeapon(null);
+                System.out.println(arg + " rimosso dall'equipaggiamento");
+            } else {
+                System.out.println("Impossibile rimuovere " + arg + " dall'equipaggiamento: non può essere inserito nell'inventario perchè è troppo pesante, è necessario alleggerire l'inventario");
+            }
+        } else {
+            System.out.println("Impossibile rimuovere " + arg + " dall'equipaggiamento: non è equipaggiato");
+        }
     }
 
     private void commandExamine(String arg) {
+        Room currentRoom = player.getRoom();
+        String desc = currentRoom.getExaminables().get(arg);
+        if (desc == null) {
+            System.out.println("Non esaminabile");
+        } else {
+            System.out.println(desc);
+        }
     }
 
     private void commandView(String arg) {
