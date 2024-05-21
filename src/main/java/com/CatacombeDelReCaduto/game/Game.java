@@ -33,7 +33,8 @@ public class Game {
             ,new Command(CommandId.UNEQUIP, List.of("d", "disequipaggia"), "d <oggetto> - Togli oggetto dall'equipaggiamento", 1)
             ,new Command(CommandId.EXAMINE, List.of("esamina"), "esamina <elemento> - Esamina un elemento nella stanza o la stanza stessa", 1)
             ,new Command(CommandId.VIEW, List.of("visualizza"), "visualizza <'inventario'/'stato'> - Visualizza l'inventario o lo stato del giocatore", 1)
-            ,new Command(CommandId.BACK, List.of("back"), "back - Torna alla stanza precedente", 0));
+            ,new Command(CommandId.BACK, List.of("back"), "back - Torna alla stanza precedente", 0)
+            ,new Command(CommandId.LOOK, List.of("guarda"), "guarda - Guarda gli oggetti presenti nella stanza", 0));
     // mappa per il parse dei comandi
     private TreeMap<String, Command> commandMap = null;
 
@@ -173,6 +174,7 @@ public class Game {
             case CommandId.EXAMINE -> commandExamine(command.getArgs()[0]);
             case CommandId.VIEW -> commandView(command.getArgs()[0]);
             case CommandId.BACK -> commandBack();
+            case CommandId.LOOK -> commandLook();
             default -> throw new RuntimeException("Command not implemented");
         }
     }
@@ -351,6 +353,20 @@ public class Game {
         } else {
             commandMove(player.getPreviousRoomDirection());
         }
+    }
+
+    private void commandLook() {
+        List<Item> items = player.getRoom().getItems();
+        String out = "";
+        for (Item it : items) {
+            out += it.getName() + ", ";
+        }
+        if (!items.isEmpty()) {
+            System.out.println(out.substring(0, out.length()-2));
+        } else {
+            System.out.println("Non ci sono oggetti nella stanza");
+        }
+
     }
 
     // endregion
