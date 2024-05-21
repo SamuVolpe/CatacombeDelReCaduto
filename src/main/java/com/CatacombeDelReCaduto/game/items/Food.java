@@ -18,4 +18,9 @@ public class Food extends Item{
     public void setHealthRecoveryAmount(int healthRecoveryAmount) {
         this.healthRecoveryAmount = healthRecoveryAmount;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + ", recupero vita=" + healthRecoveryAmount;
+    }
 }

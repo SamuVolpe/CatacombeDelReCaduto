@@ -42,6 +42,11 @@ public class Item implements Cloneable {
     }
 
     @Override
+    public String toString() {
+        return "nome=" + name + ", descrizione=" + description  + ", peso=" + weight;
+    }
+
+    @Override
     public Item clone() {
         try {
             Item clone = (Item) super.clone();

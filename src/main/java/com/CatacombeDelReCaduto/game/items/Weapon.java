@@ -18,4 +18,9 @@ public class Weapon extends Item {
     public void setDamage(int damage) {
         this.damage = damage;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + ", danno=" + damage;
+    }
 }

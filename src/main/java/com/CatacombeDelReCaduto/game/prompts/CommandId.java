@@ -21,4 +21,5 @@ public enum CommandId {
     VIEW,
     BACK,
     LOOK,
+    DETAIL
 }

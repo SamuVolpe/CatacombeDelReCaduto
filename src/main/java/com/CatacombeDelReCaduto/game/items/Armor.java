@@ -15,4 +15,9 @@ public class Armor extends Item {
     public void setDefense(int defense) {
         this.defense = defense;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + ", protezione=" + defense;
+    }
 }

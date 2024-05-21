@@ -34,7 +34,8 @@ public class Game {
             ,new Command(CommandId.EXAMINE, List.of("esamina"), "esamina <elemento> - Esamina un elemento nella stanza o la stanza stessa", 1)
             ,new Command(CommandId.VIEW, List.of("visualizza"), "visualizza <'inventario'/'stato'> - Visualizza l'inventario o lo stato del giocatore", 1)
             ,new Command(CommandId.BACK, List.of("back"), "back - Torna alla stanza precedente", 0)
-            ,new Command(CommandId.LOOK, List.of("guarda"), "guarda - Guarda gli oggetti presenti nella stanza", 0));
+            ,new Command(CommandId.LOOK, List.of("guarda"), "guarda - Guarda gli oggetti presenti nella stanza", 0)
+            ,new Command(CommandId.DETAIL, List.of("dettagli"), "dettagli <oggetto> - Vedi dettagli di un oggetto nella stanza o nell'inventario", 1));
     // mappa per il parse dei comandi
     private TreeMap<String, Command> commandMap = null;
 
@@ -175,6 +176,7 @@ public class Game {
             case CommandId.VIEW -> commandView(command.getArgs()[0]);
             case CommandId.BACK -> commandBack();
             case CommandId.LOOK -> commandLook();
+            case CommandId.DETAIL -> commandDetail(command.getArgs()[0]);
             default -> throw new RuntimeException("Command not implemented");
         }
     }
@@ -366,7 +368,28 @@ public class Game {
         } else {
             System.out.println("Non ci sono oggetti nella stanza");
         }
+    }
 
+    private void commandDetail(String arg) {
+        Inventory inventory = player.getInventory();
+        Item item = inventory.removeItem(arg);
+        if (item != null) {
+            System.out.println(item);
+            inventory.addItem(item);
+        } else {
+            List<Item> roomItems = player.getRoom().getItems();
+            item = null;
+            for (Item it : roomItems) {
+                if (it.getName().equalsIgnoreCase(arg)) {
+                    item = it;
+                }
+            }
+            if (item == null) {
+                System.out.println("L'oggetto non e' presente nell'inventario e neanche nella stanza");
+            } else {
+                System.out.println(item);
+            }
+        }
     }
 
     // endregion
