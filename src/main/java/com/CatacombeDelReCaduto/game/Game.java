@@ -32,8 +32,11 @@ public class Game {
             ,new Command(CommandId.THROW, List.of("b", "butta"), "b <oggetto> - Butta oggetto", 1)
             ,new Command(CommandId.EQUIP, List.of("e", "equipaggia"), "e <oggetto> - Equipaggia oggetto", 1)
             ,new Command(CommandId.UNEQUIP, List.of("d", "disequipaggia"), "d <oggetto> - Togli oggetto dall'equipaggiamento", 1)
-            ,new Command(CommandId.EXAMINE, List.of("e", "esamina"), "e <elemento> - Esamina un elemento nella stanza o la stanza stessa", 1)
-            ,new Command(CommandId.VIEW, List.of("visualizza"), "visualizza <'inventario'/'stato'> - Visualizza l'inventario o lo stato del giocatore", 1));
+            ,new Command(CommandId.EXAMINE, List.of("esamina"), "esamina <elemento> - Esamina un elemento nella stanza o la stanza stessa", 1)
+            ,new Command(CommandId.VIEW, List.of("visualizza"), "visualizza <'inventario'/'stato'> - Visualizza l'inventario o lo stato del giocatore", 1)
+            ,new Command(CommandId.BACK, List.of("back"), "back - Torna alla stanza precedente", 0)
+            ,new Command(CommandId.LOOK, List.of("guarda"), "guarda - Guarda gli oggetti presenti nella stanza", 0)
+            ,new Command(CommandId.DETAIL, List.of("dettagli"), "dettagli <oggetto> - Vedi dettagli di un oggetto nella stanza o nell'inventario", 1));
     // mappa per il parse dei comandi
     private TreeMap<String, Command> commandMap = null;
 
@@ -210,6 +213,9 @@ public class Game {
             case CommandId.UNEQUIP -> commandUnequip(command.getArgs()[0]);
             case CommandId.EXAMINE -> commandExamine(command.getArgs()[0]);
             case CommandId.VIEW -> commandView(command.getArgs()[0]);
+            case CommandId.BACK -> commandBack();
+            case CommandId.LOOK -> commandLook();
+            case CommandId.DETAIL -> commandDetail(command.getArgs()[0]);
             default -> throw new RuntimeException("Command not implemented");
         }
     }
@@ -225,15 +231,25 @@ public class Game {
     private void commandMove(String arg){
 
         Room nextRoom = null;
-
+        String prevDir = player.getPreviousRoomDirection();
         // gestisco spostamento, se voglio fare sinonimi di arg es. 'nord' e 'n' da gestirlo con alias in command
         switch (arg)
         {
             case "nord" :
                 nextRoom = player.getRoom().getNearRooms()[0];
+                player.setPreviousRoomDirection("sud");
                 break;
             case "sud" :
                 nextRoom = player.getRoom().getNearRooms()[1];
+                player.setPreviousRoomDirection("nord");
+                break;
+            case "est" :
+                nextRoom = player.getRoom().getNearRooms()[2];
+                player.setPreviousRoomDirection("ovest");
+                break;
+            case "ovest" :
+                nextRoom = player.getRoom().getNearRooms()[3];
+                player.setPreviousRoomDirection("est");
                 break;
             default:
                 System.out.println("Direzione inesistente");
@@ -246,6 +262,7 @@ public class Game {
         }
         else {
             System.out.println("Non c'e` nessuna stanza in questa direzione, provane un'altra");
+            player.setPreviousRoomDirection(prevDir);
         }
     }
 
@@ -300,12 +317,67 @@ public class Game {
     }
 
     private void commandEquip(String arg) {
+        Inventory inventory = player.getInventory();
+        Item toEquip = inventory.removeItem(arg);
+        if (toEquip == null) {
+            System.out.println("Impossibile equipaggiare l'oggetto: non è presente nell'inventario");
+        } else {
+            if (toEquip instanceof Weapon) {
+                Weapon currentWeapon = player.getWeapon();
+                if (currentWeapon != null) {
+                    System.out.println("Impossibile equipaggiare l'arma: è già quipaggiata un'arma");
+                } else {
+                    player.setWeapon((Weapon) toEquip);
+                    System.out.println(toEquip.getName() + " equipaggiato con successo");
+                }
+            } else if (toEquip instanceof Armor) {
+                Armor currentArmor = player.getArmor();
+                if (currentArmor != null) {
+                    System.out.println("Impossibile equipaggiare l'armatura: è già quipaggiata un'armatura");
+                } else {
+                    player.setArmor((Armor) toEquip);
+                    System.out.println(toEquip.getName() + " equipaggiato con successo");
+                }
+            } else {
+                System.out.println("Impossibile equipaggiare l'oggetto: non è un oggetto equipaggiabile");
+                inventory.addItem(toEquip);
+            }
+        }
     }
 
     private void commandUnequip(String arg) {
+        Weapon currentWeapon = player.getWeapon();
+        Armor currentArmor = player.getArmor();
+        Inventory inventory = player.getInventory();
+        if (currentArmor != null && currentArmor.getName().equalsIgnoreCase(arg)) {
+            boolean flag = inventory.addItem(currentArmor);
+            if (flag) {
+                player.setArmor(null);
+                System.out.println(arg + " rimosso dall'equipaggiamento");
+            } else {
+                System.out.println("Impossibile rimuovere " + arg + " dall'equipaggiamento: non può essere inserito nell'inventario perchè è troppo pesante, è necessario alleggerire l'inventario");
+            }
+        } else if (currentWeapon != null && currentWeapon.getName().equalsIgnoreCase(arg)) {
+            boolean flag = inventory.addItem(currentWeapon);
+            if (flag) {
+                player.setWeapon(null);
+                System.out.println(arg + " rimosso dall'equipaggiamento");
+            } else {
+                System.out.println("Impossibile rimuovere " + arg + " dall'equipaggiamento: non può essere inserito nell'inventario perchè è troppo pesante, è necessario alleggerire l'inventario");
+            }
+        } else {
+            System.out.println("Impossibile rimuovere " + arg + " dall'equipaggiamento: non è equipaggiato");
+        }
     }
 
     private void commandExamine(String arg) {
+        Room currentRoom = player.getRoom();
+        String desc = currentRoom.getExaminables().get(arg);
+        if (desc == null) {
+            System.out.println("Non esaminabile");
+        } else {
+            System.out.println(desc);
+        }
     }
 
     private void commandView(String arg) {
@@ -313,6 +385,49 @@ public class Game {
             System.out.println(player.getInventory());
         } else if (arg.equalsIgnoreCase("stato")) {
             System.out.println(player);
+        }
+    }
+
+    private void commandBack() {
+        if (player.getPreviousRoomDirection() == null) {
+            System.out.println("Non e' possibile tornare indietro, non ti sei mai spostato!");
+        } else {
+            commandMove(player.getPreviousRoomDirection());
+        }
+    }
+
+    private void commandLook() {
+        List<Item> items = player.getRoom().getItems();
+        String out = "";
+        for (Item it : items) {
+            out += it.getName() + ", ";
+        }
+        if (!items.isEmpty()) {
+            System.out.println(out.substring(0, out.length()-2));
+        } else {
+            System.out.println("Non ci sono oggetti nella stanza");
+        }
+    }
+
+    private void commandDetail(String arg) {
+        Inventory inventory = player.getInventory();
+        Item item = inventory.removeItem(arg);
+        if (item != null) {
+            System.out.println(item);
+            inventory.addItem(item);
+        } else {
+            List<Item> roomItems = player.getRoom().getItems();
+            item = null;
+            for (Item it : roomItems) {
+                if (it.getName().equalsIgnoreCase(arg)) {
+                    item = it;
+                }
+            }
+            if (item == null) {
+                System.out.println("L'oggetto non e' presente nell'inventario e neanche nella stanza");
+            } else {
+                System.out.println(item);
+            }
         }
     }
 

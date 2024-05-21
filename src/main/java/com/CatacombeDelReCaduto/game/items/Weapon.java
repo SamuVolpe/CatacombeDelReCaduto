@@ -24,4 +24,9 @@ public class Weapon extends Item implements Cloneable {
         Weapon clone = (Weapon) super.clone();
         return clone;
     }
+
+    @Override
+    public String toString() {
+        return super.toString() + ", danno=" + damage;
+    }
 }

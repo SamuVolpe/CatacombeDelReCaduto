@@ -16,6 +16,7 @@ public class Player extends Entity{
     private Armor armor;
     private Inventory inventory = new Inventory();
     private Room room = null;
+    private String previousRoomDirection = null;
 
     public Player(long creationDate, String name){
         this(creationDate, name, null, null);
@@ -122,6 +123,14 @@ public class Player extends Entity{
     public void battle(Enemy enemy) throws DeathException {
         BattleMenu battle = new BattleMenu(this, enemy);
         battle.battle();
+    }
+
+    public String getPreviousRoomDirection() {
+        return previousRoomDirection;
+    }
+
+    public void setPreviousRoomDirection(String previousRoomDirection) {
+        this.previousRoomDirection = previousRoomDirection;
     }
 
     @Override

@@ -19,4 +19,7 @@ public enum CommandId {
     ATTACK,
     ESCAPE,
     VIEW,
+    BACK,
+    LOOK,
+    DETAIL
 }
