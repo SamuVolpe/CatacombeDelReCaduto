@@ -32,7 +32,8 @@ public class Game {
             ,new Command(CommandId.EQUIP, List.of("e", "equipaggia"), "e <oggetto> - Equipaggia oggetto", 1)
             ,new Command(CommandId.UNEQUIP, List.of("d", "disequipaggia"), "d <oggetto> - Togli oggetto dall'equipaggiamento", 1)
             ,new Command(CommandId.EXAMINE, List.of("esamina"), "esamina <elemento> - Esamina un elemento nella stanza o la stanza stessa", 1)
-            ,new Command(CommandId.VIEW, List.of("visualizza"), "visualizza <'inventario'/'stato'> - Visualizza l'inventario o lo stato del giocatore", 1));
+            ,new Command(CommandId.VIEW, List.of("visualizza"), "visualizza <'inventario'/'stato'> - Visualizza l'inventario o lo stato del giocatore", 1)
+            ,new Command(CommandId.BACK, List.of("back"), "back - Torna alla stanza precedente", 0));
     // mappa per il parse dei comandi
     private TreeMap<String, Command> commandMap = null;
 
@@ -171,6 +172,7 @@ public class Game {
             case CommandId.UNEQUIP -> commandUnequip(command.getArgs()[0]);
             case CommandId.EXAMINE -> commandExamine(command.getArgs()[0]);
             case CommandId.VIEW -> commandView(command.getArgs()[0]);
+            case CommandId.BACK -> commandBack();
             default -> throw new RuntimeException("Command not implemented");
         }
     }
@@ -186,21 +188,25 @@ public class Game {
     private void commandMove(String arg){
 
         Room nextRoom = null;
-
+        String prevDir = player.getPreviousRoomDirection();
         // gestisco spostamento, se voglio fare sinonimi di arg es. 'nord' e 'n' da gestirlo con alias in command
         switch (arg)
         {
             case "nord" :
                 nextRoom = player.getRoom().getNearRooms()[0];
+                player.setPreviousRoomDirection("sud");
                 break;
             case "sud" :
                 nextRoom = player.getRoom().getNearRooms()[1];
+                player.setPreviousRoomDirection("nord");
                 break;
             case "est" :
                 nextRoom = player.getRoom().getNearRooms()[2];
+                player.setPreviousRoomDirection("ovest");
                 break;
             case "ovest" :
                 nextRoom = player.getRoom().getNearRooms()[3];
+                player.setPreviousRoomDirection("est");
                 break;
             default:
                 System.out.println("Direzione inesistente");
@@ -213,6 +219,7 @@ public class Game {
         }
         else {
             System.out.println("Non c'e` nessuna stanza in questa direzione, provane un'altra");
+            player.setPreviousRoomDirection(prevDir);
         }
     }
 
@@ -335,6 +342,14 @@ public class Game {
             System.out.println(player.getInventory());
         } else if (arg.equalsIgnoreCase("stato")) {
             System.out.println(player);
+        }
+    }
+
+    private void commandBack() {
+        if (player.getPreviousRoomDirection() == null) {
+            System.out.println("Non e' possibile tornare indietro, non ti sei mai spostato!");
+        } else {
+            commandMove(player.getPreviousRoomDirection());
         }
     }
 

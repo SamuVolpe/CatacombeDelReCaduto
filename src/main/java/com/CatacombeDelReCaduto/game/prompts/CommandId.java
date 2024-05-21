@@ -19,4 +19,5 @@ public enum CommandId {
     ATTACK,
     ESCAPE,
     VIEW,
+    BACK,
 }
