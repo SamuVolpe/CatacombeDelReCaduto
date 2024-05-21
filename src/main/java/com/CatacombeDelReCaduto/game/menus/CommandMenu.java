@@ -29,7 +29,7 @@ public abstract class CommandMenu extends Menu {
     }
 
     /**
-     * Display del menu di default
+     * Display del menu
      */
     protected void display() {
         boolean handled = false;

@@ -10,8 +10,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Menu per eliminare una partita esistente
+ */
 public class DeleteMenu extends Menu {
     private final Logger logger =  Logger.getLogger(this.getClass().getName());
     private Map<Long, String> games = new TreeMap<>();
@@ -23,6 +27,9 @@ public class DeleteMenu extends Menu {
         initMenuItems(new ArrayList<>(games.values()));
     }
 
+    /**
+     * Mostra menu e gestisce l'eliminazione della partita scelta
+     */
     public void display() {
         if (games.isEmpty()){
             System.out.println("Nessuna partita esistente");
@@ -52,6 +59,11 @@ public class DeleteMenu extends Menu {
         deleteGame(game.getKey(), game.getValue());
     }
 
+    /**
+     * Elimina la partita
+     * @param gameId id partita
+     * @param playerName nome giocatore
+     */
     private void deleteGame(Long gameId, String playerName){
         // elimina gioco da mappa
         games.remove(gameId);
@@ -60,18 +72,19 @@ public class DeleteMenu extends Menu {
         File file = new File(FilesPath.SAVES_FILE_PATH);
         ObjectMapper mapper = new ObjectMapper();
 
-        // Scrivi la mappa aggiornata nel file JSON
+        // scrivo la mappa aggiornata nel file json
         try {
             mapper.writeValue(file, games);
             logger.info("saves updated");
         } catch (IOException ex) {
-            logger.severe(ex.getMessage());
+            logger.log(Level.SEVERE, "", ex);
+            throw new RuntimeException("Errore nell'eliminazione della partita, il file : '" + FilesPath.SAVES_FILE_PATH + "' potrebbe essere stato compromesso");
         }
 
         // elimina il file di gioco
         file = new File(FilesPath.PLAYER_ROOT + "\\" + playerName + "_" + gameId + ".json");
         boolean isDeleted = file.delete();
         if (!isDeleted)
-            logger.severe("impossibile eliminare il file : " + file);
+            throw new RuntimeException("impossibile eliminare il file : " + file);
     }
 }

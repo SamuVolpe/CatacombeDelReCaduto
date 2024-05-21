@@ -9,6 +9,9 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Logger;
 
+/**
+ * Menu per il caricamento di una partita
+ */
 public class LoadMenu extends Menu {
     private final Logger logger =  Logger.getLogger(this.getClass().getName());
     private Map<Long, String> games = new TreeMap<>();
@@ -20,7 +23,11 @@ public class LoadMenu extends Menu {
         initMenuItems(new ArrayList<>(games.values()));
     }
 
-    public Save display() {
+    /**
+     * Mostra menu partite caricabili
+     * @return partita scelta - map - key : gameId - value : nome giocatore
+     */
+    public Map.Entry<Long, String> display() {
         if (games.isEmpty()){
             System.out.println("Nessuna partita esistente");
             return null;
@@ -46,11 +53,6 @@ public class LoadMenu extends Menu {
 
         // trova gioco scelto e lo carica nella classe
         Map.Entry<Long, String> game = new ArrayList<>(games.entrySet()).get(choice - 1);
-        return loadGame(game.getKey(), game.getValue());
-    }
-
-    private Save loadGame(Long gameId, String playerName){
-        // carica gioco dal file
-        return new Save();
+        return game;
     }
 }

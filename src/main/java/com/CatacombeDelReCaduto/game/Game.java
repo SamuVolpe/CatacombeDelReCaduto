@@ -3,6 +3,7 @@ package com.CatacombeDelReCaduto.game;
 import com.CatacombeDelReCaduto.game.entities.*;
 import com.CatacombeDelReCaduto.game.items.*;
 import com.CatacombeDelReCaduto.game.jsonHandlers.*;
+import com.CatacombeDelReCaduto.game.menus.BattleMenu;
 import com.CatacombeDelReCaduto.game.prompts.InputReader;
 import com.CatacombeDelReCaduto.game.prompts.Command;
 import com.CatacombeDelReCaduto.game.prompts.CommandId;
@@ -51,6 +52,10 @@ public class Game {
     private Map<String, Room> rooms = new TreeMap<>();
 
     public Game() {
+        this(null, null);
+    }
+
+    public Game(Long creationDate, String playerName) {
         // carica dati base di gioco
 
         // carica dati comandi
@@ -59,19 +64,41 @@ public class Game {
         items = FilesManager.loadItems();
         // carica nemici
         enemies = FilesManager.loadEnemies(items);
+        // todo npc
 
-        // npc todo
-        // rooms
+        if (creationDate == null)
+            // carica stanze con dati d'inizio
+            rooms = FilesManager.loadRooms(items, enemies);
+        else{
+            // carica stanze con dati basici
+            rooms = FilesManager.loadRooms();
+            // carica salvataggio
+            load(creationDate, playerName);
+        }
     }
 
     // metodo dove verra' eseguito il gioco
     public void run() {
+        // handle start nuovo gioco
+        if (player == null)
+            startNew();
+
         System.out.println(player.getRoom().getDescription());
 
         // loop che continua a chiedere comandi e a parsarli finche` non esce
         Command command = null;
 
         do {
+            try {
+                // possibile mostro che ti attacca
+                if (player.getRoom().isEnemyEngaging())
+                    player.battle(player.getRoom().getEnemies().values().stream().findFirst().get());
+
+                // todo da gestire vittoria nel caso abbia sconfitto il boss
+            }catch (DeathException death){
+
+            }
+
             // prendo input
             String userCommand = InputReader.getInput();
 
@@ -84,7 +111,7 @@ public class Game {
         } while (command == null || command.getId() != CommandId.EXIT_GAME);
     }
 
-    public void startNew() {
+    private void startNew() {
         // inizia nuovo gioco da 0
 
         // chiedi nome giocatore
@@ -102,10 +129,8 @@ public class Game {
         }while (!pattern.matcher(name).matches());
 
         // crea player
-        player = new Player(System.currentTimeMillis(), name, "un giovane avventuriero in cerca di nuove sfide", null, null);
+        player = new Player(System.currentTimeMillis(), name, null, null);
 
-        // setup stanze con dati d'inizio
-        rooms = FilesManager.loadRooms(items, enemies);
         // setup stanza d'inizio
         player.setRoom(rooms.get("inizio"));
 
@@ -143,6 +168,20 @@ public class Game {
 
         // salva sul file
         FilesManager.saveGame(player.getSaveFileName(), save);
+    }
+
+    private void load(Long creationDate, String playerName){
+        // carica gioco
+        Save save = FilesManager.loadGame(playerName + "_" + creationDate + ".json");
+
+        // carica dati stanze
+        for (var entry : rooms.entrySet()){
+            entry.getValue().load(save.getRooms().get(entry.getKey()), items, enemies);
+        }
+
+        // carica dati giocatore
+        Player player = new Player(creationDate, playerName);
+        player.load(save.getPlayer(), items ,rooms);
     }
 
     private void initCommandMap() {

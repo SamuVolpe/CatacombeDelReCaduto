@@ -1,6 +1,6 @@
 package com.CatacombeDelReCaduto.game.items;
 
-public class Weapon extends Item {
+public class Weapon extends Item implements Cloneable {
     private int damage;
 
     public Weapon() {
@@ -17,5 +17,11 @@ public class Weapon extends Item {
 
     public void setDamage(int damage) {
         this.damage = damage;
+    }
+
+    @Override
+    public Weapon clone() {
+        Weapon clone = (Weapon) super.clone();
+        return clone;
     }
 }

@@ -16,8 +16,8 @@ public class Main {
             MainMenu mainMenu = new MainMenu();
             mainMenu.display();
         }catch (Exception ex){
-            System.out.println("Errore nell'esecuzione del programma : " + ex.getMessage());
-            logger.log(Level.SEVERE, "generic error", ex);
+            System.out.println("Errore nell'esecuzione del programma\n" + ex.getMessage());
+            logger.log(Level.SEVERE, "", ex);
         }
     }
 

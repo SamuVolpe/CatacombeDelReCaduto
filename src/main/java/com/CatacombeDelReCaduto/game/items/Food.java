@@ -1,6 +1,6 @@
 package com.CatacombeDelReCaduto.game.items;
 
-public class Food extends Item{
+public class Food extends Item implements Cloneable{
     private int healthRecoveryAmount;
 
     public Food() {
@@ -17,5 +17,11 @@ public class Food extends Item{
 
     public void setHealthRecoveryAmount(int healthRecoveryAmount) {
         this.healthRecoveryAmount = healthRecoveryAmount;
+    }
+
+    @Override
+    public Food clone() {
+        Food clone = (Food) super.clone();
+        return clone;
     }
 }

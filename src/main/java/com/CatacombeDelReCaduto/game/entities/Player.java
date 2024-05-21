@@ -1,8 +1,12 @@
 package com.CatacombeDelReCaduto.game.entities;
 
+import com.CatacombeDelReCaduto.game.DeathException;
 import com.CatacombeDelReCaduto.game.items.*;
 import com.CatacombeDelReCaduto.game.jsonHandlers.PlayerSave;
+import com.CatacombeDelReCaduto.game.menus.BattleMenu;
 import com.CatacombeDelReCaduto.game.rooms.*;
+
+import java.util.Map;
 
 public class Player extends Entity{
     // data creazione del personaggio
@@ -13,8 +17,12 @@ public class Player extends Entity{
     private Inventory inventory = new Inventory();
     private Room room = null;
 
-    public Player(long creationDate, String name, String description, Weapon weapon, Armor armor) {
-        this(creationDate, name, description, 100, 5, 0, weapon, armor);
+    public Player(long creationDate, String name){
+        this(creationDate, name, null, null);
+    }
+
+    public Player(long creationDate, String name, Weapon weapon, Armor armor) {
+        this(creationDate, name, "avventuriero in cerca di fortuna", 100, 5, 0, weapon, armor);
     }
 
     public Player(long creationDate, String name, String description, int maxHealth, int attack, int defense, Weapon weapon, Armor armor) {
@@ -97,8 +105,23 @@ public class Player extends Entity{
         return playerSave;
     }
 
-    public void load(PlayerSave playerSave){
+    public void load(PlayerSave playerSave,Map<String, Item> allItems, Map<String, Room> allRooms){
         // setto dati del player
+        setHealth(playerSave.getHealth());
+        addScore(playerSave.getScore());
+        setRoom(allRooms.get(playerSave.getRoom()));
+        if (playerSave.getArmor() != null)
+            setArmor((Armor) allItems.get(playerSave.getArmor()).clone());
+        if (playerSave.getArmor() != null)
+            setWeapon((Weapon) allItems.get(playerSave.getWeapon()).clone());
+        for (String itemName : playerSave.getInventory()){
+            inventory.addItem(allItems.get(itemName).clone());
+        }
+    }
+
+    public void battle(Enemy enemy) throws DeathException {
+        BattleMenu battle = new BattleMenu(this, enemy);
+        battle.battle();
     }
 
     @Override

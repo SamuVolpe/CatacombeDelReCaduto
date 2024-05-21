@@ -28,6 +28,7 @@ public class BattleMenu extends CommandMenu {
         this.enemy = enemy;
     }
 
+    // true nemico sconfitto, false fuggito
     public boolean battle() throws DeathException {
         super.display();
 
@@ -56,7 +57,7 @@ public class BattleMenu extends CommandMenu {
             case CommandId.USE -> commandUse(command.getArgs()[0]);
             case CommandId.VIEW -> commandView();
             case CommandId.ESCAPE -> true;
-            default -> throw new RuntimeException("Command not implemented");
+            default -> throw new IllegalArgumentException("Command not implemented");
         };
     }
 

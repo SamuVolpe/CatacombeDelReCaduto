@@ -4,14 +4,17 @@ import com.CatacombeDelReCaduto.game.entities.*;
 import com.CatacombeDelReCaduto.game.items.*;
 import com.CatacombeDelReCaduto.game.jsonHandlers.RoomSave;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Stanza di gioco
+ */
 public class Room {
     private String name;
     private String description;
+    // 1 = 10% di prob che nemico attacchi
+    private int dangerLevel;
     // nord,sud,est,ovest
     private Room[] nearRooms = null;
     private Npc npc = null;
@@ -19,12 +22,21 @@ public class Room {
     private Map<String, Enemy> enemies = null;
     private Map<String, String> examinables = null; //todo ancora da implementare, key nome oggetto esaminabile, value dialogo di risposta
 
-    public Room() {
-    }
-
-    public Room(String name, String description) {
+    public Room(String name, String description, int dangerLevel) {
         this.name = name;
         this.description = description;
+        setDangerLevel(dangerLevel);
+    }
+
+    private void setDangerLevel(int dangerLevel){
+        if (dangerLevel > 10)
+            this.dangerLevel = 10;
+        else
+            this.dangerLevel = dangerLevel;
+    }
+
+    public int getDangerLevel() {
+        return dangerLevel;
     }
 
     public String getName() {
@@ -75,6 +87,15 @@ public class Room {
         this.examinables = examinables;
     }
 
+    public boolean isEnemyEngaging(){
+        if (enemies == null || enemies.isEmpty())
+            return false;
+
+        // calcolo con probabilita' che il nemico attacchi
+        Random random = new Random();
+        return random.nextInt(10) < dangerLevel;
+    }
+
     public RoomSave save(){
         RoomSave roomSave = new RoomSave();
         // dati da salvare
@@ -83,7 +104,14 @@ public class Room {
         return roomSave;
     }
 
-    public void load(RoomSave roomSave){
-        // carica dati in istanza
+    public void load(RoomSave roomSave, Map<String, Item> allItems, Map<String, Enemy> allEnemies){
+        // setto dati stanza
+        items = new ArrayList<>();
+        for (String itemKey : roomSave.getItems())
+            items.add(allItems.get(itemKey).clone());
+
+        enemies = new TreeMap<>();
+        for (String enemyKey : roomSave.getEnemies())
+            enemies.put(enemyKey, allEnemies.get(enemyKey).clone());
     }
 }

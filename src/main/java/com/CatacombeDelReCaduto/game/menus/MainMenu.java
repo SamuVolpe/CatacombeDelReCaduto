@@ -7,6 +7,9 @@ import com.CatacombeDelReCaduto.game.prompts.*;
 import java.util.List;
 import java.util.logging.Logger;
 
+/**
+ * Mostra menu di gestione del gioco
+ */
 public class MainMenu extends CommandMenu {
     // l'ordine dei comandi e' importante per la stampa del menu
     private static final List<Command> COMMANDS = List.of(
@@ -31,15 +34,13 @@ public class MainMenu extends CommandMenu {
             case CommandId.LOAD_GAME -> commandLoadGame();
             case CommandId.DELETE_GAME -> commandDeleteGame();
             case CommandId.EXIT_GAME -> true;
-            default -> throw new RuntimeException("Command not implemented");
+            default -> throw new IllegalArgumentException("Command not implemented");
         };
     }
 
     private boolean commandStartNewGame() {
-        // carica dati gioco
-        Game game = new Game();
         // carica dati nuovo gioco
-        game.startNew();
+        Game game = new Game();
         // avvia gioco
         game.run();
 
@@ -47,29 +48,24 @@ public class MainMenu extends CommandMenu {
     }
 
     private boolean commandLoadGame() {
-        logger.info("load");
-        // guarda partite salvate
         // mostra menu per decidere quale partita caricare
-        // carica la partita scelta
-        // avvia partita
-
         LoadMenu loadMenu = new LoadMenu();
-        Save loadedGameData = loadMenu.display();
+        var chosedGame = loadMenu.display();
 
-        if (loadedGameData == null)
+        // nessuna partita scelta
+        if (chosedGame == null)
             return false;
 
-        // handle save into game con un metodo di game
+        // carica dati gioco
+        Game game = new Game(chosedGame.getKey(), chosedGame.getValue());
+        // avvia gioco
+        game.run();
 
         return true;
     }
 
     private boolean commandDeleteGame() {
-        logger.info("delete");
-        // mostra menu partite
-        // elimina partita scelta
-        // rimostra menu iniziale??
-
+        // mostra menu elimina parita e elimina partita
         DeleteMenu deleteMenu = new DeleteMenu();
         deleteMenu.display();
         return false;

@@ -80,10 +80,8 @@ public class FilesManager {
             });
         } catch (IOException ex) {
             logger.log(Level.SEVERE, "error on games loading", ex);
-            System.out.println("Errore nel caricamento delle partite, il file : '" + FilesPath.SAVES_FILE_PATH + "' potrebbe essere stato compromesso");
+            throw new RuntimeException("Errore nel caricamento delle partite, il file : '" + FilesPath.SAVES_FILE_PATH + "' potrebbe essere stato compromesso");
         }
-
-        return new TreeMap<>();
     }
 
     /**
@@ -207,8 +205,9 @@ public class FilesManager {
 
                 // Estrae i dati
                 String description = roomNode.get("description").asText();
+                int dangerLevel = roomNode.get("dangerLevel").asInt();
 
-                Room room = new Room(name, description);
+                Room room = new Room(name, description, dangerLevel);
 
                 // carica stanze vicine
                 JsonNode roomsNode = roomNode.get("nearRooms");
