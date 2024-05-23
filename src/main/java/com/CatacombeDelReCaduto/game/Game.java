@@ -10,6 +10,7 @@ import com.CatacombeDelReCaduto.game.prompts.CommandId;
 import com.CatacombeDelReCaduto.game.rooms.Room;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -34,7 +35,7 @@ public class Game {
             ,new Command(CommandId.EXAMINE, List.of("esamina"), "esamina <elemento> - Esamina un elemento nella stanza o la stanza stessa", 1)
             ,new Command(CommandId.VIEW, List.of("v","visualizza"), "v <'inventario'/'stato'> - Visualizza l'inventario o lo stato del giocatore", 1)
             ,new Command(CommandId.BACK, List.of("back"), "back - Torna alla stanza precedente", 0)
-            ,new Command(CommandId.LOOK, List.of("guarda"), "guarda - Guarda gli oggetti presenti nella stanza", 0)
+            ,new Command(CommandId.LOOK, List.of("guarda"), "guarda <'stanze'/'oggetti'/'esaminabili'> - Guarda le stanze nei dintorni/gli oggetti presenti nella stanza/gli esaminabili presenti nella stanza", 1)
             ,new Command(CommandId.DETAIL, List.of("dettagli"), "dettagli <oggetto> - Vedi dettagli di un oggetto nella stanza o nell'inventario", 1));
     // mappa per il parse dei comandi
     private TreeMap<String, Command> commandMap = null;
@@ -266,7 +267,7 @@ public class Game {
             case EXAMINE -> commandExamine(command.getArgs()[0]);
             case VIEW -> commandView(command.getArgs()[0]);
             case BACK -> commandBack();
-            case LOOK -> commandLook();
+            case LOOK -> commandLook(command.getArgs()[0]);
             case DETAIL -> commandDetail(command.getArgs()[0]);
             default -> throw new IllegalArgumentException("Command not implemented");
         }
@@ -440,16 +441,24 @@ public class Game {
         }
     }
 
-    private void commandLook() {
-        List<Item> items = player.getRoom().getItems();
-        String out = "";
-        for (Item it : items) {
-            out += it.getName() + ", ";
-        }
-        if (!items.isEmpty()) {
-            System.out.println(out.substring(0, out.length()-2));
+    private void commandLook(String arg) {
+        if (arg.equalsIgnoreCase("oggetti")) {
+            List<Item> items = player.getRoom().getItems();
+            String out = "";
+            for (Item it : items) {
+                out += it.getName() + ", ";
+            }
+            if (!items.isEmpty()) {
+                System.out.println(out.substring(0, out.length()-2));
+            } else {
+                System.out.println("Non ci sono oggetti nella stanza");
+            }
+        } else if (arg.equalsIgnoreCase("stanze")) {
+            System.out.println(player.getRoom().printNearRooms());
+        } else if (arg.equalsIgnoreCase("esaminabili")) {
+            System.out.println(player.getRoom().printExaminables());
         } else {
-            System.out.println("Non ci sono oggetti nella stanza");
+            System.out.println("Argomento non valido");
         }
     }
 
