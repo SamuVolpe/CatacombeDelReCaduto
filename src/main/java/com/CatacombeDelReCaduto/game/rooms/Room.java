@@ -31,6 +31,48 @@ public class Room {
         return dangerLevel;
     }
 
+    public String printNearRooms() {
+        String ret = "";
+        if (nearRooms == null) {
+            return "Non ci sono stanze vicine";
+        }
+        if (nearRooms[0] == null) {
+            ret += "Nord: nessuna stanza in questa direzione\n";
+        } else {
+            ret += "Nord: " + nearRooms[0].name + "\n";
+        }
+        if (nearRooms[2] == null) {
+            ret += "Est: nessuna stanza in questa direzione\n";
+        } else {
+            ret += "Est: " + nearRooms[2].name + "\n";
+        }
+        if (nearRooms[1] == null) {
+            ret += "Sud: nessuna stanza in questa direzione\n";
+        } else {
+            ret += "Sud: " + nearRooms[1].name + "\n";
+        }
+        if (nearRooms[3] == null) {
+            ret += "Ovest: nessuna stanza in questa direzione";
+        } else {
+            ret += "Ovest: " + nearRooms[3].name;
+        }
+
+        return ret;
+    }
+
+    public String printExaminables() {
+        String ret = "";
+        if (!examinables.isEmpty()) {
+            for (Map.Entry<String, String> entry : examinables.entrySet()) {
+                ret += entry.getKey() + ", ";
+            }
+            ret = ret.substring(0, ret.length() - 2);
+        } else {
+            ret = "Non c'è niente da esaminare nella stanza";
+        }
+        return ret;
+    }
+
     public String getName() {
         return name;
     }
