@@ -79,7 +79,8 @@
 	},
 	"medaglione del re" : {
 		"type": "",
-		"description": "Un medaglione dorato con un inquietante teschio incastonato, chiave per accedere alla stanza del tesoro del re."
+		"description": "Un medaglione dorato con un inquietante teschio incastonato, chiave per accedere alla stanza del tesoro del re.",
+		"weight": 0
 	}
 }
 

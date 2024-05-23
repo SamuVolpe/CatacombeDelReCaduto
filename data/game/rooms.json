@@ -61,20 +61,20 @@
 		"items" : [],
 		"enemies" : ["golem"]
 	},
-	"Corridoio1" : {
+	"Corridoio" : {
 		"description": "\"La poca luce presente mi permette di scorgere tra i muri segni di artigli… Potrebbe esserci una creatura qui intorno\"",
 		"dangerLevel": 4,
-		"nearRooms": [null, null, "Stanza del sarcofago", "Corridoio2"],
+		"nearRooms": [null, null, "Stanza del sarcofago", "Corridoio lungo"],
 		"examinables" : {
 			"candelabro" : "Un antico candelabro di ferro, con residui di cera indurita, usata nel passato per illuminare le catacombe"
 		},
 		"items" : ["ascia arrugginita", "mele comuni", "spada normale"],
 		"enemies" : ["occhio errante", "occhio errante", "ragno"]
 	},
-	"Corridoio2" : {
-		"description": "\"Un altro corridoio...\"",
+	"Corridoio lungo" : {
+		"description": "\"Il corridoio prosegue\"",
 		"dangerLevel": 4,
-		"nearRooms": [null, "Altare", "Corridoio1", "Stanza della Chimera"],
+		"nearRooms": [null, "Altare", "Corridoio", "Stanza della Chimera"],
 		"examinables" : {
 			"scrigno" : "Uno scrigno antico, coperto di polvere e ruggine, prometteva tesori nascosti.",
 			"gabbia" : "Sono le vecchie gabbie del regno dove mettevano i prigionieri",

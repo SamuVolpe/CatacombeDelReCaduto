@@ -135,7 +135,7 @@ public class Game {
         player = new Player(System.currentTimeMillis(), name, null, null);
 
         // setup stanza d'inizio
-        player.setRoom(rooms.get("inizio"));
+        player.setRoom(rooms.get("Entrata"));
 
         // crea cartella di salvataggio se non esiste
         File directory = new File(FilesPath.PLAYER_ROOT);

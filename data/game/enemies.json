@@ -13,7 +13,7 @@
 		"maxHealth": 20,
 		"attack": 4,
 		"defense" : 10,
-		"drop" : ["coltello"]
+		"drop" : ["coltello normale"]
 	},
 	"scheletro pane" : {
 		"name": "scheletro",
