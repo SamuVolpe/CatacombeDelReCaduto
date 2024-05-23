@@ -1,17 +1,98 @@
 {
 	"scheletro" : {
 		"name": "scheletro",
-		"description": "un non morto invocato dal lich",
-		"maxHealth": 10,
-		"attack": 5,
-		"defense" : 10,
-		"drop" : ["coltello", "pane"]
-	},
-	"spettro" :{
-		"name": "spettro",
-		"description": "umano ucciso dal lich la cui anima e` legata al labirinto e che cerca salvezza",
+		"description": "Un non morto evocato dal lich, faceva parte del esercito del re",
 		"maxHealth": 20,
+		"attack": 4,
+		"defense" : 10,
+		"drop" : []
+	},
+	"scheletro coltello" : {
+		"name": "scheletro",
+		"description": "Un non morto evocato dal lich, faceva parte del esercito del re",
+		"maxHealth": 20,
+		"attack": 4,
+		"defense" : 10,
+		"drop" : ["coltello"]
+	},
+	"scheletro pane" : {
+		"name": "scheletro",
+		"description": "Un non morto evocato dal lich, faceva parte del esercito del re",
+		"maxHealth": 20,
+		"attack": 4,
+		"defense" : 10,
+		"drop" : ["pane"]
+	},
+	"ghoul" : {
+		"name": "ghoul",
+		"description": "Creature che si nutrono di carne morta e possono infliggere malattie",
+		"maxHealth": 35,
 		"attack": 10,
-		"defense" : 41
+		"defense" : 5,
+		"drop" : []
+	},
+	"ghoul ascia armatura" : {
+		"name": "ghoul",
+		"description": "Creature che si nutrono di carne morta e possono infliggere malattie",
+		"maxHealth": 35,
+		"attack": 10,
+		"defense" : 5,
+		"drop" : ["ascia normale", "armatura normale"]
+	},
+	"ragno spada" : {
+		"name": "ragno",
+		"description": "Infestano le catacombe da quando il regno è caduto, potrebbero essere geneticamente modificati a causa della magia nera",
+		"maxHealth": 30,
+		"attack": 8,
+		"defense" : 4,
+		"drop" : ["spada normale"]
+	},
+	"ragno" : {
+		"name": "ragno",
+		"description": "Infestano le catacombe da quando il regno è caduto, potrebbero essere geneticamente modificati a causa della magia nera",
+		"maxHealth": 30,
+		"attack": 8,
+		"defense" : 4,
+		"drop" : []
+	},
+	"occhio errante" : {
+		"name": "occhio errante",
+		"description": "Creature composte da occhi senza pupille che fluttuano nell’aria in cerca di intrusi, sono gli “occhi” delle catacombe",
+		"maxHealth": 10,
+		"attack": 15,
+		"defense" : 0,
+		"drop" : []
+	},
+	"occhio errante mele spada" : {
+		"name": "occhio errante",
+		"description": "Creature composte da occhi senza pupille che fluttuano nell’aria in cerca di intrusi, sono gli \"occhi\" delle catacombe",
+		"maxHealth": 10,
+		"attack": 15,
+		"defense" : 0,
+		"drop" : ["mele comuni", "spada arrugginita"]
+	},
+	"golem" : {
+		"name": "Golem",
+		"description": "Golem gigante di pietra creato dal Re caduto tramite la magia oscura. Protegge la spada del re.",
+		"maxHealth": 50,
+		"attack": 30,
+		"defense" : 20,
+		"drop" : ["mele rare", "mele rare", "mele rare", "spada del re caduto"]
+	},
+	"chimera" : {
+		"name": "Chimera",
+		"description": "Chimera creata dagli esperimenti del Re caduto con diversi animali, ha una Testa d’aquila, corpo di leone e coda di serpente. Protegge l'armatura del re.",
+		"maxHealth": 50,
+		"attack": 30,
+		"defense" : 20,
+		"drop" : ["mele rare", "mele rare", "mele rare", "armatura del re caduto"]
+	},
+	"lich" : {
+		"name": "Lich (Re caduto)",
+		"description": "Quel che è rimasto del re caduto, una creatura fatta di ossa che emana un’essenza malvagia",
+		"maxHealth": 70,
+		"attack": 70,
+		"defense" : 30,
+		"drop" : []
 	}
 }
