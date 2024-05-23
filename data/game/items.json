@@ -1,15 +1,86 @@
 {
-	"pane" : {
-		"type": "food",
-		"description": "del pane",
-		"weight": 1,
-		"healthRecoveryAmount": 10
-	},
-	"coltello" :{
+	"coltello arrugginito" :{
 		"type": "weapon",
-		"description": "un coltello arrugginito",
+		"description": "Coltello arrugginito trovato nelle catacombe di qualche povero",
 		"weight": 1,
 		"damage": 5
+	},
+	"coltello normale" :{
+		"type": "weapon",
+		"description": "Coltello normale rubato a qualche viandante, fa ancora il suo sporco lavoro",
+		"weight": 1,
+		"damage": 6
+	},
+	"spada arrugginita" :{
+		"type": "weapon",
+		"description": " Spada arrugginita di un vecchio fabbro",
+		"weight": 2,
+		"damage": 7
+	},
+	"spada normale" :{
+		"type": "weapon",
+		"description": "Spada normale di qualche cavaliere",
+		"weight": 2,
+		"damage": 9
+	},
+	"spada del re caduto" :{
+		"type": "weapon",
+		"description": "La spada del Re Caduto è una lama nera e lucente, intarsiata con rune arcane che pulsano di energia oscura",
+		"weight": 5,
+		"damage": 20
+	},
+	"ascia arrugginita" :{
+		"type": "weapon",
+		"description": "Ascia arrugginita, di qualche orco fra i bosch",
+		"weight": 3,
+		"damage": 6
+	},
+	"ascia normale" :{
+		"type": "weapon",
+		"description": "Ascia normale, forgiata dagli orchi",
+		"weight": 3,
+		"damage": 10
+	},
+	"mele comuni" : {
+		"type": "food",
+		"description": "mele del meleto",
+		"weight": 5,
+		"healthRecoveryAmount": 20
+	},
+	"pane" : {
+		"type": "food",
+		"description": "Pane fatto dai migliori forni degli umani",
+		"weight": 10,
+		"healthRecoveryAmount": 30
+	},
+	"mele rare" : {
+		"type": "food",
+		"description": "All'apparenza mele normali ma sono state benedette dall’elfo",
+		"weight": 10,
+		"healthRecoveryAmount": 50
+	},
+	"armatura arrugginita" : {
+		"type": "armor",
+		"description": "Armatura di qualche viandante",
+		"weight": 3,
+		"defense": 15
+	},
+	"armatura normale" : {
+		"type": "armor",
+		"description": "Armatura che apparteneva a qualche cavaliere\n",
+		"weight": 5,
+		"defense": 20
+	},
+	"armatura del re caduto" : {
+		"type": "armor",
+		"description": "L'armatura del Re Caduto è una corazza oscura e lucente, ornata con rune malefiche che brillano di un bagliore inquietante.",
+		"weight": 10,
+		"defense": 40
+	},
+	"medaglione del re" : {
+		"type": "",
+		"description": "Un medaglione dorato con un inquietante teschio incastonato, chiave per accedere alla stanza del tesoro del re.",
+		"weight": 0
 	}
 }
 
