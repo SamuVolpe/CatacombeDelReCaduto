@@ -76,6 +76,10 @@
 		"description": "L'armatura del Re Caduto è una corazza oscura e lucente, ornata con rune malefiche che brillano di un bagliore inquietante.",
 		"weight": 10,
 		"defense": 40
+	},
+	"medaglione del re" : {
+		"type": "",
+		"description": "Un medaglione dorato con un inquietante teschio incastonato, chiave per accedere alla stanza del tesoro del re."
 	}
 }
 
