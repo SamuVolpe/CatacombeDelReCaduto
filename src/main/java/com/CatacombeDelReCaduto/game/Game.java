@@ -49,7 +49,7 @@ public class Game {
     private Map<String, Enemy> enemies = new TreeMap<>();
 
     // mutable da inserire resto info dal salvataggio
-    private Map<String, Room> rooms = new TreeMap<>();
+    Map<String, Room> rooms = new TreeMap<>();
 
     /**
      * Costruttore per una nuova partita
@@ -82,6 +82,14 @@ public class Game {
             // carica salvataggio
             load(creationDate, playerName);
         }
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 
     /**
@@ -321,7 +329,7 @@ public class Game {
         }
     }
 
-    private void commandTake(String arg) {
+    void commandTake(String arg) {
         //se in player.getroom.items c'è l'item da prendere faccio un inventory.addItem e un Room.removeItem (se non è troppo pesante)
         Room currentRoom = player.getRoom();
         List<Item> currentRoomItems = currentRoom.getItems();
@@ -359,7 +367,7 @@ public class Game {
         }
     }
 
-    private void commandEquip(String arg) {
+    void commandEquip(String arg) {
         Inventory inventory = player.getInventory();
         Item toEquip = inventory.removeItem(arg);
         if (toEquip == null) {
@@ -388,7 +396,7 @@ public class Game {
         }
     }
 
-    private void commandUnequip(String arg) {
+    void commandUnequip(String arg) {
         Weapon currentWeapon = player.getWeapon();
         Armor currentArmor = player.getArmor();
         Inventory inventory = player.getInventory();
@@ -423,17 +431,17 @@ public class Game {
         }
     }
 
-    private void commandView(String arg) {
+    void commandView(String arg) {
         if (arg.equalsIgnoreCase("inventario")) {
             System.out.println(player.getInventory());
         } else if (arg.equalsIgnoreCase("stato")) {
             System.out.println(player);
         }
         else
-            System.out.println("Comando incorretto : puoi visualizzare 'stato' o 'inventario");
+            System.out.println("Comando incorretto : puoi visualizzare 'stato' o 'inventario'");
     }
 
-    private void commandBack() {
+    void commandBack() {
         if (player.getPreviousRoomDirection() == null) {
             System.out.println("Non e' possibile tornare indietro, non ti sei mai spostato!");
         } else {
@@ -441,7 +449,7 @@ public class Game {
         }
     }
 
-    private void commandLook(String arg) {
+    void commandLook(String arg) {
         if (arg.equalsIgnoreCase("oggetti")) {
             List<Item> items = player.getRoom().getItems();
             String out = "";
@@ -462,7 +470,7 @@ public class Game {
         }
     }
 
-    private void commandDetail(String arg) {
+    void commandDetail(String arg) {
         Inventory inventory = player.getInventory();
         Item item = inventory.removeItem(arg);
         if (item != null) {
