@@ -17,12 +17,6 @@ public class Weapon extends Item {
     }
 
     @Override
-    public Weapon clone() {
-        Weapon clone = (Weapon) super.clone();
-        return clone;
-    }
-
-    @Override
     public String toString() {
         return super.toString() + ", danno=" + damage;
     }

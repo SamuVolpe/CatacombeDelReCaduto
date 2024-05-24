@@ -174,7 +174,7 @@ public class FilesManager {
                 try {
                     if (dropNode != null && dropNode.isArray()) {
                         for (JsonNode itemNode : dropNode) {
-                            drop.add(items.get(itemNode.asText()).clone());
+                            drop.add(items.get(itemNode.asText()));
                         }
                     }
                 }
@@ -264,7 +264,7 @@ public class FilesManager {
                     try {
                         if (itemsNode != null && itemsNode.isArray()) {
                             for (JsonNode itemNode : itemsNode) {
-                                inRoomItems.add(items.get(itemNode.asText()).clone());
+                                inRoomItems.add(items.get(itemNode.asText()));
                             }
                         }
                     } catch (NoSuchElementException ex) {

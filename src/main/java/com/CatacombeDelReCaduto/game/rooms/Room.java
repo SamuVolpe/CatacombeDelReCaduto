@@ -163,11 +163,11 @@ public class Room {
         // setto dati stanza
         items = new ArrayList<>();
         for (String itemKey : roomSave.getItems())
-            items.add(allItems.get(itemKey).clone());
+            items.add(allItems.get(itemKey));
 
         enemies = new TreeMap<>();
         for (String enemyKey : roomSave.getEnemies())
-            enemies.put(enemyKey, allEnemies.get(enemyKey).clone());
+            enemies.put(enemyKey, allEnemies.get(enemyKey));
     }
 
     private void setDangerLevel(int dangerLevel){

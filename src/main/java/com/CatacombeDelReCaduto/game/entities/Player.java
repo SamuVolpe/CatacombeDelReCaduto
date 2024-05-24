@@ -111,11 +111,11 @@ public class Player extends Entity{
         addScore(playerSave.getScore());
         setRoom(allRooms.get(playerSave.getRoom()));
         if (playerSave.getArmor() != null)
-            setArmor((Armor) allItems.get(playerSave.getArmor()).clone());
+            setArmor((Armor) allItems.get(playerSave.getArmor()));
         if (playerSave.getArmor() != null)
-            setWeapon((Weapon) allItems.get(playerSave.getWeapon()).clone());
+            setWeapon((Weapon) allItems.get(playerSave.getWeapon()));
         for (String itemName : playerSave.getInventory()){
-            inventory.addItem(allItems.get(itemName).clone());
+            inventory.addItem(allItems.get(itemName));
         }
     }
 

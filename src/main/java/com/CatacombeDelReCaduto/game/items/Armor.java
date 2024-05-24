@@ -16,10 +16,4 @@ public class Armor extends Item {
     public String toString() {
         return super.toString() + ", protezione=" + defense;
     }
-
-    @Override
-    public Armor clone() {
-        Armor clone = (Armor) super.clone();
-        return clone;
-    }
 }
