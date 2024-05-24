@@ -346,7 +346,7 @@ public class Game {
         player.use(arg);
     }
 
-    private void commandThrow(String arg) {
+    void commandThrow(String arg) {
         Room currentRoom = player.getRoom();
         List<Item> currentRoomItems = currentRoom.getItems();
         Inventory inventory = player.getInventory();
