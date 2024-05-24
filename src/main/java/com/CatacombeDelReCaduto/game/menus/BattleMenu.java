@@ -9,6 +9,7 @@ import com.CatacombeDelReCaduto.game.prompts.Command;
 import com.CatacombeDelReCaduto.game.prompts.CommandId;
 
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Logger;
 
 public class BattleMenu extends CommandMenu {
@@ -53,14 +54,30 @@ public class BattleMenu extends CommandMenu {
         if (attacker.getHealth() <=0 || defender.getHealth() <= 0)
             return;
 
-        // scalo attacco sulla difesa
-        int damage = attacker.getAttack() - ((attacker.getAttack() * defender.getDefense()) / 100);
+        String output = "";
 
-        // sottraggo vita
-        defender.setHealth(defender.getHealth()-damage);
+        // schivata
+        Random random = new Random();
+        if (random.nextInt(100) < 8) {
+            output = defender.getName() + " ha schivato il colpo";
+        }else {
+            // scalo attacco sulla difesa
+            int damage = attacker.getAttack() - ((attacker.getAttack() * defender.getDefense()) / 100);
 
-        // output d'attacco
-        System.out.println(attacker.getName() + " ha tolto " + damage + " a " + defender.getName());
+            // critico
+            if (random.nextInt(100) < 20) {
+                damage = (int)(damage * 1.5);
+                output = "Colpo critico! ";
+            }
+
+            // sottraggo vita
+            defender.setHealth(defender.getHealth()-damage);
+
+            // output d'attacco
+            output += attacker.getName() + " ha tolto " + damage + " a " + defender.getName();
+        }
+
+        System.out.println(output);
     }
 
     // region comandi MainMenu
@@ -71,7 +88,7 @@ public class BattleMenu extends CommandMenu {
             case USE -> commandUse(command.getArgs()[0]);
             case DETAIL -> commandDetail();
             case VIEW -> commandView();
-            case ESCAPE -> true; //todo potrei cambiare la probabilita` di fuggire (es. in base a vita giocatore/ pericolo stanza)
+            case ESCAPE -> commandEscape();
             default -> throw new IllegalArgumentException("Command not implemented");
         };
     }
@@ -105,6 +122,16 @@ public class BattleMenu extends CommandMenu {
         // print nemico
         System.out.println(enemy);
         return false;
+    }
+
+    private boolean commandEscape(){
+        Random random = new Random();
+        // calcolo prob di fuga in base a stanza
+        if (random.nextInt(10) < player.getRoom().getDangerLevel()){
+            System.out.println("Fuga fallita!");
+            return false;
+        }
+        return true;
     }
 
     // endregion
