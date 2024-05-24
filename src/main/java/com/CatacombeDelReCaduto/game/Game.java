@@ -291,7 +291,7 @@ public class Game {
         System.out.print(output);
     }
 
-    private void commandMove(String arg){
+    void commandMove(String arg){
 
         Room nextRoom = null;
         String prevDir = player.getPreviousRoomDirection();

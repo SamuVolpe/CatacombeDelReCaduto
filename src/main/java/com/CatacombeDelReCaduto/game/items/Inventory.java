@@ -67,13 +67,12 @@ public class Inventory {
 
     @Override
     public String toString() {
-        String ret = "Inventory{total weight=" + currentWeight + ", maximum weight=" + MAX_WEIGHT + ", inventory=";
+        String ret = "Inventario: peso totale=" + currentWeight + "/" + MAX_WEIGHT + ", lista oggetti=";
         for(Map.Entry<String, ArrayList<Item>> entry : inventory.entrySet()) {
             String key = entry.getKey();
             ArrayList<Item> value = entry.getValue();
-            ret = ret + key + "(weight=" + value.getFirst().getWeight() + ")(x" + value.size() + ") ";
+            ret = ret + key + "(peso=" + value.getFirst().getWeight() + ")(x" + value.size() + ") ";
         }
-        ret = ret + "}";
         return ret;
     }
 }
