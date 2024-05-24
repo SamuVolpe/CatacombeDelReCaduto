@@ -89,10 +89,12 @@ public class Player extends Entity{
     }
 
     public void setRoom(Room room) {
-        // se non visitata segna visitata e aggiungi score
+        // se non visitata segna visitata
         if (!room.isVisited()) {
             room.setVisited(true);
-            addScore(2);
+            // se non prima stanza aggiungi score
+            if (this.room != null)
+                addScore(2);
         }
         this.room = room;
     }
