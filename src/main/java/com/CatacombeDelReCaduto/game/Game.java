@@ -228,16 +228,27 @@ public class Game {
 
         // player sconfitto
         if (!player.isAlive()){
-            System.out.println("Sei morto, ricarica da ultimo salvataggio..");
+            System.out.println("Sei morto, il gioco verra` ricaricato dall'ultimo salvataggio");
             // carico gioco da ultimo salvataggio
             this.load(player.CREATION_DATE, player.getName());
         }
         // nemico sconfitto
         else if (!enemy.isAlive()){
-            // elimina nemico dalla stanza
+            // elimina nemico dalla stanza e sposta drop
             player.getRoom().removeEnemy(enemy);
 
             System.out.println("Nemico sconfitto");
+            // add score
+            // miniboss
+            if (enemy.getName().equalsIgnoreCase("golem") || enemy.getName().equalsIgnoreCase("chimera"))
+                player.addScore(5);
+            // boss
+            else if (enemy.getName().equalsIgnoreCase("lich"))
+                player.addScore(10);
+            // nemico
+            else
+                player.addScore(1);
+            // show drop
             if (!enemy.getDrop().isEmpty()) {
                 System.out.println("Il nemico ha droppato i seguenti oggetti : "
                         + enemy.getDrop().stream().map(Item::getName).collect(Collectors.joining(", "))

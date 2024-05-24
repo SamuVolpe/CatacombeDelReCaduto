@@ -5,6 +5,7 @@ import java.util.List;
 public class RoomSave {
     private List<String> items;
     private List<String> enemies;
+    private boolean visited;
 
     public RoomSave() {
     }
@@ -23,5 +24,13 @@ public class RoomSave {
 
     public void setEnemies(List<String> enemies) {
         this.enemies = enemies;
+    }
+
+    public boolean isVisited() {
+        return visited;
+    }
+
+    public void setVisited(boolean visited) {
+        this.visited = visited;
     }
 }

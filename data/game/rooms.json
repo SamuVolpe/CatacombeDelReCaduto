@@ -27,7 +27,7 @@
 		"examinables" : {
 			"incisioni" : "Le incisioni sulle pareti narrano la storia del regno del Re Caduto, mostrando inizialmente scene di gloria e prosperità di Arindor.\nMan mano, le immagini diventano più oscure, raffigurando guerre, carestie e la crescente ossessione del re per il potere e l'immortalità.\nVerso la fine, le incisioni mostrano rituali magici proibiti e creature oscure, con iscrizioni che indicano la rovina portata dal re al suo popolo."
 		},
-		"items" : ["ascia normale", "armatura normale"],
+		"items" : [],
 		"enemies" : ["ghoul ascia armatura"]
 	},
 	"Stanza del sarcofago" : {

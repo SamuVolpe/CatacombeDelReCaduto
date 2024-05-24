@@ -80,6 +80,8 @@ public class Player extends Entity{
 
     public void addScore(int score) {
         this.score += score;
+        // notifica di aggiornamento dello score
+        System.out.println("Score +" + score + ", nuovo score : " + this.score);
     }
 
     public Room getRoom() {
@@ -87,6 +89,11 @@ public class Player extends Entity{
     }
 
     public void setRoom(Room room) {
+        // se non visitata segna visitata e aggiungi score
+        if (!room.isVisited()) {
+            room.setVisited(true);
+            addScore(2);
+        }
         this.room = room;
     }
 
@@ -108,7 +115,7 @@ public class Player extends Entity{
     public void load(PlayerSave playerSave,Map<String, Item> allItems, Map<String, Room> allRooms){
         // setto dati del player
         setHealth(playerSave.getHealth());
-        addScore(playerSave.getScore());
+        score = playerSave.getScore();
         setRoom(allRooms.get(playerSave.getRoom()));
         if (playerSave.getArmor() != null)
             setArmor((Armor) allItems.get(playerSave.getArmor()));
