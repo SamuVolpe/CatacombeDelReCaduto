@@ -32,7 +32,7 @@ public class Enemy extends Entity implements Cloneable{
             // clona lista di items
             clone.drop = new ArrayList<>();
             for (Item item : this.drop) {
-                clone.drop.add((Item) item.clone());
+                clone.drop.add((Item) item);
             }
             return clone;
         } catch (CloneNotSupportedException e) {

@@ -1,6 +1,6 @@
 package com.CatacombeDelReCaduto.game.items;
 
-public class Item implements Cloneable {
+public class Item {
     private String name;
     private String description;
     private int weight;
@@ -38,15 +38,5 @@ public class Item implements Cloneable {
     @Override
     public String toString() {
         return "nome=" + name + ", descrizione=" + description  + ", peso=" + weight;
-    }
-
-    @Override
-    public Item clone() {
-        try {
-            Item clone = (Item) super.clone();
-            return clone;
-        } catch (CloneNotSupportedException e) {
-            throw new AssertionError();
-        }
     }
 }

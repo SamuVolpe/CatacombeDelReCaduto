@@ -2,7 +2,7 @@
 	"Entrata" : {
 		"description": "Sei in un’ampia stanza di pietra dalle pareti fredde e umide. Il soffitto basso è coperto di ragnatele, e il pavimento è cosparso di detriti e ossa.\nNell'aria densa si respira un odore di muffa e decomposizione, e il silenzio è rotto solo dal gocciolio dell'acqua che filtra dalle crepe nel soffitto.\nAll’entrata si può vedere lo stendardo del regno del re caduto.",
 		"dangerLevel": 0,
-		"nearRooms": [null, "Stanza1", null, null],
+		"nearRooms": [null, "Stanza buia", null, null],
 		"examinables" : {
 			"muro" : "Queste ragnatele e il muro fanno pensare che sia passato molto tempo dall’ultima visita",
 			"stendardo del re caduto" : "Lo stendardo del Re Caduto presenta un corvo nero, simbolo di morte e transizione, su un campo grigio, rappresentando il lutto e la tristezza.\n Il corvo tiene tra le sue zampe una corona spezzata, un ricordo del regno perduto. Questo stendardo, sebbene cupo, serve come un potente promemoria della caduta del re e della transitorietà del potere."
@@ -10,12 +10,12 @@
 		"items" : ["coltello arrugginito", "pane"],
 		"enemies" : []
 	},
-	"Stanza1" : {
+	"Stanza buia" : {
 		"description": "La stanza e’ buia ma scorgi un baule che potrebbe contenere qualcosa",
 		"dangerLevel": 5,
-		"nearRooms": ["Entrata", "Sarcofago", null, "Gesta del re"],
+		"nearRooms": ["Entrata", "Stanza del sarcofago", null, "Gesta del re"],
 		"examinables" : {
-			"baule" : "Il baule potrebbe contenere degli oggetti"
+			"baule" : "Controlla se ci sono oggetti nella stanza..."
 		},
 		"items" : ["mele comuni", "coltello normale", "armatura arrugginita"],
 		"enemies" : ["scheletro", "scheletro"]
@@ -23,17 +23,17 @@
 	"Gesta del re" : {
 		"description": "La stanza presenta delle strane incisioni",
 		"dangerLevel": 10,
-		"nearRooms": [null, null, "Stanza1", null],
+		"nearRooms": [null, null, "Stanza buia", null],
 		"examinables" : {
 			"incisioni" : "Le incisioni sulle pareti narrano la storia del regno del Re Caduto, mostrando inizialmente scene di gloria e prosperità di Arindor.\nMan mano, le immagini diventano più oscure, raffigurando guerre, carestie e la crescente ossessione del re per il potere e l'immortalità.\nVerso la fine, le incisioni mostrano rituali magici proibiti e creature oscure, con iscrizioni che indicano la rovina portata dal re al suo popolo."
 		},
-		"items" : ["ascia normale", "armatura normale"],
+		"items" : [],
 		"enemies" : ["ghoul ascia armatura"]
 	},
 	"Stanza del sarcofago" : {
 		"description": "Sei dentro la stanza del sarcofago del re, è piccola e soffocante, illuminata solo dalla luce tremolante di qualche torcia",
 		"dangerLevel": 2,
-		"nearRooms": ["Stanza1", "Stanza del golem", "Stanza2", "Corridoio1"],
+		"nearRooms": ["Stanza buia", "Stanza del golem", "Stanza2", "Corridoio1"],
 		"examinables" : {
 			"muro" : "\"Un’ampia macchia di umidità sul muro suggerisce la presenza di una sorgente d’acqua nascosta, un raro segno di vita in questo luogo di morte\""
 		},

@@ -20,11 +20,18 @@ public class Room {
     private List<Item> items = null;
     private Map<String, Enemy> enemies = null;
     private Map<String, String> examinables = null;
+    // indica se il giocatore ha gia` visitato la stanza
+    private boolean visited;
 
     public Room(String name, String description, int dangerLevel) {
+        this (name, description, dangerLevel, false);
+    }
+
+    public Room(String name, String description, int dangerLevel, boolean visited) {
         this.name = name;
         this.description = description;
         setDangerLevel(dangerLevel);
+        this.visited = visited;
     }
 
     public int getDangerLevel() {
@@ -32,29 +39,33 @@ public class Room {
     }
 
     public String printNearRooms() {
-        String ret = "";
         if (nearRooms == null) {
             return "Non ci sono stanze vicine";
         }
-        if (nearRooms[0] == null) {
-            ret += "Nord: nessuna stanza in questa direzione\n";
-        } else {
-            ret += "Nord: " + nearRooms[0].name + "\n";
-        }
-        if (nearRooms[2] == null) {
-            ret += "Est: nessuna stanza in questa direzione\n";
-        } else {
-            ret += "Est: " + nearRooms[2].name + "\n";
-        }
-        if (nearRooms[1] == null) {
-            ret += "Sud: nessuna stanza in questa direzione\n";
-        } else {
-            ret += "Sud: " + nearRooms[1].name + "\n";
-        }
-        if (nearRooms[3] == null) {
-            ret += "Ovest: nessuna stanza in questa direzione";
-        } else {
-            ret += "Ovest: " + nearRooms[3].name;
+
+        String ret = "";
+
+        for (int i = 0; i < nearRooms.length; i++){
+            String roomName = "???";
+
+             ret += switch (i){
+                case 0 -> "Nord: ";
+                case 1 -> "Sud: ";
+                case 2 -> "Est: ";
+                case 3 -> "Ovest: ";
+                default -> throw new IllegalArgumentException("nearRooms length can be max 4");
+            };
+
+            if (nearRooms[i] == null)
+                ret += "nessuna stanza in questa direzione";
+            else{
+                // se stanza visitata visualizzo nome stanza altrimenti no
+                if (nearRooms[i].isVisited())
+                    roomName = nearRooms[i].name;
+                ret += roomName;
+            }
+
+            ret += "\n";
         }
 
         return ret;
@@ -113,6 +124,14 @@ public class Room {
         this.examinables = examinables;
     }
 
+    public boolean isVisited() {
+        return visited;
+    }
+
+    public void setVisited(boolean visited) {
+        this.visited = visited;
+    }
+
     /**
      * Calcolo con probabilita` in base al dangerLevel della stanza che il nemico attacchi
      * @return true - se il nemico attacca
@@ -150,6 +169,7 @@ public class Room {
         // dati da salvare
         roomSave.setItems(items.stream().map(Item::getName).collect(Collectors.toList()));
         roomSave.setEnemies(new ArrayList<>(enemies.keySet()));
+        roomSave.setVisited(visited);
         return roomSave;
     }
 
@@ -163,11 +183,13 @@ public class Room {
         // setto dati stanza
         items = new ArrayList<>();
         for (String itemKey : roomSave.getItems())
-            items.add(allItems.get(itemKey).clone());
+            items.add(allItems.get(itemKey));
 
         enemies = new TreeMap<>();
         for (String enemyKey : roomSave.getEnemies())
-            enemies.put(enemyKey, allEnemies.get(enemyKey).clone());
+            enemies.put(enemyKey, allEnemies.get(enemyKey));
+
+        visited = roomSave.isVisited();
     }
 
     private void setDangerLevel(int dangerLevel){

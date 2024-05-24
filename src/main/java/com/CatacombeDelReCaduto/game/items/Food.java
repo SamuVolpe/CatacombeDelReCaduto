@@ -20,10 +20,4 @@ public class Food extends Item{
     public String toString() {
         return super.toString() + ", recupero vita=" + healthRecoveryAmount;
     }
-
-    @Override
-    public Food clone() {
-        Food clone = (Food) super.clone();
-        return clone;
-    }
 }
