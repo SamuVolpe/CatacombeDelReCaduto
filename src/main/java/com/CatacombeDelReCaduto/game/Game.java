@@ -99,7 +99,7 @@ public class Game {
 
         do {
             // possibile mostro che ti attacca todo da gestire caso di vittoria (sconfitta del boss finale)
-            if (player.getRoom().isEnemyEngaging())
+            if (command != null && command.getId() != CommandId.HELP && player.getRoom().isEnemyEngaging())
                 battle(player.getRoom().getEnemies().values().stream().findFirst().get());
 
             // prendo input

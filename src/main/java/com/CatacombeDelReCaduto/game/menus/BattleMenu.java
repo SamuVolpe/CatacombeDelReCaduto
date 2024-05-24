@@ -129,6 +129,8 @@ public class BattleMenu extends CommandMenu {
         // calcolo prob di fuga in base a stanza
         if (random.nextInt(10) < player.getRoom().getDangerLevel()){
             System.out.println("Fuga fallita!");
+            // nemico attacca
+            attack(enemy, player);
             return false;
         }
         return true;
