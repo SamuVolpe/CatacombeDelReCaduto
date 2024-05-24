@@ -25,7 +25,8 @@
 		"dangerLevel": 10,
 		"nearRooms": [null, null, "Stanza1", null],
 		"examinables" : {
-			"incisioni" : "Le incisioni sulle pareti narrano la storia del regno del Re Caduto, mostrando inizialmente scene di gloria e prosperità di Arindor.\nMan mano, le immagini diventano più oscure, raffigurando guerre, carestie e la crescente ossessione del re per il potere e l'immortalità.\nVerso la fine, le incisioni mostrano rituali magici proibiti e creature oscure, con iscrizioni che indicano la rovina portata dal re al suo popolo."
+			"incisioni" : "Le incisioni sulle pareti narrano la storia del regno del Re Caduto, mostrando inizialmente scene di gloria e prosperità di Arindor.Man mano, le immagini diventano più oscure, raffigurando guerre, carestie e la crescente ossessione del re per il potere e l'immortalità.\nVerso la fine, le incisioni mostrano rituali magici proibiti e creature oscure, con iscrizioni che indicano la rovina portata dal re al suo popolo."
+
 		},
 		"items" : ["ascia normale", "armatura normale"],
 		"enemies" : ["ghoul ascia armatura"]
@@ -35,7 +36,7 @@
 		"dangerLevel": 2,
 		"nearRooms": ["Stanza1", "Stanza del golem", "Stanza2", "Corridoio"],
 		"examinables" : {
-			"muro" : "\"Un’ampia macchia di umidità sul muro suggerisce la presenza di una sorgente d’acqua nascosta, un raro segno di vita in questo luogo di morte\""
+			"muro" : "'Un’ampia macchia di umidità sul muro suggerisce la presenza di una sorgente d’acqua nascosta, un raro segno di vita in questo luogo di morte'"
 		},
 		"items" : [],
 		"enemies" : ["ragno","ragno spada"]
