@@ -14,6 +14,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -22,13 +24,14 @@ class GameTest {
     ByteArrayOutputStream outContent;
     Game game;
     Player player;
+    Room room;
 
     @BeforeEach
     void setUp() {
         outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
         player = mock(Player.class);
-        Room room = mock(Room.class);
+        room = mock(Room.class);
         Item mela = new Item("Mela", "Mela prelibata", 1);
         Weapon coltello = new Weapon("Coltello", "Coltello affilato", 1, 5);
         Armor elmo = new Armor("Elmo", "Elmo rigido", 200, 5);
@@ -169,6 +172,30 @@ class GameTest {
         game.commandLook("ArgomentoNonValido");
         assertTrue(outContent.toString().contains("Argomento non valido"));
     }
+
+    @Test
+    void commandLookNoItems() {
+        when(room.getItems()).thenReturn(new ArrayList<Item>());
+        game.commandLook("Oggetti");
+        assertTrue(outContent.toString().contains("Non ci sono oggetti nella stanza"));
+    }
+
+    @Test
+    void commandLookWithItems() {
+        game.commandLook("Oggetti");
+        //verifico che venga stampata la lista di oggetti (tra cui Mela)
+        assertTrue(outContent.toString().contains("Mela"));
+    }
+
+    @Test
+    void commandLookNoExaminables() {
+        Room room2 = new Room("Stanza test", "prova", 5);
+        when(player.getRoom()).thenReturn(room2);
+        room2.setExaminables(new TreeMap<String, String>());
+        game.commandLook("Esaminabili");
+        assertTrue(outContent.toString().contains("Non c'è niente da esaminare nella stanza"));
+    }
+
 /*
     @Test
     void commandLookNoNearRooms() {
