@@ -491,7 +491,7 @@ public class Game {
     }
 
     /**
-     * Permette al giocatore di tornare nella stanza precedente.
+     * Permette al giocatore di tornare nella stanza precedente (se possibile).
      */
     void commandBack() {
         if (player.getPreviousRoomDirection() == null) {
@@ -504,7 +504,7 @@ public class Game {
     /**
      * Permette al giocatore di guardare gli oggetti, le stanze o gli esaminabili nella stanza corrente.
      *
-     * @param arg il tipo di oggetto da guardare (oggetti, stanze o esaminabili)
+     * @param arg Cosa si intende guardare (oggetti, stanze o esaminabili)
      */
     void commandLook(String arg) {
         if (arg.equalsIgnoreCase("oggetti")) {
