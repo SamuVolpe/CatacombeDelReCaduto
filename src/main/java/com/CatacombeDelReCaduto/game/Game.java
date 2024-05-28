@@ -10,7 +10,6 @@ import com.CatacombeDelReCaduto.game.prompts.CommandId;
 import com.CatacombeDelReCaduto.game.rooms.Room;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -22,7 +21,7 @@ public class Game {
     private long creationDate;
 
     // comandi di gioco
-    public static final List<Command> COMMANDS = List.of(
+    private final List<Command> commands = List.of(
             new Command(CommandId.EXIT_GAME, List.of("esci", "esci partita"), "esci - Esci dalla partita")
             ,new Command(CommandId.HELP, List.of("help", "aiuto", "comandi", "lista comandi"), "aiuto - Mostra tutti i comandi")
             ,new Command(CommandId.SAVE, List.of("s", "salva", "salva partita"), "salva - Salva la partita")
@@ -49,7 +48,7 @@ public class Game {
     private Map<String, Enemy> enemies = new TreeMap<>();
 
     // mutable da inserire resto info dal salvataggio
-    Map<String, Room> rooms = new TreeMap<>();
+    private Map<String, Room> rooms = new TreeMap<>();
 
     /**
      * Costruttore per una nuova partita
@@ -145,14 +144,6 @@ public class Game {
         // setup stanza d'inizio
         player.setRoom(rooms.get("Entrata"));
 
-        // crea cartella di salvataggio se non esiste
-        File directory = new File(FilesPath.PLAYER_ROOT);
-        if (!directory.exists()) {
-            boolean maked = directory.mkdir();
-            if (!maked)
-                throw new RuntimeException("Impossibile creare la cartella per il salvataggio dei dati");
-        }
-
         // salvataggio iniziale (file save)
         save();
 
@@ -215,7 +206,7 @@ public class Game {
         commandMap = new TreeMap<>();
 
         // inserisco nella mappa tutti gli alias del comando come chiave
-        for (var command : COMMANDS)
+        for (var command : commands)
             for (var alias : command.getAliases())
                 commandMap.put(alias, command);
     }
@@ -299,7 +290,7 @@ public class Game {
      */
     private void commandHelp() {
         String output = "Lista di tutti i comandi possibili\n\n";
-        for (var command : COMMANDS)
+        for (var command : commands)
             output += command.getDescription() + "\n";
 
         System.out.print(output);

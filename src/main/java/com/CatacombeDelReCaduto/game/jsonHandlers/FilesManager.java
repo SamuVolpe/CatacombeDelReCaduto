@@ -18,19 +18,53 @@ import java.util.logging.Logger;
  * Classe per la gestione del caricamento/ salvataggio sui files
  */
 public class FilesManager {
+    // folders
+    public static String DATA_ROOT = "data";
+    public static String PLAYER_ROOT = DATA_ROOT + "\\player";
+    public static String GAME_ROOT = DATA_ROOT + "\\game";
+
+    // files
+    public static String SAVES_FILE_NAME = "saves.json";
+    public static String ITEMS_FILE_PATH = GAME_ROOT + "\\items.json";
+    public static String ENEMIES_FILE_PATH = GAME_ROOT + "\\enemies.json";
+    public static String ROOMS_FILE_PATH = GAME_ROOT + "\\rooms.json";
+    public static String SAVES_FILE_PATH = PLAYER_ROOT + "\\" + SAVES_FILE_NAME;
+
     public static final Logger logger =  Logger.getLogger(FilesManager.class.getName());
 
+    public static void makeSavesDir(){
+        // crea cartella di salvataggio se non esiste
+        File directory = new File(PLAYER_ROOT);
+        if (!directory.exists()) {
+            boolean maked = directory.mkdir();
+            if (!maked)
+                throw new RuntimeException("Impossibile creare la cartella per il salvataggio dei dati");
+        }
+    }
+
     /**
-     * Salva la partita nel file
-     * @param saveFileName nome file in cui salvare (json)
-     * @param save oggetto con i dati da salvare
+     * Carica dati partite
+     * @return map - key : data partita, value : nome giocatore
      */
-    public static void saveGame (String saveFileName, Save save) {
+    public static Map<Long, String> loadGames(){
+        logger.info("load games");
+
         ObjectMapper mapper = new ObjectMapper();
-        try {
-            mapper.writeValue(new File(FilesPath.PLAYER_ROOT + "\\" + saveFileName), save);
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
+        File file = new File(SAVES_FILE_PATH);
+
+        if (file.exists()) {
+            // Leggi il file JSON e deserializza nella mappa
+            try {
+                return mapper.readValue(file, new TypeReference<Map<Long, String>>() {
+                });
+            } catch (IOException ex) {
+                logger.log(Level.SEVERE, "error on games loading", ex);
+                throw new RuntimeException("Errore nel caricamento delle partite, il file : '" + SAVES_FILE_PATH + "' potrebbe essere stato compromesso");
+            }
+        }
+        else {
+            logger.info("file doesn't exist");
+            return new TreeMap<>();
         }
     }
 
@@ -47,8 +81,22 @@ public class FilesManager {
 
         // Scrivi la mappa aggiornata nel file json
         try {
-            mapper.writeValue(new File(FilesPath.SAVES_FILE_PATH), map);
+            mapper.writeValue(new File(SAVES_FILE_PATH), map);
             logger.info("saves updated");
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    /**
+     * Salva la partita nel file
+     * @param saveFileName nome file in cui salvare (json)
+     * @param save oggetto con i dati da salvare
+     */
+    public static void saveGame (String saveFileName, Save save) {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            mapper.writeValue(new File(PLAYER_ROOT + "\\" + saveFileName), save);
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
@@ -62,35 +110,9 @@ public class FilesManager {
     public static Save loadGame(String loadFileName) {
         ObjectMapper mapper = new ObjectMapper();
         try {
-            return mapper.readValue(new File(FilesPath.PLAYER_ROOT + "\\" + loadFileName), Save.class);
+            return mapper.readValue(new File(PLAYER_ROOT + "\\" + loadFileName), Save.class);
         } catch (IOException ex) {
             throw new RuntimeException(ex);
-        }
-    }
-
-    /**
-     * Carica dati partite
-     * @return map - key : data partita, value : nome giocatore
-     */
-    public static Map<Long, String> loadGames(){
-        logger.info("load games");
-
-        ObjectMapper mapper = new ObjectMapper();
-        File file = new File(FilesPath.SAVES_FILE_PATH);
-
-        if (file.exists()) {
-            // Leggi il file JSON e deserializza nella mappa
-            try {
-                return mapper.readValue(file, new TypeReference<Map<Long, String>>() {
-                });
-            } catch (IOException ex) {
-                logger.log(Level.SEVERE, "error on games loading", ex);
-                throw new RuntimeException("Errore nel caricamento delle partite, il file : '" + FilesPath.SAVES_FILE_PATH + "' potrebbe essere stato compromesso");
-            }
-        }
-        else {
-            logger.info("file doesn't exist");
-            return new TreeMap<>();
         }
     }
 
@@ -105,7 +127,7 @@ public class FilesManager {
 
         try {
             // leggi file json e converti in jsonNode
-            JsonNode rootNode = mapper.readTree(new File(FilesPath.ITEMS_FILE_PATH));
+            JsonNode rootNode = mapper.readTree(new File(ITEMS_FILE_PATH));
 
             // ogni figlio del nodo principale e' un item, converto
             Iterator<Map.Entry<String, JsonNode>> fields = rootNode.fields();
@@ -130,7 +152,7 @@ public class FilesManager {
             }
         } catch (IOException ex) {
             logger.log(Level.SEVERE, "error on items loading", ex);
-            throw new RuntimeException("Errore nel caricamento degli oggetti di gioco, il file : '" + FilesPath.ITEMS_FILE_PATH + "' potrebbe essere stato compromesso");
+            throw new RuntimeException("Errore nel caricamento degli oggetti di gioco, il file : '" + ITEMS_FILE_PATH + "' potrebbe essere stato compromesso");
         }
 
         return result;
@@ -144,7 +166,7 @@ public class FilesManager {
     public static Map<String, Enemy> loadEnemies(Map<String, Item> items){
         logger.info("load enemies");
         // Path del file JSON
-        final String FILE_PATH = FilesPath.ENEMIES_FILE_PATH;
+        final String FILE_PATH = ENEMIES_FILE_PATH;
 
         Map<String, Enemy> result = new TreeMap<>();
 
@@ -187,7 +209,7 @@ public class FilesManager {
             }
         } catch (IOException ex) {
             logger.log(Level.SEVERE, "error on enemies loading", ex);
-            throw new RuntimeException("Errore nel caricamento dei nemici di gioco, il file : '" + FilesPath.ENEMIES_FILE_PATH + "' potrebbe essere stato compromesso");
+            throw new RuntimeException("Errore nel caricamento dei nemici di gioco, il file : '" + ENEMIES_FILE_PATH + "' potrebbe essere stato compromesso");
         }
 
         return result;
@@ -221,7 +243,7 @@ public class FilesManager {
         try {
 
             // Leggi il file JSON e converti in JsonNode
-            JsonNode rootNode = mapper.readTree(new File(FilesPath.ROOMS_FILE_PATH));
+            JsonNode rootNode = mapper.readTree(new File(ROOMS_FILE_PATH));
 
             // Itera attraverso i nodi figli
             Iterator<Map.Entry<String, JsonNode>> fields = rootNode.fields();
@@ -296,7 +318,7 @@ public class FilesManager {
             }
         } catch (IOException ex) {
             logger.log(Level.SEVERE, "error on rooms loading", ex);
-            throw new RuntimeException("Errore nel caricamento delle stanze di gioco, il file : '" + FilesPath.ROOMS_FILE_PATH + "' potrebbe essere stato compromesso");
+            throw new RuntimeException("Errore nel caricamento delle stanze di gioco, il file : '" + ROOMS_FILE_PATH + "' potrebbe essere stato compromesso");
         }
 
         // carica stanze adiacenti converto da Nome a Room

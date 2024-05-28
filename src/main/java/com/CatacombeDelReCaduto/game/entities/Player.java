@@ -156,9 +156,16 @@ public class Player extends Entity{
 
     @Override
     public String toString() {
+        String weaponName = "nessuna";
+        String armorName = "nessuna";
+        if (weapon != null)
+            weaponName = weapon.getName();
+        if (armor != null)
+            armorName = armor.getName();
+
         return super.toString() +
-                ", Arma : " + weapon +
-                ", Armatura : " + armor +
+                ", Arma : " + weaponName +
+                ", Armatura : " + armorName +
                 ", Score : " + score;
     }
 }

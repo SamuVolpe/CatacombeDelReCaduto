@@ -17,7 +17,7 @@ public abstract class CommandMenu extends Menu {
 
     /**
      * Costruttore che inizializza i comandi del menu
-     * @param commands comandi
+     * @param commands comandi ordinati per la visualizzazione
      */
     public CommandMenu(List<Command> commands) {
         // chiamo costruttore Menu dando gli item da mostrare
