@@ -137,19 +137,13 @@ public class Game {
         // setup stanza d'inizio
         player.setRoom(rooms.get("Entrata"));
 
-        // crea cartella di salvataggio se non esiste
-        File directory = new File(FilesPath.PLAYER_ROOT);
-        if (!directory.exists()) {
-            boolean maked = directory.mkdir();
-            if (!maked)
-                throw new RuntimeException("Impossibile creare la cartella per il salvataggio dei dati");
-        }
-
         // salvataggio iniziale (file save)
         save();
 
         // crea record in file giochi
         FilesManager.saveNewGame(player);
+
+        // carica file saves
     }
 
     /**

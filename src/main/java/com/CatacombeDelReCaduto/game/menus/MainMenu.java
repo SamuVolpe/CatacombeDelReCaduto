@@ -1,9 +1,12 @@
 package com.CatacombeDelReCaduto.game.menus;
 
 import com.CatacombeDelReCaduto.game.Game;
+import com.CatacombeDelReCaduto.game.jsonHandlers.BucketManager;
+import com.CatacombeDelReCaduto.game.jsonHandlers.FilesPath;
 import com.CatacombeDelReCaduto.game.jsonHandlers.Save;
 import com.CatacombeDelReCaduto.game.prompts.*;
 
+import java.io.File;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -20,7 +23,22 @@ public class MainMenu extends CommandMenu {
 
     private final Logger logger =  Logger.getLogger(this.getClass().getName());
 
-    public MainMenu() { super(COMMANDS); }
+    public MainMenu() {
+        super(COMMANDS);
+
+        // crea cartella di salvataggio se non esiste
+        File directory = new File(FilesPath.PLAYER_ROOT);
+        if (!directory.exists()) {
+            boolean maked = directory.mkdir();
+            if (!maked)
+                throw new RuntimeException("Impossibile creare la cartella per il salvataggio dei dati");
+        }
+
+        // scarica file profili
+        try (BucketManager bucketManager = new BucketManager()){
+            bucketManager.downloadFile(FilesPath.SAVES_FILE_NAME, FilesPath.SAVES_FILE_PATH);
+        }
+    }
 
     // region comandi MainMenu
 

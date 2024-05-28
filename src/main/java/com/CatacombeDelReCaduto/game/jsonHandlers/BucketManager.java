@@ -5,12 +5,14 @@ import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
+import java.io.Closeable;
 import java.io.File;
 import java.nio.file.Paths;
 
-public class BucketManager {
+public class BucketManager implements AutoCloseable {
     private final S3Client s3Client = S3Client.builder()
             .region(Region.EU_CENTRAL_1)
             .credentialsProvider(ProfileCredentialsProvider.create())
@@ -37,6 +39,7 @@ public class BucketManager {
         s3Client.getObject(getObjectRequest, Paths.get(downloadFilePath));
     }
 
+    @Override
     public void close() {
         s3Client.close();
     }
