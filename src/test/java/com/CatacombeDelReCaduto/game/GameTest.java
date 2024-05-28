@@ -217,6 +217,4 @@ class GameTest {
         assertTrue(outContent.toString().contains("nome"));
     }
 
-    //TODO Use, Examine
-
 }
