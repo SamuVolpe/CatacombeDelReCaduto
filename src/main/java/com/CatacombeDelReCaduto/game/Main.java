@@ -1,8 +1,13 @@
 package com.CatacombeDelReCaduto.game;
 
 import com.CatacombeDelReCaduto.game.menus.MainMenu;
+import com.CatacombeDelReCaduto.game.jsonHandlers.BucketManager;
+import com.CatacombeDelReCaduto.game.jsonHandlers.FilesPath;
+import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
+
 import java.util.logging.Logger;
 import java.util.logging.Level;
+import java.io.File;
 
 /**
  * Classe d'avvio del gioco
@@ -12,6 +17,7 @@ public class Main {
 
     public static void main(String[] args){
         try {
+            BucketManager bucketManager = new BucketManager();
             // avvio menu iniziale
             MainMenu mainMenu = new MainMenu();
             mainMenu.display();
