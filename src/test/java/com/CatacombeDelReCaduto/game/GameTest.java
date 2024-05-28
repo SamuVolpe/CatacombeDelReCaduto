@@ -94,7 +94,7 @@ class GameTest {
         Weapon martello = new Weapon("Martello", "Martello pesante", 5, 3);
         when(player.getWeapon()).thenReturn(martello);
         game.commandEquip("Spada");
-        assertTrue(outContent.toString().contains("Impossibile equipaggiare l'arma: è già quipaggiata un'arma"));
+        assertTrue(outContent.toString().contains("Impossibile equipaggiare l'arma: è già equipaggiata un'arma"));
     }
 
     @Test
