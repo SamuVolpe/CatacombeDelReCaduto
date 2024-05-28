@@ -157,14 +157,6 @@ class GameTest {
         game.commandBack();
         assertTrue(outContent.toString().contains("Non e' possibile tornare indietro, non ti sei mai spostato!"));
     }
-/*
-    @Test
-    void commandBackSuccess() {
-        game.commandMove("nord");
-        when(room)
-        game.commandBack();
-
-    } */
 
     //test di Look
     @Test
@@ -196,13 +188,13 @@ class GameTest {
         assertTrue(outContent.toString().contains("Non c'è niente da esaminare nella stanza"));
     }
 
-/*
     @Test
     void commandLookNoNearRooms() {
+        Room noNearRooms = new Room("Stanza", "No stanze vicine", 3);
+        when(room.printNearRooms()).thenReturn(noNearRooms.printNearRooms());
         game.commandLook("Stanze");
         assertTrue(outContent.toString().contains("Non ci sono stanze vicine"));
     }
-*/
 
     //test di Detail
     @Test
@@ -225,6 +217,6 @@ class GameTest {
         assertTrue(outContent.toString().contains("nome"));
     }
 
-    //TODO Use, Examine, completare Back, completare Look
+    //TODO Use, Examine
 
 }
