@@ -411,6 +411,7 @@ public class Game {
                 Weapon currentWeapon = player.getWeapon();
                 if (currentWeapon != null) {
                     System.out.println("Impossibile equipaggiare l'arma: è già equipaggiata un'arma");
+                    inventory.addItem(toEquip);
                 } else {
                     player.setWeapon((Weapon) toEquip);
                     System.out.println(toEquip.getName() + " equipaggiato con successo");
@@ -419,6 +420,7 @@ public class Game {
                 Armor currentArmor = player.getArmor();
                 if (currentArmor != null) {
                     System.out.println("Impossibile equipaggiare l'armatura: è già equipaggiata un'armatura");
+                    inventory.addItem(toEquip);
                 } else {
                     player.setArmor((Armor) toEquip);
                     System.out.println(toEquip.getName() + " equipaggiato con successo");
