@@ -12,6 +12,8 @@ import java.io.Closeable;
 import java.io.File;
 import java.nio.file.Paths;
 
+//Gestiore la connessione con client amazon, metodo per credenziali e internet
+//fare cartella .aws per file credenziali e config
 public class BucketManager implements AutoCloseable {
     private final S3Client s3Client = S3Client.builder()
             .region(Region.EU_CENTRAL_1)
@@ -30,7 +32,7 @@ public class BucketManager implements AutoCloseable {
                 .build();
         s3Client.putObject(putObjectRequest, RequestBody.fromFile(file));
     }
-
+    //Controlla che esista il file nel downlaod
     public void downloadFile(String key, String downloadFilePath) {
         GetObjectRequest getObjectRequest = GetObjectRequest.builder()
                 .bucket(bucketName)
