@@ -10,7 +10,12 @@ import software.amazon.awssdk.services.s3.model.*;
 
 import java.io.Closeable;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.attribute.FileTime;
+import java.time.Instant;
 
 //Gestiore la connessione con client amazon, metodo per credenziali e internet
 public class BucketManager implements AutoCloseable {
@@ -44,6 +49,42 @@ public class BucketManager implements AutoCloseable {
             //System.err.println("Connessione con il bucket S3 fallita. Motivo: " + e.awsErrorDetails().errorMessage());
             return false;
         }
+    }
+
+    public boolean getLastModified(String key){
+        if(tryConnection()){
+            // Ottieni la data di ultima modifica del file nel bucket S3
+            HeadObjectRequest headObjectRequest = HeadObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(key) //key sarebbe il file all'interno
+                    .build();
+            HeadObjectResponse headObjectResponse = s3Client.headObject(headObjectRequest);
+            Instant s3LastModified = headObjectResponse.lastModified();
+
+            // Ottieni la data di ultima modifica del file locale
+            Path filePath = Paths.get("C:\\Users\\UTENTE\\Desktop\\CatacombeDelReCaduto\\data\\player"+key);
+            FileTime localFileTime = null;
+            try {
+                localFileTime = Files.getLastModifiedTime(filePath);
+            } catch (IOException e) {
+                System.err.println("Il file è inesistente o è stato danneggiato");
+                return true;
+            }
+            Instant localLastModified = localFileTime.toInstant();
+
+            // Confronta le due date
+            if (s3LastModified.isAfter(localLastModified)) {
+                System.out.println("Il file nel bucket S3 è più recente.");
+                return true;
+            } else if (localLastModified.isAfter(s3LastModified)) {
+                System.out.println("Il file locale è più recente.");
+                return false;
+            } else {
+                System.out.println("Entrambi i file hanno la stessa data di ultima modifica.");
+                return true;
+            }
+        }
+        return false;
     }
 
     public void uploadFile(String key, File file) {
