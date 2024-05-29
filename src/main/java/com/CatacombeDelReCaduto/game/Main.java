@@ -1,10 +1,7 @@
 package com.CatacombeDelReCaduto.game;
 
-import com.CatacombeDelReCaduto.game.jsonHandlers.BucketManager;
-import com.CatacombeDelReCaduto.game.jsonHandlers.FilesPath;
+import com.CatacombeDelReCaduto.game.jsonHandlers.FilesManager;
 import com.CatacombeDelReCaduto.game.menus.MainMenu;
-
-import java.io.File;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
@@ -16,6 +13,9 @@ public class Main {
 
     public static void main(String[] args){
         try {
+            // crea se necessario cartella salvataggio dei dati
+            FilesManager.makeSavesDir();
+
             // avvio menu iniziale
             MainMenu mainMenu = new MainMenu();
             mainMenu.display();

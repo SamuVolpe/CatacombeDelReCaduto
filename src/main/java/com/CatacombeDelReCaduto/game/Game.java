@@ -10,7 +10,6 @@ import com.CatacombeDelReCaduto.game.prompts.CommandId;
 import com.CatacombeDelReCaduto.game.rooms.Room;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -22,7 +21,7 @@ public class Game {
     private long creationDate;
 
     // comandi di gioco
-    public static final List<Command> COMMANDS = List.of(
+    private final List<Command> commands = List.of(
             new Command(CommandId.EXIT_GAME, List.of("esci", "esci partita"), "esci - Esci dalla partita")
             ,new Command(CommandId.HELP, List.of("help", "aiuto", "comandi", "lista comandi"), "aiuto - Mostra tutti i comandi")
             ,new Command(CommandId.SAVE, List.of("s", "salva", "salva partita"), "salva - Salva la partita")
@@ -84,6 +83,14 @@ public class Game {
         }
     }
 
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
     /**
      * Inizia il gioco
      */
@@ -99,7 +106,7 @@ public class Game {
 
         do {
             // possibile mostro che ti attacca todo da gestire caso di vittoria (sconfitta del boss finale)
-            if (player.getRoom().isEnemyEngaging())
+            if (command != null && command.getId() != CommandId.HELP && player.getRoom().isEnemyEngaging())
                 battle(player.getRoom().getEnemies().values().stream().findFirst().get());
 
             // prendo input
@@ -201,7 +208,7 @@ public class Game {
         commandMap = new TreeMap<>();
 
         // inserisco nella mappa tutti gli alias del comando come chiave
-        for (var command : COMMANDS)
+        for (var command : commands)
             for (var alias : command.getAliases())
                 commandMap.put(alias, command);
     }
@@ -222,16 +229,27 @@ public class Game {
 
         // player sconfitto
         if (!player.isAlive()){
-            System.out.println("Sei morto, ricarica da ultimo salvataggio..");
+            System.out.println("Sei morto, il gioco verra` ricaricato dall'ultimo salvataggio");
             // carico gioco da ultimo salvataggio
             this.load(player.CREATION_DATE, player.getName());
         }
         // nemico sconfitto
         else if (!enemy.isAlive()){
-            // elimina nemico dalla stanza
+            // elimina nemico dalla stanza e sposta drop
             player.getRoom().removeEnemy(enemy);
 
             System.out.println("Nemico sconfitto");
+            // add score
+            // miniboss
+            if (enemy.getName().equalsIgnoreCase("golem") || enemy.getName().equalsIgnoreCase("chimera"))
+                player.addScore(5);
+            // boss
+            else if (enemy.getName().equalsIgnoreCase("lich"))
+                player.addScore(10);
+            // nemico
+            else
+                player.addScore(1);
+            // show drop
             if (!enemy.getDrop().isEmpty()) {
                 System.out.println("Il nemico ha droppato i seguenti oggetti : "
                         + enemy.getDrop().stream().map(Item::getName).collect(Collectors.joining(", "))
@@ -269,34 +287,39 @@ public class Game {
 
     // region commands
 
+    /**
+     * Stampa una lista di tutti i comandi possibili.
+     */
     private void commandHelp() {
         String output = "Lista di tutti i comandi possibili\n\n";
-        for (var command : COMMANDS)
+        for (var command : commands)
             output += command.getDescription() + "\n";
 
         System.out.print(output);
     }
 
-    private void commandMove(String arg){
-
+    /**
+     * Sposta il giocatore nella direzione specificata.
+     *
+     * @param arg la direzione in cui il giocatore deve muoversi
+     */
+    void commandMove(String arg) {
         Room nextRoom = null;
         String prevDir = player.getPreviousRoomDirection();
-        // gestisco spostamento
-        switch (arg)
-        {
-            case "nord" :
+        switch (arg) {
+            case "nord":
                 nextRoom = player.getRoom().getNearRooms()[0];
                 player.setPreviousRoomDirection("sud");
                 break;
-            case "sud" :
+            case "sud":
                 nextRoom = player.getRoom().getNearRooms()[1];
                 player.setPreviousRoomDirection("nord");
                 break;
-            case "est" :
+            case "est":
                 nextRoom = player.getRoom().getNearRooms()[2];
                 player.setPreviousRoomDirection("ovest");
                 break;
-            case "ovest" :
+            case "ovest":
                 nextRoom = player.getRoom().getNearRooms()[3];
                 player.setPreviousRoomDirection("est");
                 break;
@@ -305,18 +328,21 @@ public class Game {
                 return;
         }
 
-        if (nextRoom != null){
+        if (nextRoom != null) {
             player.setRoom(nextRoom);
             System.out.println(player.getRoom().getDescription());
-        }
-        else {
-            System.out.println("Non c'e` nessuna stanza in questa direzione, provane un'altra");
+        } else {
+            System.out.println("Non c'è nessuna stanza in questa direzione, provane un'altra");
             player.setPreviousRoomDirection(prevDir);
         }
     }
 
-    private void commandTake(String arg) {
-        //se in player.getroom.items c'è l'item da prendere faccio un inventory.addItem e un Room.removeItem (se non è troppo pesante)
+    /**
+     * Permette al giocatore di raccogliere un oggetto dalla stanza corrente.
+     *
+     * @param arg il nome dell'oggetto da raccogliere
+     */
+    void commandTake(String arg) {
         Room currentRoom = player.getRoom();
         List<Item> currentRoomItems = currentRoom.getItems();
         Item toTake;
@@ -336,11 +362,21 @@ public class Game {
         }
     }
 
+    /**
+     * Permette al giocatore di utilizzare un oggetto specificato.
+     *
+     * @param arg il nome dell'oggetto da utilizzare
+     */
     private void commandUse(String arg) {
         player.use(arg);
     }
 
-    private void commandThrow(String arg) {
+    /**
+     * Permette al giocatore di buttare un oggetto specificato.
+     *
+     * @param arg il nome dell'oggetto da buttare
+     */
+    void commandThrow(String arg) {
         Room currentRoom = player.getRoom();
         List<Item> currentRoomItems = currentRoom.getItems();
         Inventory inventory = player.getInventory();
@@ -353,7 +389,12 @@ public class Game {
         }
     }
 
-    private void commandEquip(String arg) {
+    /**
+     * Permette al giocatore di equipaggiare un oggetto specificato.
+     *
+     * @param arg il nome dell'oggetto da equipaggiare
+     */
+    void commandEquip(String arg) {
         Inventory inventory = player.getInventory();
         Item toEquip = inventory.removeItem(arg);
         if (toEquip == null) {
@@ -362,7 +403,8 @@ public class Game {
             if (toEquip instanceof Weapon) {
                 Weapon currentWeapon = player.getWeapon();
                 if (currentWeapon != null) {
-                    System.out.println("Impossibile equipaggiare l'arma: è già quipaggiata un'arma");
+                    System.out.println("Impossibile equipaggiare l'arma: è già equipaggiata un'arma");
+                    inventory.addItem(toEquip);
                 } else {
                     player.setWeapon((Weapon) toEquip);
                     System.out.println(toEquip.getName() + " equipaggiato con successo");
@@ -370,7 +412,8 @@ public class Game {
             } else if (toEquip instanceof Armor) {
                 Armor currentArmor = player.getArmor();
                 if (currentArmor != null) {
-                    System.out.println("Impossibile equipaggiare l'armatura: è già quipaggiata un'armatura");
+                    System.out.println("Impossibile equipaggiare l'armatura: è già equipaggiata un'armatura");
+                    inventory.addItem(toEquip);
                 } else {
                     player.setArmor((Armor) toEquip);
                     System.out.println(toEquip.getName() + " equipaggiato con successo");
@@ -382,7 +425,12 @@ public class Game {
         }
     }
 
-    private void commandUnequip(String arg) {
+    /**
+     * Permette al giocatore di rimuovere un oggetto equipaggiato specificato.
+     *
+     * @param arg il nome dell'oggetto da rimuovere dall'equipaggiamento
+     */
+    void commandUnequip(String arg) {
         Weapon currentWeapon = player.getWeapon();
         Armor currentArmor = player.getArmor();
         Inventory inventory = player.getInventory();
@@ -407,6 +455,11 @@ public class Game {
         }
     }
 
+    /**
+     * Permette al giocatore di esaminare un oggetto specificato nella stanza corrente.
+     *
+     * @param arg il nome dell'oggetto da esaminare
+     */
     private void commandExamine(String arg) {
         Room currentRoom = player.getRoom();
         String desc = currentRoom.getExaminables().get(arg);
@@ -417,17 +470,25 @@ public class Game {
         }
     }
 
-    private void commandView(String arg) {
+    /**
+     * Permette al giocatore di visualizzare lo stato o l'inventario.
+     *
+     * @param arg il tipo di visualizzazione (stato o inventario)
+     */
+    void commandView(String arg) {
         if (arg.equalsIgnoreCase("inventario")) {
             System.out.println(player.getInventory());
         } else if (arg.equalsIgnoreCase("stato")) {
             System.out.println(player);
         }
         else
-            System.out.println("Comando incorretto : puoi visualizzare 'stato' o 'inventario");
+            System.out.println("Comando incorretto : puoi visualizzare 'stato' o 'inventario'");
     }
 
-    private void commandBack() {
+    /**
+     * Permette al giocatore di tornare nella stanza precedente (se possibile).
+     */
+    void commandBack() {
         if (player.getPreviousRoomDirection() == null) {
             System.out.println("Non e' possibile tornare indietro, non ti sei mai spostato!");
         } else {
@@ -435,7 +496,12 @@ public class Game {
         }
     }
 
-    private void commandLook(String arg) {
+    /**
+     * Permette al giocatore di guardare gli oggetti, le stanze o gli esaminabili nella stanza corrente.
+     *
+     * @param arg Cosa si intende guardare (oggetti, stanze o esaminabili)
+     */
+    void commandLook(String arg) {
         if (arg.equalsIgnoreCase("oggetti")) {
             List<Item> items = player.getRoom().getItems();
             String out = "";
@@ -456,7 +522,12 @@ public class Game {
         }
     }
 
-    private void commandDetail(String arg) {
+    /**
+     * Fornisce i dettagli di un oggetto specificato nell'inventario o nella stanza corrente.
+     *
+     * @param arg il nome dell'oggetto di cui visualizzare i dettagli
+     */
+    void commandDetail(String arg) {
         Inventory inventory = player.getInventory();
         Item item = inventory.removeItem(arg);
         if (item != null) {

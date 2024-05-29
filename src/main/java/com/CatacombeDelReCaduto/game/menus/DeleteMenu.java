@@ -1,6 +1,5 @@
 package com.CatacombeDelReCaduto.game.menus;
 
-import com.CatacombeDelReCaduto.game.jsonHandlers.FilesPath;
 import com.CatacombeDelReCaduto.game.jsonHandlers.FilesManager;
 import com.CatacombeDelReCaduto.game.prompts.InputReader;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -70,7 +69,7 @@ public class DeleteMenu extends Menu {
         games.remove(gameId);
 
         // init file
-        File file = new File(FilesPath.SAVES_FILE_PATH);
+        File file = new File(FilesManager.SAVES_FILE_PATH);
         ObjectMapper mapper = new ObjectMapper();
 
         // scrivo la mappa aggiornata nel file json
@@ -79,11 +78,11 @@ public class DeleteMenu extends Menu {
             logger.info("saves updated");
         } catch (IOException ex) {
             logger.log(Level.SEVERE, "", ex);
-            throw new RuntimeException("Errore nell'eliminazione della partita, il file : '" + FilesPath.SAVES_FILE_PATH + "' potrebbe essere stato compromesso");
+            throw new RuntimeException("Errore nell'eliminazione della partita, il file : '" + FilesManager.SAVES_FILE_PATH + "' potrebbe essere stato compromesso");
         }
 
         // elimina il file di gioco
-        file = new File(FilesPath.PLAYER_ROOT + "\\" + playerName + "_" + gameId + ".json");
+        file = new File(FilesManager.PLAYER_ROOT + "\\" + playerName + "_" + gameId + ".json");
         boolean isDeleted = file.delete();
         if (!isDeleted)
             throw new RuntimeException("impossibile eliminare il file : " + file);
