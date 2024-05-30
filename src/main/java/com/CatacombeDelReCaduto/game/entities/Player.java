@@ -296,7 +296,7 @@ public class Player extends Entity{
                 }
             }
             else {
-                System.out.println("L'oggetto non è utilizzabile");
+                System.out.println("Impossibile utilizzare l'oggetto");
                 inventory.addItem(toUse);
                 return false;
             }

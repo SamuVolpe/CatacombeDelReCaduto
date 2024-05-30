@@ -226,7 +226,8 @@ public class Game {
         if (!player.isAlive()){
             System.out.println("Sei morto, il gioco verra` ricaricato dall'ultimo salvataggio");
             // carico gioco da ultimo salvataggio
-            this.load(player.CREATION_DATE, player.getName());
+            load(player.CREATION_DATE, player.getName());
+            System.out.println(player.getRoom().getDescription());
         }
         // nemico sconfitto
         else if (!enemy.isAlive()){

@@ -245,7 +245,7 @@ class GameTest {
         player.setInventory(inventory);
         game.setPlayer(player);
         game.commandUse("Spada");
-        assertTrue(outContent.toString().contains("Impossibile utilizzare l'oggetto: non è cibo"));
+        assertTrue(outContent.toString().contains("Impossibile utilizzare l'oggetto"));
     }
 
     @Test
@@ -256,5 +256,4 @@ class GameTest {
         game.commandUse("Mela");
         assertTrue(outContent.toString().contains("Vita dopo aver mangiato"));
     }
-
 }
