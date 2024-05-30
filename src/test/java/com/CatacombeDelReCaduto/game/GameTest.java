@@ -6,7 +6,6 @@ import com.CatacombeDelReCaduto.game.items.Inventory;
 import com.CatacombeDelReCaduto.game.items.Item;
 import com.CatacombeDelReCaduto.game.items.Weapon;
 import com.CatacombeDelReCaduto.game.rooms.Room;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +13,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.TreeMap;
 
 import static org.junit.jupiter.api.Assertions.*;

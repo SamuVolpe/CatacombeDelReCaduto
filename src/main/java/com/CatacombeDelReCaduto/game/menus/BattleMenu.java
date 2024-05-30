@@ -12,6 +12,7 @@ import java.util.Random;
 public class BattleMenu extends CommandMenu {
     private final Player player;
     private final Enemy enemy;
+    private Random random = new Random();
 
     public BattleMenu(Player player, Enemy enemy) {
         super(List.of(
@@ -23,6 +24,10 @@ public class BattleMenu extends CommandMenu {
         ));
         this.player = player;
         this.enemy = enemy;
+    }
+
+    void setRandom(Random random) {
+        this.random = random;
     }
 
     // true combattimento terminato, false fuggito
@@ -44,7 +49,7 @@ public class BattleMenu extends CommandMenu {
         System.out.println(enemyHealth);
     }
 
-    private void attack(Entity attacker, Entity defender){
+     void attack(Entity attacker, Entity defender){
         // controllo che sia un attacco tra due entita` vive
         if (attacker.getHealth() <=0 || defender.getHealth() <= 0)
             return;
@@ -52,7 +57,6 @@ public class BattleMenu extends CommandMenu {
         String output = "";
 
         // schivata
-        Random random = new Random();
         if (random.nextInt(100) < 8) {
             output = defender.getName() + " ha schivato il colpo";
         }else {
@@ -88,7 +92,7 @@ public class BattleMenu extends CommandMenu {
         };
     }
 
-    private boolean commandAttack() {
+     boolean commandAttack() {
         // player attacca
         attack(player, enemy);
 
@@ -98,7 +102,7 @@ public class BattleMenu extends CommandMenu {
         return !player.isAlive() || !enemy.isAlive();
     }
 
-    private boolean commandUse(String arg) {
+     boolean commandUse(String arg) {
         // usa cibo
         if (player.use(arg))
             // se cibo valido il nemico attacca
@@ -107,20 +111,19 @@ public class BattleMenu extends CommandMenu {
         return !player.isAlive() || !enemy.isAlive();
     }
 
-    private boolean commandView() {
+    boolean commandView() {
         // print inventory
         System.out.println(player.getInventory());
         return false;
     }
 
-    private boolean commandDetail() {
+    boolean commandDetail() {
         // print nemico
         System.out.println(enemy);
         return false;
     }
 
-    private boolean commandEscape(){
-        Random random = new Random();
+     boolean commandEscape(){
         // calcolo prob di fuga in base a stanza
         if (random.nextInt(10) < player.getRoom().getDangerLevel()){
             System.out.println("Fuga fallita!");
