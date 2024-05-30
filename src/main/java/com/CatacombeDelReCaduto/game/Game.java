@@ -92,28 +92,47 @@ public class Game {
         if (player == null)
             startNew();
 
+        // controllo se il giocatore ha vinto
+        if (player.getRoom().getName().equals("Sala del tesoro")){
+            System.out.println("Hai già concluso la tua avventura con score=" + player.getScore());
+            return;
+        }
+
         System.out.println(player.getRoom().getDescription());
 
         // loop che continua a chiedere comandi e a parsarli finche` non esce
         Command command = null;
 
-        do {
-            // possibile mostro che ti attacca todo da gestire caso di vittoria (sconfitta del boss finale)
-            if (command != null && command.getId() != CommandId.HELP && player.getRoom().isEnemyEngaging())
-                battle(player.getRoom().getEnemies().values().stream().findFirst().get());
+        try {
+            do {
+                // possibile mostro che ti attacca todo da gestire caso di vittoria (sconfitta del boss finale)
+                if (command != null && command.getId() != CommandId.HELP && player.getRoom().isEnemyEngaging())
+                    battle(player.getRoom().getEnemies().values().stream().findFirst().get());
 
-            // prendo input
-            String userCommand = InputReader.getInput();
+                // prendo input
+                String userCommand = InputReader.getInput();
 
-            // parse command
-            command = Command.parse(userCommand, commandMap);
+                // parse command
+                command = Command.parse(userCommand, commandMap);
 
-            // gestisce comando richiamando metodo corretto
-            handleCommand(command);
+                // gestisce comando richiamando metodo corretto
+                handleCommand(command);
 
-        } while (command == null || command.getId() != CommandId.EXIT_GAME);
+            } while (command == null || command.getId() != CommandId.EXIT_GAME);
+        }catch (WinException e){
+            // outro
+            System.out.println("L'eroe sconfigge il re corrotto, spezzando la maledizione delle catacombe, " +
+                    "\ncon la morte del re, la magia oscura inizia a dissolversi." +
+                    "\nL'eroe raccoglie tesori e artefatti antichi, quindi si dirige verso l'uscita delle catacombe, ora meno minacciose...");
+
+            System.out.println("Congraturazioni hai vinto! Score=" + player.getScore());
+            commandSave();
+        }
     }
 
+    /**
+     * Inizia nuovo gioco
+     */
     private void startNew() {
         // inizia nuovo gioco da 0
 
@@ -185,7 +204,11 @@ public class Game {
                 commandMap.put(alias, command);
     }
 
-    private void battle(Enemy enemy){
+    /**
+     * Gestisce il combattimento
+     * @param enemy nemico da combattere
+     */
+    private void battle(Enemy enemy) throws WinException {
         System.out.println("Sei stato attaccato!");
 
         // menu combattimento
@@ -216,8 +239,11 @@ public class Game {
             if (enemy.getName().equalsIgnoreCase("golem") || enemy.getName().equalsIgnoreCase("chimera"))
                 player.addScore(5);
             // boss
-            else if (enemy.getName().equalsIgnoreCase("lich"))
+            else if (enemy.getName().equalsIgnoreCase("lich")) {
                 player.addScore(10);
+                // vittoria
+                throw new WinException();
+            }
             // nemico
             else
                 player.addScore(1);
@@ -312,23 +338,18 @@ public class Game {
      */
     void commandMove(String arg) {
         Room nextRoom = null;
-        String prevDir = player.getPreviousRoomDirection();
         switch (arg) {
             case "nord":
                 nextRoom = player.getRoom().getNearRooms()[0];
-                player.setPreviousRoomDirection("sud");
                 break;
             case "sud":
                 nextRoom = player.getRoom().getNearRooms()[1];
-                player.setPreviousRoomDirection("nord");
                 break;
             case "est":
                 nextRoom = player.getRoom().getNearRooms()[2];
-                player.setPreviousRoomDirection("ovest");
                 break;
             case "ovest":
                 nextRoom = player.getRoom().getNearRooms()[3];
-                player.setPreviousRoomDirection("est");
                 break;
             default:
                 System.out.println("Direzione inesistente");
@@ -336,11 +357,19 @@ public class Game {
         }
 
         if (nextRoom != null) {
+            // caso sala del tesoro (stanza accessibile sotto condizioni)
+            if (nextRoom.getName().equals("Sala del tesoro")){
+                if (!player.isBossRoomOpen()) {
+                    System.out.println("Non puoi passare, il passaggio sembra bloccato da un meccanismo");
+                    return;
+                }
+            }
+
             player.setRoom(nextRoom);
+            player.setPreviousRoomDirection(arg);
             System.out.println(player.getRoom().getDescription());
         } else {
             System.out.println("Non c'è nessuna stanza in questa direzione, provane un'altra");
-            player.setPreviousRoomDirection(prevDir);
         }
     }
 
@@ -474,6 +503,14 @@ public class Game {
             System.out.println("Non esaminabile");
         } else {
             System.out.println(desc);
+            // gestisce caso speciale (esamina sarcofago)
+            if (arg.equalsIgnoreCase("sarcofago")){
+                // aggiunge medaglione alla stanza
+                currentRoom.getItems().add(items.get("medaglione del re"));
+                System.out.print("oggetti nella stanza: ");
+                // visualizza oggetti nella stanza
+                commandLook("oggetti");
+            }
         }
     }
 
@@ -521,7 +558,7 @@ public class Game {
                 System.out.println("Non ci sono oggetti nella stanza");
             }
         } else if (arg.equalsIgnoreCase("stanze")) {
-            System.out.println(player.getRoom().printNearRooms());
+            System.out.print(player.getRoom().printNearRooms());
         } else if (arg.equalsIgnoreCase("esaminabili")) {
             System.out.println(player.getRoom().printExaminables());
         } else {
