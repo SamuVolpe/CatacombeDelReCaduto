@@ -20,6 +20,7 @@ public class Player extends Entity{
     private Inventory inventory = new Inventory();
     private Room room = null;
     private String previousRoomDirection = null;
+    private boolean bossRoomOpen = false;
 
     /**
      * Costruttore che inzializza la data di creazione e il nome.
@@ -186,6 +187,22 @@ public class Player extends Entity{
     }
 
     /**
+     * Verifica se la stanza del boss è stata aperta ed è accessibile
+     * @return true se aperta false altrimenti
+     */
+    public boolean isBossRoomOpen() {
+        return bossRoomOpen;
+    }
+
+    /**
+     * Imposta l'accesso alla stanza del boss
+     * @param bossRoomOpen true se può accedere false altrimenti
+     */
+    public void setBossRoomOpen(boolean bossRoomOpen) {
+        this.bossRoomOpen = bossRoomOpen;
+    }
+
+    /**
      * Metodo che per salvare i parametri del giocatore.
      *
      * @return playerSave oggetto con all'interno i parametri salvati del giocatore.
@@ -201,6 +218,7 @@ public class Player extends Entity{
         if (getWeapon() != null)
             playerSave.setWeapon(getWeapon().getName());
         playerSave.setInventory(getInventory().getItemsNames());
+        playerSave.setBossRoomOpen(isBossRoomOpen());
 
         return playerSave;
     }
@@ -224,6 +242,7 @@ public class Player extends Entity{
         for (String itemName : playerSave.getInventory()){
             inventory.addItem(allItems.get(itemName));
         }
+        setBossRoomOpen(playerSave.isBossRoomOpen());
     }
 
     /**
@@ -259,8 +278,25 @@ public class Player extends Entity{
             if (toUse instanceof Food) {
                 setHealth(getHealth() + ((Food) toUse).getHealthRecoveryAmount());
                 System.out.println("Vita dopo aver mangiato " + toUse.getName() + ": " + getHealth());
-            } else {
-                System.out.println("Impossibile utilizzare l'oggetto: non è cibo");
+            } else if (toUse.getName().equalsIgnoreCase("medaglione del re")){
+                // usabile solo se mi trovo nella stanza corretta
+                if (getRoom().getName().equalsIgnoreCase("altare")){
+                    // verifico che non sia già stato utilizzato
+                    if (isBossRoomOpen()){
+                        System.out.println("La porta è già aperta");
+                        return false;
+                    }
+                    else{
+                        System.out.println("Inserisci il medaglione nel'incavatura dell'Altare, un meccanismo si sblocca");
+                        setBossRoomOpen(true);
+                    }
+                }else {
+                    System.out.println("Questo oggetto non è utilizzabile qui");
+                    return false;
+                }
+            }
+            else {
+                System.out.println("L'oggetto non è utilizzabile");
                 inventory.addItem(toUse);
                 return false;
             }

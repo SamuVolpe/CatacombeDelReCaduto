@@ -9,6 +9,7 @@ public class PlayerSave {
     private String armor;
     private String Room;
     private List<String> inventory;
+    private boolean bossRoomOpen;
 
     public PlayerSave() {
     }
@@ -59,5 +60,13 @@ public class PlayerSave {
 
     public void setInventory(List<String> inventory) {
         this.inventory = inventory;
+    }
+
+    public boolean isBossRoomOpen() {
+        return bossRoomOpen;
+    }
+
+    public void setBossRoomOpen(boolean bossRoomOpen) {
+        this.bossRoomOpen = bossRoomOpen;
     }
 }

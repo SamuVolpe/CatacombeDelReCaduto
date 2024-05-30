@@ -32,11 +32,11 @@
 		"enemies" : ["ghoul ascia armatura"]
 	},
 	"Stanza del sarcofago" : {
-		"description": "Sei dentro la stanza del sarcofago del re, è piccola e soffocante, illuminata solo dalla luce tremolante di qualche torcia",
+		"description": "Sei dentro la stanza del sarcofago del re, su un piedistallo di pietra, si erge un antico sarcofago coperto di polvere e ragnatele",
 		"dangerLevel": 2,
-		"nearRooms": ["Stanza buia", "Stanza del golem", "Stanza2", "Corridoio1"],
+		"nearRooms": ["Stanza buia", "Stanza del golem", "Stanza2", "Corridoio"],
 		"examinables" : {
-			"muro" : "'Un’ampia macchia di umidità sul muro suggerisce la presenza di una sorgente d’acqua nascosta, un raro segno di vita in questo luogo di morte'"
+			"sarcofago" : "Avvicinandoti, noti una stretta fessura sul lato del sarcofago. Infilando la mano, senti un oggetto freddo e metallico: il medaglione del re..."
 		},
 		"items" : [],
 		"enemies" : ["ragno","ragno spada"]
@@ -100,12 +100,9 @@
 		"nearRooms": ["Corridoio lungo", "Sala del tesoro", null, null],
 		"examinables" : {
 			"libro" : "Contiene le peggiori arti di magia oscura della terra.",
-			"tappeti e arazzi": "Richiesti dal re e fatti dai migliori sarti del regno.",
-			"pareti": "Le pareti sono adornate con iscrizioni arcane e bassorilievi raffiguranti riti oscuri.",
-			"Altare": "Sul lato dell'altare, c'è un'incavatura rotonda, potrebbe starci qualcosa."
-
+			"altare": "Sul lato dell'altare, c'è un'incavatura rotonda, potrebbe starci qualcosa..."
 		},
-		"items" : ["medaglione del re"],
+		"items" : [],
 		"enemies" : []
 	},
 	"Sala del tesoro" :{

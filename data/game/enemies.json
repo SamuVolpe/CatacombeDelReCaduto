@@ -74,8 +74,8 @@
 	"golem" : {
 		"name": "Golem",
 		"description": "Golem gigante di pietra creato dal Re caduto tramite la magia oscura. Protegge la spada del re.",
-		"maxHealth": 50,
-		"attack": 15,
+		"maxHealth": 60,
+		"attack": 10,
 		"defense" : 20,
 		"drop" : ["mela rara", "mela rara", "mela rara", "spada del re caduto"]
 	},
@@ -84,7 +84,7 @@
 		"description": "Chimera creata dagli esperimenti del Re caduto con diversi animali, ha una Testa d’aquila, corpo di leone e coda di serpente. Protegge l'armatura del re.",
 		"maxHealth": 50,
 		"attack": 15,
-		"defense" : 20,
+		"defense" : 15,
 		"drop" : ["mela rara", "mela rara", "mela rara", "armatura del re caduto"]
 	},
 	"lich" : {
