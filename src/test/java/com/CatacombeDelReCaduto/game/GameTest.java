@@ -205,14 +205,14 @@ class GameTest {
     void commandDetailItemInRoom() {
         game.commandDetail("coltello");
         //verifico che sia chiamato il toString di Item
-        assertTrue(outContent.toString().contains("nome"));
+        assertTrue(outContent.toString().contains("Nome"));
     }
 
     @Test
     void commandDetailItemInInventory() {
         game.commandDetail("Spada");
         //verifico che sia chiamato il toString di Item
-        assertTrue(outContent.toString().contains("nome"));
+        assertTrue(outContent.toString().contains("Nome"));
     }
 
 }
