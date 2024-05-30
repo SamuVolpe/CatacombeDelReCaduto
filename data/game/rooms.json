@@ -17,7 +17,7 @@
 		"examinables" : {
 			"baule" : "Controlla se ci sono oggetti nella stanza..."
 		},
-		"items" : ["mele comuni", "coltello normale", "armatura arrugginita"],
+		"items" : ["mela", "coltello normale", "armatura arrugginita"],
 		"enemies" : ["scheletro", "scheletro"]
 	},
 	"Gesta del re" : {
@@ -69,7 +69,7 @@
 		"examinables" : {
 			"candelabro" : "Un antico candelabro di ferro, con residui di cera indurita, usata nel passato per illuminare le catacombe"
 		},
-		"items" : ["ascia arrugginita", "mele comuni", "spada normale"],
+		"items" : ["ascia arrugginita", "mela", "spada normale"],
 		"enemies" : ["occhio errante", "occhio errante", "ragno"]
 	},
 	"Corridoio lungo" : {

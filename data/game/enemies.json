@@ -69,7 +69,7 @@
 		"maxHealth": 10,
 		"attack": 1,
 		"defense" : 0,
-		"drop" : ["mele comuni", "spada arrugginita"]
+		"drop" : ["mela", "spada arrugginita"]
 	},
 	"golem" : {
 		"name": "Golem",
@@ -77,7 +77,7 @@
 		"maxHealth": 50,
 		"attack": 15,
 		"defense" : 20,
-		"drop" : ["mele rare", "mele rare", "mele rare", "spada del re caduto"]
+		"drop" : ["mela rara", "mela rara", "mela rara", "spada del re caduto"]
 	},
 	"chimera" : {
 		"name": "Chimera",
@@ -85,7 +85,7 @@
 		"maxHealth": 50,
 		"attack": 15,
 		"defense" : 20,
-		"drop" : ["mele rare", "mele rare", "mele rare", "armatura del re caduto"]
+		"drop" : ["mela rara", "mela rara", "mela rara", "armatura del re caduto"]
 	},
 	"lich" : {
 		"name": "Lich (Re caduto)",

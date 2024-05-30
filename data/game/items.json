@@ -41,7 +41,7 @@
 		"weight": 3,
 		"damage": 10
 	},
-	"mele comuni" : {
+	"mela" : {
 		"type": "food",
 		"description": "mele del meleto",
 		"weight": 5,
@@ -53,7 +53,7 @@
 		"weight": 10,
 		"healthRecoveryAmount": 30
 	},
-	"mele rare" : {
+	"mela rara" : {
 		"type": "food",
 		"description": "All'apparenza mele normali ma sono state benedette dall’elfo",
 		"weight": 10,

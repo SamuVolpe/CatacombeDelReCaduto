@@ -114,6 +114,9 @@ public class Game {
         } while (command == null || command.getId() != CommandId.EXIT_GAME);
     }
 
+    /**
+     * Inizia nuovo gioco
+     */
     private void startNew() {
         // inizia nuovo gioco da 0
 
@@ -185,6 +188,10 @@ public class Game {
                 commandMap.put(alias, command);
     }
 
+    /**
+     * Gestisce il combattimento
+     * @param enemy nemico da combattere
+     */
     private void battle(Enemy enemy){
         System.out.println("Sei stato attaccato!");
 
@@ -521,7 +528,7 @@ public class Game {
                 System.out.println("Non ci sono oggetti nella stanza");
             }
         } else if (arg.equalsIgnoreCase("stanze")) {
-            System.out.println(player.getRoom().printNearRooms());
+            System.out.print(player.getRoom().printNearRooms());
         } else if (arg.equalsIgnoreCase("esaminabili")) {
             System.out.println(player.getRoom().printExaminables());
         } else {
