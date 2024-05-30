@@ -10,6 +10,9 @@ import java.io.IOException;
 public class AwsConnectionSettings {
     public static final String DEFAULT_CONNECTION_FILE_PATH = FilesManager.GAME_ROOT + "\\" + "awsConnectionSettings.json";
 
+    // is loaded
+    private static boolean loaded = false;
+
     // dati connessione
     private static String accessKey = null;
     private static String secretKey = null;
@@ -21,6 +24,7 @@ public class AwsConnectionSettings {
     }
 
     public static void load(String filePath) throws IOException{
+        loaded = false;
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = objectMapper.readTree(new File(filePath));
 
@@ -28,10 +32,11 @@ public class AwsConnectionSettings {
         secretKey = rootNode.get("secretKey").asText();
         region = Region.of(rootNode.get("region").asText());
         bucketName = rootNode.get("bucketName").asText();
+        loaded = true;
     }
 
     public static boolean isloaded(){
-        return accessKey != null; // aggiungi altri != null
+        return loaded;
     }
 
     public static String getAccessKey() {

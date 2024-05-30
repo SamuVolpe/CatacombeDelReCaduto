@@ -9,9 +9,7 @@ import com.CatacombeDelReCaduto.game.prompts.Command;
 import com.CatacombeDelReCaduto.game.prompts.CommandId;
 import com.CatacombeDelReCaduto.game.rooms.Room;
 
-import java.io.File;
 import java.util.*;
-import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -39,7 +37,6 @@ public class Game {
     // mappa per il parse dei comandi
     private TreeMap<String, Command> commandMap = null;
 
-    private final Logger logger =  Logger.getLogger(this.getClass().getName());
     private Player player = null;
 
     // non mutable (da prendere clonati)
@@ -151,6 +148,10 @@ public class Game {
         FilesManager.saveNewGame(player);
 
         // carica file saves
+        try (BucketManager bucket = BucketManager.loadExistConnection()){
+            // aggiorna file salvataggi
+            bucket.uploadFile(FilesManager.SAVES_FILE_NAME, FilesManager.SAVES_FILE_PATH);
+        }
     }
 
     /**
@@ -158,24 +159,34 @@ public class Game {
      */
     private void save() {
         // salva gioco su file
+        try {
+            // dati giocatore da salvare
+            PlayerSave playerSave = player.save();
 
-        // dati giocatore da salvare
-        PlayerSave playerSave = player.save();
+            // dati stanze da salvare
+            Map<String, RoomSave> roomsSave = new TreeMap<>();
+            for (var entry : rooms.entrySet()) {
+                roomsSave.put(entry.getKey(), entry.getValue().save());
+            }
 
-        // dati stanze da salvare
-        Map<String, RoomSave> roomsSave = new TreeMap<>();
-        for (var entry : rooms.entrySet()){
-            roomsSave.put(entry.getKey(), entry.getValue().save());
+            // crea Salvataggio
+            Save save = new Save();
+            save.setPlayer(playerSave);
+            save.setRooms(roomsSave);
+
+            // salva sul file
+            FilesManager.saveGame(player.getSaveFileName(), save);
+
+            // carica file
+            try (BucketManager bucket = BucketManager.loadExistConnection()) {
+                // aggiorna file salvataggio
+                bucket.uploadFile(player.getSaveFileName(), FilesManager.PLAYER_ROOT + "\\" + player.getSaveFileName());
+            }
+            System.out.println("Gioco salvato");
+        }catch (Exception e){
+            System.out.println("Impossibile salvare il gioco");
+            e.printStackTrace();
         }
-
-        // crea Salvataggio
-        Save save = new Save();
-        save.setPlayer(playerSave);
-        save.setRooms(roomsSave);
-
-        // salva sul file
-        FilesManager.saveGame(player.getSaveFileName(), save);
-        System.out.println("Gioco salvato");
     }
 
     /**
@@ -185,7 +196,7 @@ public class Game {
      */
     private void load(Long creationDate, String playerName){
         // carica gioco
-        Save save = FilesManager.loadGame(playerName + "_" + creationDate + ".json");
+        Save save = FilesManager.loadGame(FilesManager.gameFileName(creationDate, playerName));
 
         // carica dati stanze
         for (var entry : rooms.entrySet()){

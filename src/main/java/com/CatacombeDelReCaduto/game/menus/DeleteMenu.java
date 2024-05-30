@@ -1,22 +1,22 @@
 package com.CatacombeDelReCaduto.game.menus;
 
+import com.CatacombeDelReCaduto.game.jsonHandlers.BucketManager;
 import com.CatacombeDelReCaduto.game.jsonHandlers.FilesManager;
 import com.CatacombeDelReCaduto.game.prompts.InputReader;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.TreeMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Menu per eliminare una partita esistente
  */
 public class DeleteMenu extends Menu {
-    private final Logger logger =  Logger.getLogger(this.getClass().getName());
     private Map<Long, String> games = new TreeMap<>();
 
     public DeleteMenu(){
@@ -75,16 +75,30 @@ public class DeleteMenu extends Menu {
         // scrivo la mappa aggiornata nel file json
         try {
             mapper.writeValue(file, games);
-            logger.info("saves updated");
-        } catch (IOException ex) {
-            logger.log(Level.SEVERE, "", ex);
-            throw new RuntimeException("Errore nell'eliminazione della partita, il file : '" + FilesManager.SAVES_FILE_PATH + "' potrebbe essere stato compromesso");
+        } catch (IOException e) {
+            System.out.println("Errore nell'eliminazione della partita, il file : '" + FilesManager.SAVES_FILE_PATH + "' potrebbe essere stato compromesso");
+            e.printStackTrace();
+            return;
         }
 
-        // elimina il file di gioco
+        // elimina il file di gioco se esiste
         file = new File(FilesManager.PLAYER_ROOT + "\\" + FilesManager.gameFileName(gameId, playerName));
-        boolean isDeleted = file.delete();
-        if (!isDeleted)
-            throw new RuntimeException("impossibile eliminare il file : " + file);
+        if (file.exists()) {
+            boolean isDeleted = file.delete();
+            if (!isDeleted) {
+                System.out.println("Impossibile eliminare il file : " + file.getPath());
+                return;
+            }
+        }
+
+        // web
+        try (BucketManager bucket = BucketManager.loadExistConnection()){
+            // elimina file di gioco
+            bucket.deleteFile(FilesManager.gameFileName(gameId, playerName), FilesManager.PLAYER_ROOT + "\\" + FilesManager.gameFileName(gameId, playerName));
+            // aggiorna file salvataggi
+            bucket.uploadFile(FilesManager.SAVES_FILE_NAME, FilesManager.SAVES_FILE_PATH);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

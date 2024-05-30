@@ -7,13 +7,11 @@ import com.CatacombeDelReCaduto.game.prompts.InputReader;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.logging.Logger;
 
 /**
  * Menu per il caricamento di una partita
  */
 public class LoadMenu extends Menu {
-    private final Logger logger =  Logger.getLogger(this.getClass().getName());
     private Map<Long, String> games = new TreeMap<>();
 
     public LoadMenu(){

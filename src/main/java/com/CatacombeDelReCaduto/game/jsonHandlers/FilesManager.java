@@ -11,8 +11,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Classe per la gestione del caricamento/ salvataggio sui files
@@ -29,8 +27,6 @@ public class FilesManager {
     public static String ENEMIES_FILE_PATH = GAME_ROOT + "\\enemies.json";
     public static String ROOMS_FILE_PATH = GAME_ROOT + "\\rooms.json";
     public static String SAVES_FILE_PATH = PLAYER_ROOT + "\\" + SAVES_FILE_NAME;
-
-    public static final Logger logger =  Logger.getLogger(FilesManager.class.getName());
 
     public static String gameFileName(long id, String name){
         return name + "_" + id + ".json";
@@ -51,8 +47,6 @@ public class FilesManager {
      * @return map - key : data partita, value : nome giocatore
      */
     public static Map<Long, String> loadGames(){
-        logger.info("load games");
-
         ObjectMapper mapper = new ObjectMapper();
         File file = new File(SAVES_FILE_PATH);
 
@@ -62,12 +56,10 @@ public class FilesManager {
                 return mapper.readValue(file, new TypeReference<Map<Long, String>>() {
                 });
             } catch (IOException ex) {
-                logger.log(Level.SEVERE, "error on games loading", ex);
-                throw new RuntimeException("Errore nel caricamento delle partite, il file : '" + SAVES_FILE_PATH + "' potrebbe essere stato compromesso");
+                throw new RuntimeException(ex);
             }
         }
         else {
-            logger.info("file doesn't exist");
             return new TreeMap<>();
         }
     }
@@ -87,7 +79,6 @@ public class FilesManager {
         // Scrivi la mappa aggiornata nel file json
         try {
             mapper.writeValue(new File(SAVES_FILE_PATH), map);
-            logger.info("saves updated");
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
@@ -126,7 +117,6 @@ public class FilesManager {
      * @return map - key : identificativo oggetto, value : oggetto
      */
     public static Map<String, Item> loadItems(){
-        logger.info("load items");
         Map<String, Item> result = new TreeMap<>();
         ObjectMapper mapper = new ObjectMapper();
 
@@ -156,7 +146,6 @@ public class FilesManager {
                 result.put(name, item);
             }
         } catch (IOException ex) {
-            logger.log(Level.SEVERE, "error on items loading", ex);
             throw new RuntimeException("Errore nel caricamento degli oggetti di gioco, il file : '" + ITEMS_FILE_PATH + "' potrebbe essere stato compromesso");
         }
 
@@ -169,7 +158,6 @@ public class FilesManager {
      * @return map - key : identificativo nemico, value : nemico
      */
     public static Map<String, Enemy> loadEnemies(Map<String, Item> items){
-        logger.info("load enemies");
         // Path del file JSON
         final String FILE_PATH = ENEMIES_FILE_PATH;
 
@@ -198,23 +186,17 @@ public class FilesManager {
                 // aggiungo a lista drop gli items
                 JsonNode dropNode = enemyNode.get("drop");
                 List<Item> drop = new ArrayList<>();
-                try {
-                    if (dropNode != null && dropNode.isArray()) {
-                        for (JsonNode itemNode : dropNode) {
-                            drop.add(items.get(itemNode.asText()));
-                        }
+                if (dropNode != null && dropNode.isArray()) {
+                    for (JsonNode itemNode : dropNode) {
+                        drop.add(items.get(itemNode.asText()));
                     }
-                }
-                catch (NoSuchElementException ex) {
-                    logger.severe("Error in enemies file, item not found " + ex.getMessage());
                 }
 
                 // aggiungo a mappa
                 result.put(field.getKey(), new Enemy(name, description, maxHealth, attack, defense, drop));
             }
         } catch (IOException ex) {
-            logger.log(Level.SEVERE, "error on enemies loading", ex);
-            throw new RuntimeException("Errore nel caricamento dei nemici di gioco, il file : '" + ENEMIES_FILE_PATH + "' potrebbe essere stato compromesso");
+            throw new RuntimeException(ex);
         }
 
         return result;
@@ -225,7 +207,6 @@ public class FilesManager {
      * @return map - key : identificativo stanza, value : stanza
      */
     public static Map<String, Room> loadRooms(){
-        logger.info("load base rooms data");
         return loadRooms(null, null);
     }
 
@@ -237,7 +218,6 @@ public class FilesManager {
      */
     public static Map<String, Room> loadRooms(Map<String, Item> items, Map<String, Enemy> enemies)
     {
-        logger.info("load rooms");
         Map<String, Room> result = new TreeMap<>();
         // mappa di supporto salvataggio nearRooms
         Map<String, String[]> nearRooms = new TreeMap<>();
@@ -246,7 +226,6 @@ public class FilesManager {
         ObjectMapper mapper = new ObjectMapper();
 
         try {
-
             // Leggi il file JSON e converti in JsonNode
             JsonNode rootNode = mapper.readTree(new File(ROOMS_FILE_PATH));
 
@@ -288,14 +267,10 @@ public class FilesManager {
                 if (items != null) {
                     JsonNode itemsNode = roomNode.get("items");
                     List<Item> inRoomItems = new ArrayList<>();
-                    try {
-                        if (itemsNode != null && itemsNode.isArray()) {
-                            for (JsonNode itemNode : itemsNode) {
-                                inRoomItems.add(items.get(itemNode.asText()));
-                            }
+                    if (itemsNode != null && itemsNode.isArray()) {
+                        for (JsonNode itemNode : itemsNode) {
+                            inRoomItems.add(items.get(itemNode.asText()));
                         }
-                    } catch (NoSuchElementException ex) {
-                        logger.severe("Error in room file, item not found " + ex.getMessage());
                     }
 
                     room.setItems(inRoomItems);
@@ -305,14 +280,10 @@ public class FilesManager {
                 if (enemies != null) {
                     JsonNode enemiesNode = roomNode.get("enemies");
                     Map<String, Enemy> inRoomEnemies = new TreeMap<>();
-                    try {
-                        if (enemiesNode != null && enemiesNode.isArray()) {
-                            for (JsonNode enemyNode : enemiesNode) {
-                                inRoomEnemies.put(enemyNode.asText(), enemies.get(enemyNode.asText()).clone());
-                            }
+                    if (enemiesNode != null && enemiesNode.isArray()) {
+                        for (JsonNode enemyNode : enemiesNode) {
+                            inRoomEnemies.put(enemyNode.asText(), enemies.get(enemyNode.asText()).clone());
                         }
-                    } catch (NoSuchElementException ex) {
-                        logger.severe("Error in room file, enemy not found " + ex.getMessage());
                     }
 
                     room.setEnemies(inRoomEnemies);
@@ -322,7 +293,6 @@ public class FilesManager {
                 result.put(name, room);
             }
         } catch (IOException ex) {
-            logger.log(Level.SEVERE, "error on rooms loading", ex);
             throw new RuntimeException("Errore nel caricamento delle stanze di gioco, il file : '" + ROOMS_FILE_PATH + "' potrebbe essere stato compromesso");
         }
 

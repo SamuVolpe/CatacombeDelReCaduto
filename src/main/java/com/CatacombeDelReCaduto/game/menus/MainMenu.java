@@ -1,6 +1,8 @@
 package com.CatacombeDelReCaduto.game.menus;
 
 import com.CatacombeDelReCaduto.game.Game;
+import com.CatacombeDelReCaduto.game.jsonHandlers.BucketManager;
+import com.CatacombeDelReCaduto.game.jsonHandlers.FilesManager;
 import com.CatacombeDelReCaduto.game.prompts.*;
 
 import java.util.List;
@@ -49,6 +51,16 @@ public class MainMenu extends CommandMenu {
         // nessuna partita scelta
         if (chosedGame == null)
             return false;
+
+        // scarica file di gioco scelto aggiornato
+        try (BucketManager bucket = BucketManager.loadExistConnection()){
+            bucket.downloadFile(FilesManager.gameFileName(chosedGame.getKey(), chosedGame.getValue())
+                    , FilesManager.PLAYER_ROOT + "\\" + FilesManager.gameFileName(chosedGame.getKey(), chosedGame.getValue()));
+        }catch (Exception e){
+            System.out.println("Impossibile scaricare il file di gioco");
+            e.printStackTrace();
+            return false;
+        }
 
         // carica dati gioco
         Game game = new Game(chosedGame.getKey(), chosedGame.getValue());
