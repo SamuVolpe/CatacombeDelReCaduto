@@ -18,7 +18,7 @@ public class Main {
             try (BucketManager bucket = BucketManager.loadConnection()){
                 bucket.downloadFile(FilesManager.SAVES_FILE_NAME, FilesManager.SAVES_FILE_PATH);
             }
-            catch (NoSuchKeyException _) {}
+            catch (NoSuchKeyException e) {}
             catch (Exception e){
                 System.out.println("Impossibile connettersi ad aws, controllare il file di configurazione o la rete");
                 throw e;

@@ -42,7 +42,7 @@ public abstract class Menu {
             int choice = Integer.parseInt(userCommand.trim());
             if (choice > 0 && choice <= menuItems.size())
                 return choice;
-        } catch (NumberFormatException _) {
+        } catch (NumberFormatException e) {
         }
         return -1;
     }

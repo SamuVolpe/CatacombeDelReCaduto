@@ -61,12 +61,12 @@ public class Inventory {
     public Item removeItem(String itemName) {
         ArrayList<Item> list = inventory.get(itemName);
         if (list != null) {
-            Item it = list.getFirst();
+            Item it = list.get(0);
             currentWeight = currentWeight - it.getWeight();
             if (list.size() == 1) {
                 inventory.remove(itemName);
             } else {
-                list.removeFirst();
+                list.remove(0);
             }
             return it;
         } else {
@@ -99,7 +99,7 @@ public class Inventory {
         for (Map.Entry<String, ArrayList<Item>> entry : inventory.entrySet()) {
             String key = entry.getKey();
             ArrayList<Item> value = entry.getValue();
-            ret = ret + key + "(peso=" + value.getFirst().getWeight() + ")(x" + value.size() + ") ";
+            ret = ret + key + "(peso=" + value.get(0).getWeight() + ")(x" + value.size() + ") ";
         }
         return ret;
     }
