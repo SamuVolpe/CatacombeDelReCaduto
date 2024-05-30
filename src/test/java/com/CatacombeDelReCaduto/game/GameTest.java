@@ -1,10 +1,7 @@
 package com.CatacombeDelReCaduto.game;
 
 import com.CatacombeDelReCaduto.game.entities.Player;
-import com.CatacombeDelReCaduto.game.items.Armor;
-import com.CatacombeDelReCaduto.game.items.Inventory;
-import com.CatacombeDelReCaduto.game.items.Item;
-import com.CatacombeDelReCaduto.game.items.Weapon;
+import com.CatacombeDelReCaduto.game.items.*;
 import com.CatacombeDelReCaduto.game.rooms.Room;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,6 +10,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,6 +21,7 @@ class GameTest {
     Game game;
     Player player;
     Room room;
+    Inventory inventory;
 
     @BeforeEach
     void setUp() {
@@ -30,12 +29,12 @@ class GameTest {
         System.setOut(new PrintStream(outContent));
         player = mock(Player.class);
         room = mock(Room.class);
-        Item mela = new Item("Mela", "Mela prelibata", 1);
+        Food mela = new Food("Mela", "Mela prelibata", 1, 5);
         Weapon coltello = new Weapon("Coltello", "Coltello affilato", 1, 5);
         Armor elmo = new Armor("Elmo", "Elmo rigido", 200, 5);
         Weapon spada = new Weapon("Spada", "Spada di pietra", 2, 5);
         List<Item> list = new ArrayList<Item>();
-        Inventory inventory = new Inventory();
+        inventory = new Inventory();
         inventory.addItem(spada);
         inventory.addItem(mela);
         list.add(mela);
@@ -213,6 +212,49 @@ class GameTest {
         game.commandDetail("Spada");
         //verifico che sia chiamato il toString di Item
         assertTrue(outContent.toString().contains("Nome"));
+    }
+
+    //test di Examine
+    @Test
+    void commandExamineNotExaminable() {
+        game.commandExamine("NonEsaminabile");
+        assertTrue(outContent.toString().contains("Non esaminabile"));
+    }
+
+    @Test
+    void commandExamineExaminable() {
+        Map<String, String> examinables = new TreeMap<>();
+        examinables.put("Muro", "Muro rovinato");
+        when(room.getExaminables()).thenReturn(examinables);
+        game.commandExamine("Muro rovinato");
+        assertTrue(outContent.toString().contains("Non esaminabile"));
+    }
+
+    //test di Use
+    @Test
+    void commandUseNotPresent() {
+        Player player = new Player(0, "test");
+        game.setPlayer(player);
+        game.commandUse("OggettoNonPresente");
+        assertTrue(outContent.toString().contains("Impossibile utilizzare l'oggetto: non è presente nell'inventario"));
+    }
+
+    @Test
+    void commandUseNotUsable() {
+        Player player = new Player(0, "test");
+        player.setInventory(inventory);
+        game.setPlayer(player);
+        game.commandUse("Spada");
+        assertTrue(outContent.toString().contains("Impossibile utilizzare l'oggetto: non è cibo"));
+    }
+
+    @Test
+    void commandUseSuccess() {
+        Player player = new Player(0, "test");
+        player.setInventory(inventory);
+        game.setPlayer(player);
+        game.commandUse("Mela");
+        assertTrue(outContent.toString().contains("Vita dopo aver mangiato"));
     }
 
 }

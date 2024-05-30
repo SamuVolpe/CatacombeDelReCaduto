@@ -374,7 +374,7 @@ public class Game {
      *
      * @param arg il nome dell'oggetto da utilizzare
      */
-    private void commandUse(String arg) {
+    void commandUse(String arg) {
         player.use(arg);
     }
 
@@ -467,7 +467,7 @@ public class Game {
      *
      * @param arg il nome dell'oggetto da esaminare
      */
-    private void commandExamine(String arg) {
+    void commandExamine(String arg) {
         Room currentRoom = player.getRoom();
         String desc = currentRoom.getExaminables().get(arg);
         if (desc == null) {
