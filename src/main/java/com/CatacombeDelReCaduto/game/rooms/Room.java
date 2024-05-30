@@ -1,7 +1,7 @@
 package com.CatacombeDelReCaduto.game.rooms;
 
-import com.CatacombeDelReCaduto.game.entities.*;
-import com.CatacombeDelReCaduto.game.items.*;
+import com.CatacombeDelReCaduto.game.entities.Enemy;
+import com.CatacombeDelReCaduto.game.items.Item;
 import com.CatacombeDelReCaduto.game.jsonHandlers.RoomSave;
 
 import java.util.*;

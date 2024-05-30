@@ -4,13 +4,11 @@ import com.CatacombeDelReCaduto.game.jsonHandlers.BucketManager;
 import com.CatacombeDelReCaduto.game.jsonHandlers.FilesManager;
 import com.CatacombeDelReCaduto.game.prompts.InputReader;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.TreeMap;
 
 /**

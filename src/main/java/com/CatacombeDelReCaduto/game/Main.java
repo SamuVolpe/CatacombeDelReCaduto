@@ -5,8 +5,6 @@ import com.CatacombeDelReCaduto.game.jsonHandlers.FilesManager;
 import com.CatacombeDelReCaduto.game.menus.MainMenu;
 import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
 
-import java.util.NoSuchElementException;
-
 /**
  * Classe d'avvio del gioco
  */

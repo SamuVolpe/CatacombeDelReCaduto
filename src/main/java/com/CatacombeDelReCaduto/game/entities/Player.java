@@ -3,8 +3,7 @@ package com.CatacombeDelReCaduto.game.entities;
 import com.CatacombeDelReCaduto.game.items.*;
 import com.CatacombeDelReCaduto.game.jsonHandlers.FilesManager;
 import com.CatacombeDelReCaduto.game.jsonHandlers.PlayerSave;
-import com.CatacombeDelReCaduto.game.menus.BattleMenu;
-import com.CatacombeDelReCaduto.game.rooms.*;
+import com.CatacombeDelReCaduto.game.rooms.Room;
 
 import java.util.Map;
 
