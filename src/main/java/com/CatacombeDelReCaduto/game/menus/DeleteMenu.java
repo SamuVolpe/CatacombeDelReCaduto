@@ -82,7 +82,7 @@ public class DeleteMenu extends Menu {
         }
 
         // elimina il file di gioco
-        file = new File(FilesManager.PLAYER_ROOT + "\\" + playerName + "_" + gameId + ".json");
+        file = new File(FilesManager.PLAYER_ROOT + "\\" + FilesManager.gameFileName(gameId, playerName));
         boolean isDeleted = file.delete();
         if (!isDeleted)
             throw new RuntimeException("impossibile eliminare il file : " + file);

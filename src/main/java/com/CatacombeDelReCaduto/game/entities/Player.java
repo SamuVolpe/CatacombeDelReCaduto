@@ -1,6 +1,7 @@
 package com.CatacombeDelReCaduto.game.entities;
 
 import com.CatacombeDelReCaduto.game.items.*;
+import com.CatacombeDelReCaduto.game.jsonHandlers.FilesManager;
 import com.CatacombeDelReCaduto.game.jsonHandlers.PlayerSave;
 import com.CatacombeDelReCaduto.game.menus.BattleMenu;
 import com.CatacombeDelReCaduto.game.rooms.*;
@@ -32,7 +33,7 @@ public class Player extends Entity{
         this.armor = armor;
     }
 
-    public String getSaveFileName() {return getName() + "_" + CREATION_DATE + ".json"; }
+    public String getSaveFileName() {return FilesManager.gameFileName(CREATION_DATE, getName());}
 
     public Inventory getInventory() {
         return inventory;

@@ -32,6 +32,10 @@ public class FilesManager {
 
     public static final Logger logger =  Logger.getLogger(FilesManager.class.getName());
 
+    public static String gameFileName(long id, String name){
+        return name + "_" + id + ".json";
+    }
+
     public static void makeSavesDir(){
         // crea cartella di salvataggio se non esiste
         File directory = new File(PLAYER_ROOT);
@@ -77,7 +81,8 @@ public class FilesManager {
         Map<Long, String> map = loadGames();
 
         // Aggiungi un nuovo elemento alla mappa
-        map.put(player.CREATION_DATE, player.getName());
+        if (player != null)
+            map.put(player.CREATION_DATE, player.getName());
 
         // Scrivi la mappa aggiornata nel file json
         try {
