@@ -151,11 +151,11 @@ public class Entity {
      */
     @Override
     public String toString() {
-        return "Nome : " + name
-                + "\nInfo : " + description
-                + "\nVita : " + health + "/" + maxHealth
-                + ", Attacco : " + attack
-                + ", Difesa : " + defense;
+        return "Nome=" + name
+                + "\nInfo=" + description
+                + "\nVita=" + health + "/" + maxHealth
+                + ", Attacco=" + attack
+                + ", Difesa=" + defense;
     }
 
     /**

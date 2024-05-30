@@ -41,8 +41,8 @@ public class BattleMenu extends CommandMenu {
     protected void print(){
         super.print();
 
-        String playerHealth = String.format("vita %s : %d/%d", player.getName(), player.getHealth(), player.getMaxHealth());
-        String enemyHealth = String.format("vita %s : %d/%d", enemy.getName(), enemy.getHealth(), enemy.getMaxHealth());
+        String playerHealth = String.format("vita %s=%d/%d", player.getName(), player.getHealth(), player.getMaxHealth());
+        String enemyHealth = String.format("vita %s=%d/%d", enemy.getName(), enemy.getHealth(), enemy.getMaxHealth());
 
         System.out.println();
         System.out.println(playerHealth);

@@ -17,16 +17,16 @@ import java.util.*;
  */
 public class FilesManager {
     // folders
-    public static String DATA_ROOT = "data";
-    public static String PLAYER_ROOT = DATA_ROOT + "\\player";
-    public static String GAME_ROOT = DATA_ROOT + "\\game";
+    public static final String DATA_ROOT = "data";
+    public static final String PLAYER_ROOT = DATA_ROOT + "\\player";
+    public static final String GAME_ROOT = DATA_ROOT + "\\game";
 
     // files
-    public static String SAVES_FILE_NAME = "saves.json";
-    public static String ITEMS_FILE_PATH = GAME_ROOT + "\\items.json";
-    public static String ENEMIES_FILE_PATH = GAME_ROOT + "\\enemies.json";
-    public static String ROOMS_FILE_PATH = GAME_ROOT + "\\rooms.json";
-    public static String SAVES_FILE_PATH = PLAYER_ROOT + "\\" + SAVES_FILE_NAME;
+    public static final String SAVES_FILE_NAME = "saves.json";
+    public static final String ITEMS_FILE_PATH = GAME_ROOT + "\\items.json";
+    public static final String ENEMIES_FILE_PATH = GAME_ROOT + "\\enemies.json";
+    public static final String ROOMS_FILE_PATH = GAME_ROOT + "\\rooms.json";
+    public static final String SAVES_FILE_PATH = PLAYER_ROOT + "\\" + SAVES_FILE_NAME;
 
     public static String gameFileName(long id, String name){
         return name + "_" + id + ".json";

@@ -39,7 +39,7 @@ public class Armor extends Item {
      */
     @Override
     public String toString() {
-        return super.toString() + ", protezione=" + defense;
+        return super.toString() + ", Protezione=" + defense;
     }
 }
 

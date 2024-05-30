@@ -138,7 +138,7 @@ public class Game {
         player.setRoom(rooms.get("Entrata"));
 
         // salvataggio iniziale (file save)
-        save();
+        commandSave();
 
         // crea record in file giochi
         FilesManager.saveNewGame(player);
@@ -147,41 +147,6 @@ public class Game {
         try (BucketManager bucket = BucketManager.loadExistConnection()){
             // aggiorna file salvataggi
             bucket.uploadFile(FilesManager.SAVES_FILE_NAME, FilesManager.SAVES_FILE_PATH);
-        }
-    }
-
-    /**
-     * Salva il gioco
-     */
-    private void save() {
-        // salva gioco su file
-        try {
-            // dati giocatore da salvare
-            PlayerSave playerSave = player.save();
-
-            // dati stanze da salvare
-            Map<String, RoomSave> roomsSave = new TreeMap<>();
-            for (var entry : rooms.entrySet()) {
-                roomsSave.put(entry.getKey(), entry.getValue().save());
-            }
-
-            // crea Salvataggio
-            Save save = new Save();
-            save.setPlayer(playerSave);
-            save.setRooms(roomsSave);
-
-            // salva sul file
-            FilesManager.saveGame(player.getSaveFileName(), save);
-
-            // carica file
-            try (BucketManager bucket = BucketManager.loadExistConnection()) {
-                // aggiorna file salvataggio
-                bucket.uploadFile(player.getSaveFileName(), FilesManager.PLAYER_ROOT + "\\" + player.getSaveFileName());
-            }
-            System.out.println("Gioco salvato");
-        }catch (Exception e){
-            System.out.println("Impossibile salvare il gioco");
-            e.printStackTrace();
         }
     }
 
@@ -276,7 +241,7 @@ public class Game {
         // aggiungi comandi su switch
         switch (command.getId()) {
             case HELP -> commandHelp();
-            case SAVE -> save();
+            case SAVE -> commandSave();
             case MOVE -> commandMove(command.getArgs()[0]);
             case TAKE -> commandTake(command.getArgs()[0]);
             case USE -> commandUse(command.getArgs()[0]);
@@ -293,6 +258,41 @@ public class Game {
     }
 
     // region commands
+
+    /**
+     * Salva il gioco
+     */
+    private void commandSave() {
+        // salva gioco su file
+        try {
+            // dati giocatore da salvare
+            PlayerSave playerSave = player.save();
+
+            // dati stanze da salvare
+            Map<String, RoomSave> roomsSave = new TreeMap<>();
+            for (var entry : rooms.entrySet()) {
+                roomsSave.put(entry.getKey(), entry.getValue().save());
+            }
+
+            // crea Salvataggio
+            Save save = new Save();
+            save.setPlayer(playerSave);
+            save.setRooms(roomsSave);
+
+            // salva sul file
+            FilesManager.saveGame(player.getSaveFileName(), save);
+
+            // carica file
+            try (BucketManager bucket = BucketManager.loadExistConnection()) {
+                // aggiorna file salvataggio
+                bucket.uploadFile(player.getSaveFileName(), FilesManager.PLAYER_ROOT + "\\" + player.getSaveFileName());
+            }
+            System.out.println("Gioco salvato");
+        }catch (Exception e){
+            System.out.println("Impossibile salvare il gioco");
+            e.printStackTrace();
+        }
+    }
 
     /**
      * Stampa una lista di tutti i comandi possibili.

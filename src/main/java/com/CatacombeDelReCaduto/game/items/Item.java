@@ -83,7 +83,7 @@ public class Item {
      */
     @Override
     public String toString() {
-        return "nome=" + name + ", descrizione=" + description  + ", peso=" + weight;
+        return "Nome=" + name + "\nDescrizione=" + description  + "\nPeso=" + weight;
     }
 }
 

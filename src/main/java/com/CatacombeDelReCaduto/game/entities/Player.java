@@ -283,8 +283,8 @@ public class Player extends Entity{
             armorName = armor.getName();
 
         return super.toString() +
-                ", Arma : " + weaponName +
-                ", Armatura : " + armorName +
-                ", Score : " + score;
+                "\nArma=" + weaponName +
+                ", Armatura=" + armorName +
+                "\nScore=" + score;
     }
 }

@@ -45,6 +45,6 @@ public class Food extends Item {
      */
     @Override
     public String toString() {
-        return super.toString() + ", recupero vita=" + healthRecoveryAmount;
+        return super.toString() + ", Recupero vita=" + healthRecoveryAmount;
     }
 }
