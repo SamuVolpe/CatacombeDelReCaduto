@@ -87,7 +87,7 @@ public class Command {
                         return command;
                     }
                     // se un parametro trovo il parametro e lo setto nel comando
-                    else if (command.getArgsNum() == 1 && userCommand.startsWith(entry.getKey() + " ")) {
+                    else if (command.getArgsNum() == 1) {
                         String arg = userCommand.substring(entry.getKey().length()).trim();
                         command.setArgs(new String[] {arg});
                         return command;

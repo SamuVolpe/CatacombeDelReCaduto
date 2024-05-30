@@ -14,10 +14,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Game {
-
-    // data file di salvataggio
-    private long creationDate;
-
     // comandi di gioco
     private final List<Command> commands = List.of(
             new Command(CommandId.EXIT_GAME, List.of("esci", "esci partita"), "esci - Esci dalla partita")
