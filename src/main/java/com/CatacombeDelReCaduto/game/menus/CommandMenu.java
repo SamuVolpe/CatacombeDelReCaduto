@@ -49,6 +49,11 @@ public abstract class CommandMenu extends Menu {
         } while (!handled);
     }
 
+    /**
+     * Gestisce l'input dell'utente, traducendolo in un comando.
+     * @param userCommand L'input inserito dall'utente
+     * @return Il comando associato all'input, o null se non è stato riconosciuto un comando
+     */
     protected Command handleInput(String userCommand) {
         Command command = null;
 

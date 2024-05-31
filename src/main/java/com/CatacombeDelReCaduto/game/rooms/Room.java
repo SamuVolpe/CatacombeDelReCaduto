@@ -23,10 +23,25 @@ public class Room {
     // indica se il giocatore ha gia` visitato la stanza
     private boolean visited;
 
+    /**
+     * Costruttore della classe Room.
+     *
+     * @param name Nome della stanza
+     * @param description Descrizione della stanza
+     * @param dangerLevel Livello di pericolo della stanza
+     */
     public Room(String name, String description, int dangerLevel) {
         this (name, description, dangerLevel, false);
     }
 
+    /**
+     * Costruttore della classe Room.
+     *
+     * @param name Nome della stanza
+     * @param description Descrizione della stanza
+     * @param dangerLevel Livello di pericolo della stanza
+     * @param visited Indica se la stanza è stata già visitata
+     */
     public Room(String name, String description, int dangerLevel, boolean visited) {
         this.name = name;
         this.description = description;
@@ -34,10 +49,10 @@ public class Room {
         this.visited = visited;
     }
 
-    public int getDangerLevel() {
-        return dangerLevel;
-    }
-
+    /**
+     * Stampa le stanze adiacenti.
+     * @return Una stringa contenente le informazioni sulle stanze adiacenti
+     */
     public String printNearRooms() {
         if (nearRooms == null) {
             return "Non ci sono stanze vicine";
@@ -71,6 +86,11 @@ public class Room {
         return ret;
     }
 
+    /**
+     * Restituisce una stringa contenente gli oggetti esaminabili presenti nella stanza.
+     * Se non ci sono oggetti esaminabili, restituisce un messaggio appropriato.
+     * @return una stringa contenente gli oggetti esaminabili
+     */
     public String printExaminables() {
         String ret = "";
         if (!examinables.isEmpty()) {
@@ -82,54 +102,6 @@ public class Room {
             ret = "Non c'è niente da esaminare nella stanza";
         }
         return ret;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public Room[] getNearRooms() {
-        return nearRooms;
-    }
-
-    public void setNearRooms(Room[] nearRooms) {
-        this.nearRooms = nearRooms;
-    }
-
-    public List<Item> getItems() {
-        return items;
-    }
-
-    public void setItems(List<Item> items) {
-        this.items = items;
-    }
-
-    public Map<String, Enemy> getEnemies() {
-        return enemies;
-    }
-
-    public void setEnemies(Map<String, Enemy> enemies) {
-        this.enemies = enemies;
-    }
-
-    public Map<String, String> getExaminables() {
-        return examinables;
-    }
-
-    public void setExaminables(Map<String, String> examinables) {
-        this.examinables = examinables;
-    }
-
-    public boolean isVisited() {
-        return visited;
-    }
-
-    public void setVisited(boolean visited) {
-        this.visited = visited;
     }
 
     /**
@@ -192,7 +164,64 @@ public class Room {
         visited = roomSave.isVisited();
     }
 
-    private void setDangerLevel(int dangerLevel){
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Room[] getNearRooms() {
+        return nearRooms;
+    }
+
+    public void setNearRooms(Room[] nearRooms) {
+        this.nearRooms = nearRooms;
+    }
+
+    public List<Item> getItems() {
+        return items;
+    }
+
+    public void setItems(List<Item> items) {
+        this.items = items;
+    }
+
+    public Map<String, Enemy> getEnemies() {
+        return enemies;
+    }
+
+    public void setEnemies(Map<String, Enemy> enemies) {
+        this.enemies = enemies;
+    }
+
+    public Map<String, String> getExaminables() {
+        return examinables;
+    }
+
+    public void setExaminables(Map<String, String> examinables) {
+        this.examinables = examinables;
+    }
+
+    public boolean isVisited() {
+        return visited;
+    }
+
+    public void setVisited(boolean visited) {
+        this.visited = visited;
+    }
+
+    public int getDangerLevel() {
+        return dangerLevel;
+    }
+
+    /**
+     * Imposta il livello di pericolo della stanza.
+     * Se il livello di pericolo specificato è superiore a 10, viene impostato a 10.
+     * @param dangerLevel Il livello di pericolo da impostare
+     */
+    public void setDangerLevel(int dangerLevel){
         if (dangerLevel > 10)
             this.dangerLevel = 10;
         else

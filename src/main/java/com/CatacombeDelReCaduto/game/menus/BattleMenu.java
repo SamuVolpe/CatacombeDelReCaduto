@@ -9,11 +9,19 @@ import com.CatacombeDelReCaduto.game.prompts.CommandId;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Menu per la gestione del combattimento tra il giocatore e un nemico.
+ */
 public class BattleMenu extends CommandMenu {
     private final Player player;
     private final Enemy enemy;
     private Random random = new Random();
 
+    /**
+     * Costruttore che inizializza il menu di combattimento con i comandi disponibili e i partecipanti al combattimento.
+     * @param player Il giocatore coinvolto nel combattimento
+     * @param enemy  Il nemico coinvolto nel combattimento
+     */
     public BattleMenu(Player player, Enemy enemy) {
         super(List.of(
                 new Command(CommandId.ATTACK, List.of("attacca"), "Attacca")
@@ -30,13 +38,19 @@ public class BattleMenu extends CommandMenu {
         this.random = random;
     }
 
-    // true combattimento terminato, false fuggito
+    /**
+     * Metodo che gestisce il combattimento.
+     * @return true se il combattimento è terminato (per la morte di uno dei partecipanti), altrimenti false
+     */
     public boolean battle(){
         super.display();
 
         return !enemy.isAlive() || !player.isAlive();
     }
 
+    /**
+     * Stampa menu e vita dei combattenti
+     */
     @Override
     protected void print(){
         super.print();
@@ -49,6 +63,11 @@ public class BattleMenu extends CommandMenu {
         System.out.println(enemyHealth);
     }
 
+    /**
+     * Gestisce un'azione d'attacco
+     * @param attacker
+     * @param defender
+     */
      void attack(Entity attacker, Entity defender){
         // controllo che sia un attacco tra due entita` vive
         if (attacker.getHealth() <=0 || defender.getHealth() <= 0)
@@ -92,6 +111,10 @@ public class BattleMenu extends CommandMenu {
         };
     }
 
+    /**
+     * Comando d'attacco
+     * @return true se uno dei due combattenti muore, false altrimenti
+     */
      boolean commandAttack() {
         // player attacca
         attack(player, enemy);
@@ -102,6 +125,11 @@ public class BattleMenu extends CommandMenu {
         return !player.isAlive() || !enemy.isAlive();
     }
 
+    /**
+     * Comando di utilizzo oggetto
+     * @param arg oggetto da utilizzare
+     * @return true se uno dei due combattenti muore, false altrimenti
+     */
      boolean commandUse(String arg) {
         // usa cibo
         if (player.use(arg))
@@ -111,18 +139,30 @@ public class BattleMenu extends CommandMenu {
         return !player.isAlive() || !enemy.isAlive();
     }
 
+    /**
+     * Visualizza inventario
+     * @return false dato che il combattimento non termina
+     */
     boolean commandView() {
         // print inventory
         System.out.println(player.getInventory());
         return false;
     }
 
+    /**
+     * Visualizza dettaggli nemico
+     * @return false dato che il combattimento non termina
+     */
     boolean commandDetail() {
         // print nemico
         System.out.println(enemy);
         return false;
     }
 
+    /**
+     * Comando di fuga
+     * @return true se fuga riuscita, false altrimenti
+     */
      boolean commandEscape(){
         // calcolo prob di fuga in base a stanza
         if (random.nextInt(10) < player.getRoom().getDangerLevel()){

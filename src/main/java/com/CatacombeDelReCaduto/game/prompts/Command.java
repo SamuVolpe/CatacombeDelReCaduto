@@ -15,10 +15,23 @@ public class Command {
     // i parametri, sono mutabili in base a quanto inserito dall'utente
     private String[] args = null;
 
+    /**
+     * Costruttore della classe Command.
+     * @param id Identificatore del comando
+     * @param aliases Sinonimi del comando
+     * @param description Descrizione del comando
+     */
     public Command(CommandId id, List<String> aliases, String description) {
         this(id, aliases, description, 0);
     }
 
+    /**
+     * Costruttore della classe Command.
+     * @param id Identificatore del comando
+     * @param aliases Sinonimi del comando
+     * @param description Descrizione del comando
+     * @param argsNum Numero di argomenti richiesti dal comando
+     */
     public Command(CommandId id, List<String> aliases, String description, int argsNum) {
         this.id = id;
         this.aliases = Collections.unmodifiableList(aliases);

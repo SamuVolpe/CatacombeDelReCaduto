@@ -14,6 +14,10 @@ import java.util.TreeMap;
 public class LoadMenu extends Menu {
     private Map<Long, String> games = new TreeMap<>();
 
+    /**
+     * Costruttore della classe LoadMenu.
+     * Carica le partite esistenti e inizializza la lista di opzioni del menu.
+     */
     public LoadMenu(){
         // carica giochi da file
         games = FilesManager.loadGames();

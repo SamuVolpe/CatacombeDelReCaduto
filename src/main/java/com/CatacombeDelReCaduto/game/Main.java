@@ -8,33 +8,33 @@ import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
 import java.io.File;
 
 /**
- * Classe d'avvio del gioco
+ * Classe di avvio del gioco.
  */
 public class Main {
     public static void main(String[] args){
         try {
-            // crea se necessario cartella salvataggio dei dati
+            // Crea la cartella di salvataggio dei dati se necessario
             FilesManager.makeSavesDir();
 
-            // scarica file salvataggi se esiste
+            // Scarica il file di salvataggio se esiste
             try (BucketManager bucket = BucketManager.loadConnection()){
                 bucket.downloadFile(FilesManager.SAVES_FILE_NAME, FilesManager.SAVES_FILE_PATH);
             }
             catch (NoSuchKeyException e) {
-                // file di configurazione non trovato elimina file saves se esiste
+                // Se il file di configurazione non è trovato, elimina il file di salvataggio se esiste
                 File savesFile = new File(FilesManager.SAVES_FILE_PATH);
                 if (savesFile.exists())
                     savesFile.delete();
             }
             catch (Exception e){
-                System.out.println("Impossibile connettersi ad aws, controllare il file di configurazione o la rete");
+                System.out.println("Impossibile connettersi ad AWS. Controllare il file di configurazione o la rete.");
                 throw e;
             }
 
-            // avvio menu iniziale
+            // Avvia il menu iniziale del gioco
             MainMenu mainMenu = new MainMenu();
             mainMenu.display();
-        }catch (Exception e){
+        } catch (Exception e){
             e.printStackTrace();
         }
     }

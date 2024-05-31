@@ -23,7 +23,7 @@ public class MainMenu extends CommandMenu {
     }
 
     // region comandi MainMenu
-
+    
     protected boolean commandsHandler(Command command){
         return switch (command.getId()) {
             case NEW_GAME -> commandStartNewGame();
@@ -34,6 +34,10 @@ public class MainMenu extends CommandMenu {
         };
     }
 
+    /**
+     * Avvia una nuova partita.
+     * @return true poiché è necessario terminare l'esecuzione del menu dopo l'esecuzione della partita
+     */
     private boolean commandStartNewGame() {
         // carica dati nuovo gioco
         Game game = new Game();
@@ -43,6 +47,10 @@ public class MainMenu extends CommandMenu {
         return true;
     }
 
+    /**
+     * Carica una partita esistente.
+     * @return true se il caricamento è andato a buon fine, false altrimenti
+     */
     private boolean commandLoadGame() {
         // mostra menu per decidere quale partita caricare
         LoadMenu loadMenu = new LoadMenu();
@@ -70,6 +78,10 @@ public class MainMenu extends CommandMenu {
         return true;
     }
 
+    /**
+     * Elimina una partita esistente.
+     * @return false poiché non è necessario terminare l'esecuzione del menu dopo l'eliminazione di una partita
+     */
     private boolean commandDeleteGame() {
         // mostra menu elimina parita e elimina partita
         DeleteMenu deleteMenu = new DeleteMenu();

@@ -35,12 +35,12 @@ public class Game {
 
     private Player player = null;
 
-    // non mutable (da prendere clonati)
-    // tutti gli oggetti e i nemici del gioco
+    // load da files
+    // tutti gli oggetti del gioco
     private Map<String, Item> items = new TreeMap<>();
+    // tutti i nemici del gioco (prendere clonati)
     private Map<String, Enemy> enemies = new TreeMap<>();
-
-    // mutable da inserire resto info dal salvataggio
+    // tutte le stanze del gioco
     private Map<String, Room> rooms = new TreeMap<>();
 
     /**
