@@ -53,9 +53,9 @@ public class Inventory {
     }
 
     /**
-     * Prende oggetto dall'inventario
+     * Ritorna oggetto dall'inventario
      *
-     * @param itemName il nome dell'oggetto da prendere
+     * @param itemName il nome dell'oggetto da ritornare
      * @return l'oggetto, o null se l'oggetto non è presente
      */
     public Item getItem(String itemName){
