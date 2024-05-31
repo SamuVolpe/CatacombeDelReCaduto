@@ -118,37 +118,41 @@ public class FilesManager {
      * @return map - key : identificativo oggetto, value : oggetto
      */
     public static Map<String, Item> loadItems(){
-        Map<String, Item> result = new TreeMap<>();
+        // Crea un ObjectMapper
         ObjectMapper mapper = new ObjectMapper();
 
         try {
-            // leggi file json e converti in jsonNode
+            // Leggi il file JSON e converti in JsonNode
             JsonNode rootNode = mapper.readTree(new File(ITEMS_FILE_PATH));
-
-            // ogni figlio del nodo principale e' un item, converto
-            Iterator<Map.Entry<String, JsonNode>> fields = rootNode.fields();
-            while (fields.hasNext()) {
-                Map.Entry<String, JsonNode> field = fields.next();
-                String name = field.getKey();
-                JsonNode itemNode = field.getValue();
-
-                // Estrai i dati dell'item
-                String description = itemNode.get("description").asText();
-                int weight = itemNode.get("weight").asInt();
-
-                Item item = switch (itemNode.get("type").asText()){
-                    case "food" -> new Food(name, description, weight, itemNode.get("healthRecoveryAmount").asInt());
-                    case "weapon" -> new Weapon(name, description, weight, itemNode.get("damage").asInt());
-                    case "armor" -> new Armor(name, description, weight, itemNode.get("defense").asInt());
-                    default -> new Item(name, description, weight);
-                };
-
-                // aggiungo a mappa
-                result.put(name, item);
-            }
+            return loadItems(rootNode);
         } catch (IOException e) {
-            System.out.println("Errore nel caricamento degli oggetti di gioco, il file : '" + ITEMS_FILE_PATH + "' potrebbe essere stato compromesso");
             throw new RuntimeException(e);
+        }
+    }
+
+    public static Map<String, Item> loadItems(JsonNode rootNode) {
+        Map<String, Item> result = new TreeMap<>();
+
+        // ogni figlio del nodo principale e' un item, converto
+        Iterator<Map.Entry<String, JsonNode>> fields = rootNode.fields();
+        while (fields.hasNext()) {
+            Map.Entry<String, JsonNode> field = fields.next();
+            String name = field.getKey();
+            JsonNode itemNode = field.getValue();
+
+            // Estrai i dati dell'item
+            String description = itemNode.get("description").asText();
+            int weight = itemNode.get("weight").asInt();
+
+            Item item = switch (itemNode.get("type").asText()) {
+                case "food" -> new Food(name, description, weight, itemNode.get("healthRecoveryAmount").asInt());
+                case "weapon" -> new Weapon(name, description, weight, itemNode.get("damage").asInt());
+                case "armor" -> new Armor(name, description, weight, itemNode.get("defense").asInt());
+                default -> new Item(name, description, weight);
+            };
+
+            // aggiungo a mappa
+            result.put(name, item);
         }
 
         return result;
@@ -160,43 +164,45 @@ public class FilesManager {
      * @return map - key : identificativo nemico, value : nemico
      */
     public static Map<String, Enemy> loadEnemies(Map<String, Item> items){
-        Map<String, Enemy> result = new TreeMap<>();
-
         // Crea un ObjectMapper
         ObjectMapper mapper = new ObjectMapper();
 
         try {
             // Leggi il file JSON e converti in JsonNode
             JsonNode rootNode = mapper.readTree(new File(ENEMIES_FILE_PATH));
-
-            // Itera attraverso i nodi figli
-            Iterator<Map.Entry<String, JsonNode>> fields = rootNode.fields();
-            while (fields.hasNext()) {
-                Map.Entry<String, JsonNode> field = fields.next();
-                JsonNode enemyNode = field.getValue();
-
-                // Estrarre i dati dell'enemy
-                String name = enemyNode.get("name").asText();
-                String description = enemyNode.get("description").asText();
-                int maxHealth = enemyNode.get("maxHealth").asInt();
-                int attack = enemyNode.get("attack").asInt();
-                int defense = enemyNode.get("defense").asInt();
-
-                // aggiungo a lista drop gli items
-                JsonNode dropNode = enemyNode.get("drop");
-                List<Item> drop = new ArrayList<>();
-                if (dropNode != null && dropNode.isArray()) {
-                    for (JsonNode itemNode : dropNode) {
-                        drop.add(items.get(itemNode.asText()));
-                    }
-                }
-
-                // aggiungo a mappa
-                result.put(field.getKey(), new Enemy(name, description, maxHealth, attack, defense, drop));
-            }
+            return loadEnemies(rootNode, items);
         } catch (IOException e) {
-            System.out.println("Errore nel caricamento dei nemici, il file : '" + ENEMIES_FILE_PATH + "' potrebbe essere stato compromesso");
             throw new RuntimeException(e);
+        }
+    }
+
+    public static Map<String, Enemy> loadEnemies(JsonNode rootNode, Map<String, Item> items) {
+        Map<String, Enemy> result = new TreeMap<>();
+
+        // Itera attraverso i nodi figli
+        Iterator<Map.Entry<String, JsonNode>> fields = rootNode.fields();
+        while (fields.hasNext()) {
+            Map.Entry<String, JsonNode> field = fields.next();
+            JsonNode enemyNode = field.getValue();
+
+            // Estrarre i dati dell'enemy
+            String name = enemyNode.get("name").asText();
+            String description = enemyNode.get("description").asText();
+            int maxHealth = enemyNode.get("maxHealth").asInt();
+            int attack = enemyNode.get("attack").asInt();
+            int defense = enemyNode.get("defense").asInt();
+
+            // aggiungo a lista drop gli items
+            JsonNode dropNode = enemyNode.get("drop");
+            List<Item> drop = new ArrayList<>();
+            if (dropNode != null && dropNode.isArray()) {
+                for (JsonNode itemNode : dropNode) {
+                    drop.add(items.get(itemNode.asText()));
+                }
+            }
+
+            // aggiungo a mappa
+            result.put(field.getKey(), new Enemy(name, description, maxHealth, attack, defense, drop));
         }
 
         return result;

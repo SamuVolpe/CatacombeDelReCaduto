@@ -44,19 +44,19 @@
 	"mela" : {
 		"type": "food",
 		"description": "mele del meleto",
-		"weight": 5,
+		"weight": 2,
 		"healthRecoveryAmount": 20
 	},
 	"pane" : {
 		"type": "food",
 		"description": "Pane fatto dai migliori forni degli umani",
-		"weight": 10,
+		"weight": 5,
 		"healthRecoveryAmount": 30
 	},
 	"mela rara" : {
 		"type": "food",
 		"description": "All'apparenza mele normali ma sono state benedette dall’elfo",
-		"weight": 10,
+		"weight": 8,
 		"healthRecoveryAmount": 50
 	},
 	"armatura arrugginita" : {
@@ -69,7 +69,7 @@
 		"type": "armor",
 		"description": "Armatura che apparteneva a qualche cavaliere\n",
 		"weight": 5,
-		"defense": 20
+		"defense": 25
 	},
 	"armatura del re caduto" : {
 		"type": "armor",

@@ -35,6 +35,31 @@ class FilesManagerTest {
     }
 
     @Test
+    void loadItems() throws IOException {
+        String json = "{\"mela\":{\"type\":\"food\",\"description\":\"mele del meleto\",\"weight\":2,\"healthRecoveryAmount\":20}}";
+        JsonNode rootNode = mapper.readTree(json);
+        Map<String, Item> items = FilesManager.loadItems(rootNode);
+        assertEquals("mela", items.get("mela").getName());
+        assertInstanceOf(Food.class, items.get("mela"));
+    }
+
+    @Test
+    void loadEnemies() throws IOException {
+        String json = "{\"scheletro\":{\"name\":\"scheletro\",\"description\":\"\",\"maxHealth\":20,\"attack\":2,\"defense\":10,\"drop\":[\"mela\",\"mela\"]}}";
+        JsonNode rootNode = mapper.readTree(json);
+        Map<String, Enemy> enemies = FilesManager.loadEnemies(rootNode, items);
+        assertEquals("scheletro", enemies.get("scheletro").getName());
+    }
+
+    @Test
+    void loadEnemiesDrop() throws IOException {
+        String json = "{\"scheletro\":{\"name\":\"scheletro\",\"description\":\"\",\"maxHealth\":20,\"attack\":2,\"defense\":10,\"drop\":[\"mela\",\"mela\"]}}";
+        JsonNode rootNode = mapper.readTree(json);
+        Map<String, Enemy> enemies = FilesManager.loadEnemies(rootNode, items);
+        assertEquals(2, enemies.get("scheletro").getDrop().size());
+    }
+
+    @Test
     void loadRooms() throws IOException {
         String json = "{\"Entrata\":{\"description\":\"descrizione entrata\",\"dangerLevel\":0,\"nearRooms\":[null,\"Stanza buia\",null,null],\"examinables\":{\"muro\":\"descrizione muro\",\"stendardo\":\"descrizione stendardo\"},\"items\":[],\"enemies\":[]}" +
                 ",\"Stanza buia\":{\"description\":\"descrizione stanza buia\",\"dangerLevel\":5,\"nearRooms\":[\"Entrata\",null,null,null],\"examinables\":{},\"items\":[\"mela\"],\"enemies\":[\"scheletro\",\"golem\"]}}\n";
