@@ -4,6 +4,7 @@ import com.CatacombeDelReCaduto.game.entities.Enemy;
 import com.CatacombeDelReCaduto.game.entities.Player;
 import com.CatacombeDelReCaduto.game.items.*;
 import com.CatacombeDelReCaduto.game.rooms.Room;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -79,8 +80,8 @@ public class FilesManager {
         // Scrivi la mappa aggiornata nel file json
         try {
             mapper.writeValue(new File(SAVES_FILE_PATH), map);
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -93,8 +94,8 @@ public class FilesManager {
         ObjectMapper mapper = new ObjectMapper();
         try {
             mapper.writeValue(new File(PLAYER_ROOT + "\\" + saveFileName), save);
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -107,8 +108,8 @@ public class FilesManager {
         ObjectMapper mapper = new ObjectMapper();
         try {
             return mapper.readValue(new File(PLAYER_ROOT + "\\" + loadFileName), Save.class);
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -145,8 +146,9 @@ public class FilesManager {
                 // aggiungo a mappa
                 result.put(name, item);
             }
-        } catch (IOException ex) {
-            throw new RuntimeException("Errore nel caricamento degli oggetti di gioco, il file : '" + ITEMS_FILE_PATH + "' potrebbe essere stato compromesso");
+        } catch (IOException e) {
+            System.out.println("Errore nel caricamento degli oggetti di gioco, il file : '" + ITEMS_FILE_PATH + "' potrebbe essere stato compromesso");
+            throw new RuntimeException(e);
         }
 
         return result;
@@ -158,9 +160,6 @@ public class FilesManager {
      * @return map - key : identificativo nemico, value : nemico
      */
     public static Map<String, Enemy> loadEnemies(Map<String, Item> items){
-        // Path del file JSON
-        final String FILE_PATH = ENEMIES_FILE_PATH;
-
         Map<String, Enemy> result = new TreeMap<>();
 
         // Crea un ObjectMapper
@@ -168,7 +167,7 @@ public class FilesManager {
 
         try {
             // Leggi il file JSON e converti in JsonNode
-            JsonNode rootNode = mapper.readTree(new File(FILE_PATH));
+            JsonNode rootNode = mapper.readTree(new File(ENEMIES_FILE_PATH));
 
             // Itera attraverso i nodi figli
             Iterator<Map.Entry<String, JsonNode>> fields = rootNode.fields();
@@ -195,8 +194,9 @@ public class FilesManager {
                 // aggiungo a mappa
                 result.put(field.getKey(), new Enemy(name, description, maxHealth, attack, defense, drop));
             }
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
+        } catch (IOException e) {
+            System.out.println("Errore nel caricamento dei nemici, il file : '" + ENEMIES_FILE_PATH + "' potrebbe essere stato compromesso");
+            throw new RuntimeException(e);
         }
 
         return result;
@@ -218,90 +218,93 @@ public class FilesManager {
      */
     public static Map<String, Room> loadRooms(Map<String, Item> items, Map<String, Enemy> enemies)
     {
-        Map<String, Room> result = new TreeMap<>();
-        // mappa di supporto salvataggio nearRooms
-        Map<String, String[]> nearRooms = new TreeMap<>();
-
         // Crea un ObjectMapper
         ObjectMapper mapper = new ObjectMapper();
 
         try {
             // Leggi il file JSON e converti in JsonNode
             JsonNode rootNode = mapper.readTree(new File(ROOMS_FILE_PATH));
+            return loadRooms(rootNode, items, enemies);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-            // Itera attraverso i nodi figli
-            Iterator<Map.Entry<String, JsonNode>> fields = rootNode.fields();
-            while (fields.hasNext()) {
-                Map.Entry<String, JsonNode> field = fields.next();
-                String name = field.getKey();
-                JsonNode roomNode = field.getValue();
+    public static Map<String, Room> loadRooms(JsonNode rootNode, Map<String, Item> items, Map<String, Enemy> enemies) {
+        Map<String, Room> result = new TreeMap<>();
+        // mappa di supporto salvataggio nearRooms
+        Map<String, String[]> nearRooms = new TreeMap<>();
 
-                // Estrae i dati
-                String description = roomNode.get("description").asText();
-                int dangerLevel = roomNode.get("dangerLevel").asInt();
+        // Itera attraverso i nodi figli
+        Iterator<Map.Entry<String, JsonNode>> fields = rootNode.fields();
+        while (fields.hasNext()) {
+            Map.Entry<String, JsonNode> field = fields.next();
+            String name = field.getKey();
+            JsonNode roomNode = field.getValue();
 
-                Room room = new Room(name, description, dangerLevel);
+            // Estrae i dati
+            String description = roomNode.get("description").asText();
+            int dangerLevel = roomNode.get("dangerLevel").asInt();
 
-                // carica stanze vicine
-                JsonNode roomsNode = roomNode.get("nearRooms");
-                String[] rooms = new String[4];
-                int i = 0;
-                for (JsonNode nearRoomNode : roomsNode) {
-                    rooms[i] = nearRoomNode.asText();
-                    i++;
-                }
-                nearRooms.put(field.getKey(), rooms);
+            Room room = new Room(name, description, dangerLevel);
 
-                // carica esaminabili se necessario
-                JsonNode exNode = roomNode.get("examinables");
-                if (exNode != null){
-                    Map<String, String> examinables = new TreeMap<>();
-                    exNode.fields().forEachRemaining(entry -> {
-                        examinables.put(entry.getKey(), entry.getValue().toString());
-                    });
-
-                    room.setExaminables(examinables);
-                }
-
-                // carica oggetti se necessario
-                if (items != null) {
-                    JsonNode itemsNode = roomNode.get("items");
-                    List<Item> inRoomItems = new ArrayList<>();
-                    if (itemsNode != null && itemsNode.isArray()) {
-                        for (JsonNode itemNode : itemsNode) {
-                            inRoomItems.add(items.get(itemNode.asText()));
-                        }
-                    }
-
-                    room.setItems(inRoomItems);
-                }
-
-                // carica nemici se necessario
-                if (enemies != null) {
-                    JsonNode enemiesNode = roomNode.get("enemies");
-                    Map<String, Enemy> inRoomEnemies = new TreeMap<>();
-                    if (enemiesNode != null && enemiesNode.isArray()) {
-                        for (JsonNode enemyNode : enemiesNode) {
-                            inRoomEnemies.put(enemyNode.asText(), enemies.get(enemyNode.asText()).clone());
-                        }
-                    }
-
-                    room.setEnemies(inRoomEnemies);
-                }
-
-                // aggiungo a mappa
-                result.put(name, room);
+            // carica stanze vicine
+            JsonNode roomsNode = roomNode.get("nearRooms");
+            String[] rooms = new String[4];
+            int i = 0;
+            for (JsonNode nearRoomNode : roomsNode) {
+                rooms[i] = nearRoomNode.asText();
+                i++;
             }
-        } catch (IOException ex) {
-            throw new RuntimeException("Errore nel caricamento delle stanze di gioco, il file : '" + ROOMS_FILE_PATH + "' potrebbe essere stato compromesso");
+            nearRooms.put(field.getKey(), rooms);
+
+            // carica esaminabili se necessario
+            JsonNode exNode = roomNode.get("examinables");
+            if (exNode != null) {
+                Map<String, String> examinables = new TreeMap<>();
+                exNode.fields().forEachRemaining(entry -> {
+                    examinables.put(entry.getKey(), entry.getValue().toString());
+                });
+
+                room.setExaminables(examinables);
+            }
+
+            // carica oggetti se necessario
+            if (items != null) {
+                JsonNode itemsNode = roomNode.get("items");
+                List<Item> inRoomItems = new ArrayList<>();
+                if (itemsNode != null && itemsNode.isArray()) {
+                    for (JsonNode itemNode : itemsNode) {
+                        inRoomItems.add(items.get(itemNode.asText()));
+                    }
+                }
+
+                room.setItems(inRoomItems);
+            }
+
+            // carica nemici se necessario
+            if (enemies != null) {
+                JsonNode enemiesNode = roomNode.get("enemies");
+                Map<String, Enemy> inRoomEnemies = new TreeMap<>();
+                if (enemiesNode != null && enemiesNode.isArray()) {
+                    for (JsonNode enemyNode : enemiesNode) {
+                        inRoomEnemies.put(enemyNode.asText(), enemies.get(enemyNode.asText()).clone());
+                    }
+                }
+
+                room.setEnemies(inRoomEnemies);
+            }
+
+            // aggiungo a mappa
+            result.put(name, room);
         }
 
         // carica stanze adiacenti converto da Nome a Room
-        for (var entry : nearRooms.entrySet()){
+        for (var entry : nearRooms.entrySet()) {
             String[] roomsKey = nearRooms.get(entry.getKey());
             // carica in array di supporto le room convertite
             Room[] rooms = new Room[roomsKey.length];
-            for (int i=0; i < roomsKey.length; i++)
+            for (int i = 0; i < roomsKey.length; i++)
                 if (roomsKey[i] != null)
                     rooms[i] = result.get(roomsKey[i]);
 
