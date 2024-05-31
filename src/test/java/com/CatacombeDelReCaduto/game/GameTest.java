@@ -235,7 +235,7 @@ class GameTest {
     void commandUseNotPresent() {
         Player player = new Player(0, "test");
         game.setPlayer(player);
-        game.commandUse("OggettoNonPresente");
+        assertFalse(game.commandUse("OggettoNonPresente"));
         assertTrue(outContent.toString().contains("Impossibile utilizzare l'oggetto: non è presente nell'inventario"));
     }
 
@@ -244,16 +244,125 @@ class GameTest {
         Player player = new Player(0, "test");
         player.setInventory(inventory);
         game.setPlayer(player);
-        game.commandUse("Spada");
+        assertFalse(game.commandUse("Spada"));
         assertTrue(outContent.toString().contains("Impossibile utilizzare l'oggetto"));
     }
 
     @Test
-    void commandUseSuccess() {
+    void commandUseFoodSuccess() {
         Player player = new Player(0, "test");
         player.setInventory(inventory);
         game.setPlayer(player);
-        game.commandUse("Mela");
+        assertTrue(game.commandUse("Mela"));
         assertTrue(outContent.toString().contains("Vita dopo aver mangiato"));
+    }
+
+    @Test
+    void commandUseMedallionRoomIncorrect() {
+        Player player = new Player(0, "test");
+        Item item = new Item("medaglione del re", "", 0);
+        inventory.addItem(item);
+        player.setInventory(inventory);
+        Room current = new Room("current", "", 0);
+        player.setRoom(current);
+        game.setPlayer(player);
+
+        boolean used = game.commandUse("medaglione del re");
+        assertFalse(used);
+        assertTrue(outContent.toString().contains("Questo oggetto non è utilizzabile qui"));
+    }
+
+    @Test
+    void commandUseMedallionAlreadyUsed() {
+        Player player = new Player(0, "test");
+        Item item = new Item("medaglione del re", "", 0);
+        inventory.addItem(item);
+        player.setInventory(inventory);
+        Room current = new Room("altare", "", 0);
+        player.setRoom(current);
+        player.setBossRoomOpen(true);
+        game.setPlayer(player);
+
+        boolean used = game.commandUse("medaglione del re");
+        assertFalse(used);
+        assertTrue(outContent.toString().contains("La porta è già aperta"));
+    }
+
+    @Test
+    void commandUseMedallionSuccess() {
+        Player player = new Player(0, "test");
+        Item item = new Item("medaglione del re", "", 0);
+        inventory.addItem(item);
+        player.setInventory(inventory);
+        Room current = new Room("altare", "", 0);
+        player.setRoom(current);
+        game.setPlayer(player);
+
+        boolean used = game.commandUse("medaglione del re");
+        assertTrue(used);
+        assertTrue(player.isBossRoomOpen());
+    }
+
+    @Test
+    void commandMoveSuccess() {
+        // prepara stanza in cui spostarsi/stanza di partenza e giocatore
+        Player player = new Player(0, "test");
+        Room current = new Room("current", "", 0);
+        Room moveInto = new Room("moveInto", "", 0);
+        current.setNearRooms(new Room[] {moveInto, null, null, null});
+        player.setRoom(current);
+        game.setPlayer(player);
+
+        game.commandMove("nord");
+        assertSame(moveInto, game.getPlayer().getRoom());
+        assertEquals("sud", game.getPlayer().getPreviousRoomDirection());
+    }
+
+    @Test
+    void commandMoveNoRoom() {
+        // prepara stanza in cui spostarsi/stanza di partenza e giocatore
+        Player player = new Player(0, "test");
+        Room current = new Room("current", "", 0);
+        current.setNearRooms(new Room[] {null, null, null, null});
+        player.setRoom(current);
+        player.setPreviousRoomDirection("ovest");
+        game.setPlayer(player);
+
+        game.commandMove("nord");
+        assertSame(current, game.getPlayer().getRoom());
+        assertEquals("ovest", game.getPlayer().getPreviousRoomDirection());
+    }
+
+    @Test
+    void commandMoveFinalRoomFail() {
+        // prepara stanza in cui spostarsi/stanza di partenza e giocatore
+        Player player = new Player(0, "test");
+        Room current = new Room("current", "", 0);
+        Room moveInto = new Room("Sala del tesoro", "", 0);
+        current.setNearRooms(new Room[] {moveInto, null, null, null});
+        player.setRoom(current);
+        player.setPreviousRoomDirection("ovest");
+        player.setBossRoomOpen(false);
+        game.setPlayer(player);
+
+        game.commandMove("nord");
+        assertSame(current, game.getPlayer().getRoom());
+        assertEquals("ovest", game.getPlayer().getPreviousRoomDirection());
+    }
+
+    @Test
+    void commandMoveFinalRoomSuccess() {
+        // prepara stanza in cui spostarsi/stanza di partenza e giocatore
+        Player player = new Player(0, "test");
+        Room current = new Room("current", "", 0);
+        Room moveInto = new Room("Sala del tesoro", "", 0);
+        current.setNearRooms(new Room[] {moveInto, null, null, null});
+        player.setRoom(current);
+        player.setBossRoomOpen(true);
+        game.setPlayer(player);
+
+        game.commandMove("nord");
+        assertSame(moveInto, game.getPlayer().getRoom());
+        assertEquals("sud", game.getPlayer().getPreviousRoomDirection());
     }
 }

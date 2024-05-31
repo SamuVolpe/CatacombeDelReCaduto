@@ -17,8 +17,8 @@ public class Game {
     // comandi di gioco
     private final List<Command> commands = List.of(
             new Command(CommandId.EXIT_GAME, List.of("esci", "esci partita"), "esci - Esci dalla partita")
-            ,new Command(CommandId.HELP, List.of("help", "aiuto", "comandi", "lista comandi"), "aiuto - Mostra tutti i comandi")
-            ,new Command(CommandId.SAVE, List.of("s", "salva", "salva partita"), "salva - Salva la partita")
+            ,new Command(CommandId.HELP, List.of("help", "aiuto", "comandi", "lista comandi"), "help - Mostra tutti i comandi")
+            ,new Command(CommandId.SAVE, List.of("s", "salva", "salva partita", "save"), "salva - Salva la partita")
             ,new Command(CommandId.MOVE, List.of("vai"), "vai <direzione> - Spostati in un'altra stanza", 1)
             ,new Command(CommandId.TAKE, List.of("p", "prendi"), "p <oggetto> - Prendi oggetto", 1)
             ,new Command(CommandId.USE, List.of("u", "usa"), "u <oggetto> - Usa oggetto", 1)
@@ -28,7 +28,7 @@ public class Game {
             ,new Command(CommandId.EXAMINE, List.of("esamina"), "esamina <elemento> - Esamina un elemento nella stanza o la stanza stessa", 1)
             ,new Command(CommandId.VIEW, List.of("v","visualizza"), "v <'inventario'/'stato'> - Visualizza l'inventario o lo stato del giocatore", 1)
             ,new Command(CommandId.BACK, List.of("back"), "back - Torna alla stanza precedente", 0)
-            ,new Command(CommandId.LOOK, List.of("guarda"), "guarda <'stanze'/'oggetti'/'esaminabili'> - Guarda le stanze nei dintorni/gli oggetti presenti nella stanza/gli esaminabili presenti nella stanza", 1)
+            ,new Command(CommandId.LOOK, List.of("g","guarda"), "g <'stanze'/'oggetti'/'esaminabili'> - Guarda le stanze nei dintorni/gli oggetti presenti nella stanza/gli esaminabili presenti nella stanza", 1)
             ,new Command(CommandId.DETAIL, List.of("dettagli"), "dettagli <oggetto> - Vedi dettagli di un oggetto nella stanza o nell'inventario", 1));
     // mappa per il parse dei comandi
     private TreeMap<String, Command> commandMap = null;
@@ -339,38 +339,47 @@ public class Game {
      */
     void commandMove(String arg) {
         Room nextRoom = null;
+        String prevDirection = player.getPreviousRoomDirection();
         switch (arg) {
             case "nord":
                 nextRoom = player.getRoom().getNearRooms()[0];
+                player.setPreviousRoomDirection("sud");
                 break;
             case "sud":
                 nextRoom = player.getRoom().getNearRooms()[1];
+                player.setPreviousRoomDirection("nord");
                 break;
             case "est":
                 nextRoom = player.getRoom().getNearRooms()[2];
+                player.setPreviousRoomDirection("ovest");
                 break;
             case "ovest":
                 nextRoom = player.getRoom().getNearRooms()[3];
+                player.setPreviousRoomDirection("est");
                 break;
             default:
                 System.out.println("Direzione inesistente");
                 return;
         }
-
-        if (nextRoom != null) {
-            // caso sala del tesoro (stanza accessibile sotto condizioni)
-            if (nextRoom.getName().equals("Sala del tesoro")){
-                if (!player.isBossRoomOpen()) {
-                    System.out.println("Non puoi passare, il passaggio sembra bloccato da un meccanismo");
-                    return;
+        try {
+            if (nextRoom != null) {
+                // caso sala del tesoro (stanza accessibile sotto condizioni)
+                if (nextRoom.getName().equals("Sala del tesoro")) {
+                    if (!player.isBossRoomOpen()) {
+                        System.out.println("Non puoi passare, il passaggio sembra bloccato da un meccanismo");
+                        return;
+                    }
                 }
-            }
 
-            player.setRoom(nextRoom);
-            player.setPreviousRoomDirection(arg);
-            System.out.println(player.getRoom().getDescription());
-        } else {
-            System.out.println("Non c'è nessuna stanza in questa direzione, provane un'altra");
+                player.setRoom(nextRoom);
+                System.out.println(player.getRoom().getDescription());
+            } else {
+                System.out.println("Non c'è nessuna stanza in questa direzione, provane un'altra");
+            }
+        } finally {
+            // restore valore se non c'è stato lo spostamento
+            if (player.getRoom() != nextRoom)
+                player.setPreviousRoomDirection(prevDirection);
         }
     }
 
@@ -404,8 +413,8 @@ public class Game {
      *
      * @param arg il nome dell'oggetto da utilizzare
      */
-    void commandUse(String arg) {
-        player.use(arg);
+    boolean commandUse(String arg) {
+        return player.use(arg);
     }
 
     /**

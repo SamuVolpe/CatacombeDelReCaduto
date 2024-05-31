@@ -36,7 +36,7 @@ class BattleMenuTest {
         when(random.nextInt(100)).thenReturn(1);
         battleMenu.attack(player, enemy);
 
-        assertEquals(enemy.getHealth(), enemy.getMaxHealth());
+        assertEquals(enemy.getMaxHealth(), enemy.getHealth());
     }
 
     @Test
