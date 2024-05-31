@@ -18,11 +18,11 @@
 			"baule" : "Controlla se ci sono oggetti nella stanza..."
 		},
 		"items" : ["mela", "coltello normale", "armatura arrugginita"],
-		"enemies" : ["scheletro", "scheletro"]
+		"enemies" : ["scheletro", "scheletro pane"]
 	},
 	"Gesta del re" : {
 		"description": "La stanza presenta delle strane incisioni",
-		"dangerLevel": 10,
+		"dangerLevel": 9,
 		"nearRooms": [null, null, "Stanza buia", null],
 		"examinables" : {
 			"incisioni" : "Le incisioni sulle pareti narrano la storia del regno del Re Caduto, mostrando inizialmente scene di gloria e prosperità di Arindor.Man mano, le immagini diventano più oscure, raffigurando guerre, carestie e la crescente ossessione del re per il potere e l'immortalità.\nVerso la fine, le incisioni mostrano rituali magici proibiti e creature oscure, con iscrizioni che indicano la rovina portata dal re al suo popolo."
@@ -34,14 +34,14 @@
 	"Stanza del sarcofago" : {
 		"description": "Sei dentro la stanza del sarcofago del re, su un piedistallo di pietra, si erge un antico sarcofago coperto di polvere e ragnatele",
 		"dangerLevel": 2,
-		"nearRooms": ["Stanza buia", "Stanza del golem", "Stanza2", "Corridoio"],
+		"nearRooms": ["Stanza buia", "Stanza del golem", "Stanza umida", "Corridoio"],
 		"examinables" : {
 			"sarcofago" : "Avvicinandoti, noti una stretta fessura sul lato del sarcofago. Infilando la mano, senti un oggetto freddo e metallico: il medaglione del re..."
 		},
 		"items" : [],
 		"enemies" : ["ragno","ragno spada"]
 	},
-	"Stanza2" : {
+	"Stanza umida" : {
 		"description": "\"La stanza si apre davanti a te, oscura e umida, con pareti coperte di muschio, oggetti abbandonati e sinistri scricchiolii che risuonano nell'aria.\"",
 		"dangerLevel": 3,
 		"nearRooms": [null, null, null, "Stanza del sarcofago"],
