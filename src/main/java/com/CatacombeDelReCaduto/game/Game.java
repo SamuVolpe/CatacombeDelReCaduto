@@ -141,11 +141,11 @@ public class Game {
 
         String name = null;
         // pattern di controllo del nome
-        Pattern pattern = Pattern.compile("[a-zA-Z0-9]{1,10}");
+        Pattern pattern = Pattern.compile("[a-zA-Z0-9]{1,15}");
         // chiedo nome finche` non e` valido
         do{
             if (name != null)
-                System.out.println("Nome non valido, il nome deve contenere solo lettere e/o numeri ed essere lungo da 1 a 10 caratteri");
+                System.out.println("Nome non valido, il nome deve contenere solo lettere e/o numeri ed essere lungo da 1 a 15 caratteri");
 
             name = InputReader.getInput();
         }while (!pattern.matcher(name).matches());
@@ -240,7 +240,7 @@ public class Game {
             if (enemy.getName().equalsIgnoreCase("golem") || enemy.getName().equalsIgnoreCase("chimera"))
                 player.addScore(5);
             // boss
-            else if (enemy.getName().equalsIgnoreCase("lich")) {
+            else if (enemy.getName().toLowerCase().contains("lich")) {
                 player.addScore(10);
                 // vittoria
                 throw new WinException();
@@ -429,7 +429,11 @@ public class Game {
         Item toThrow = inventory.removeItem(arg);
         if (toThrow == null) {
             System.out.println("Impossibile buttare l'oggetto: non è presente nell'inventario");
-        } else {
+        } else if (toThrow.getName().equals("medaglione del re")) {
+            inventory.addItem(toThrow);
+            System.out.println("Meglio non buttare questo oggetto, potrebbe tornare utile");
+        }
+        else {
             currentRoomItems.add(toThrow);
             System.out.println("Oggetto buttato");
         }
@@ -512,15 +516,21 @@ public class Game {
         if (desc == null) {
             System.out.println("Non esaminabile");
         } else {
-            System.out.println(desc);
             // gestisce caso speciale (esamina sarcofago)
             if (arg.equalsIgnoreCase("sarcofago")){
-                // aggiunge medaglione alla stanza
-                currentRoom.getItems().add(items.get("medaglione del re"));
-                System.out.print("oggetti nella stanza: ");
-                // visualizza oggetti nella stanza
-                commandLook("oggetti");
+                if (player.getInventory().getItem("medaglione del re") == null) {
+                    System.out.println(desc);
+
+                    // aggiunge medaglione alla stanza
+                    currentRoom.getItems().add(items.get("medaglione del re"));
+                    System.out.print("oggetti nella stanza: ");
+                    // visualizza oggetti nella stanza
+                    commandLook("oggetti");
+                } else
+                    System.out.println("Infili la mano nella fessura... non c'è più niente qui");
             }
+            else
+                System.out.println(desc);
         }
     }
 

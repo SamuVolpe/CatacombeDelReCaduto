@@ -237,7 +237,7 @@ public class Player extends Entity{
         setRoom(allRooms.get(playerSave.getRoom()));
         if (playerSave.getArmor() != null)
             setArmor((Armor) allItems.get(playerSave.getArmor()));
-        if (playerSave.getArmor() != null)
+        if (playerSave.getWeapon() != null)
             setWeapon((Weapon) allItems.get(playerSave.getWeapon()));
         for (String itemName : playerSave.getInventory()){
             inventory.addItem(allItems.get(itemName));
@@ -279,6 +279,7 @@ public class Player extends Entity{
                 setHealth(getHealth() + ((Food) toUse).getHealthRecoveryAmount());
                 System.out.println("Vita dopo aver mangiato " + toUse.getName() + ": " + getHealth());
             } else if (toUse.getName().equalsIgnoreCase("medaglione del re")){
+                inventory.addItem(toUse);
                 // usabile solo se mi trovo nella stanza corretta
                 if (getRoom().getName().equalsIgnoreCase("altare")){
                     // verifico che non sia già stato utilizzato

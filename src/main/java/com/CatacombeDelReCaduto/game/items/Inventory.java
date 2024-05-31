@@ -53,25 +53,43 @@ public class Inventory {
     }
 
     /**
+     * Prende oggetto dall'inventario
+     *
+     * @param itemName il nome dell'oggetto da prendere
+     * @return l'oggetto, o null se l'oggetto non è presente
+     */
+    public Item getItem(String itemName){
+        // prende lista nell'inventario contenente quel tipo di oggetti
+        ArrayList<Item> list = inventory.get(itemName);
+        if (list != null) {
+            // se esiste ritorna il primo oggetto
+            return list.get(0);
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * Rimuove un oggetto dall'inventario.
      *
      * @param itemName il nome dell'oggetto da rimuovere
      * @return l'oggetto rimosso, o null se l'oggetto non è presente
      */
     public Item removeItem(String itemName) {
-        ArrayList<Item> list = inventory.get(itemName);
-        if (list != null) {
-            Item it = list.get(0);
-            currentWeight = currentWeight - it.getWeight();
-            if (list.size() == 1) {
-                inventory.remove(itemName);
-            } else {
-                list.remove(0);
-            }
-            return it;
-        } else {
-            return null;
+        // prende oggetto
+        Item item = getItem(itemName);
+        // se oggetto esiste
+        if (item != null){
+            // toglie peso da inventario
+            currentWeight = currentWeight - item.getWeight();
+            if (inventory.get(item.getName()).size() == 1)
+                // rimuove tutta la lista se l'oggetto è singolo
+                inventory.remove(item.getName());
+            else
+                // rimuove solo l'oggetto se ce ne sono più di uno
+                inventory.get(item.getName()).remove(0);
         }
+        return item;
     }
 
     /**

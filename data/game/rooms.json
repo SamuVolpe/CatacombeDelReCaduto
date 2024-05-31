@@ -75,7 +75,7 @@
 	"Corridoio lungo" : {
 		"description": "\"Il corridoio prosegue\"",
 		"dangerLevel": 4,
-		"nearRooms": [null, "Altare", "Corridoio", "Stanza della Chimera"],
+		"nearRooms": [null, "Altare", "Corridoio", "Stanza della chimera"],
 		"examinables" : {
 			"scrigno" : "Uno scrigno antico, coperto di polvere e ruggine, prometteva tesori nascosti.",
 			"gabbia" : "Sono le vecchie gabbie del regno dove mettevano i prigionieri",
@@ -91,7 +91,7 @@
 		"examinables" : {
 
 		},
-		"items" : ["armatura del re caduto"],
+		"items" : [],
 		"enemies" : ["chimera"]
 	},
 	"Altare" : {

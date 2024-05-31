@@ -18,6 +18,7 @@ public class Room {
     // nord,sud,est,ovest
     private Room[] nearRooms = null; //nord sud est ovest
     private List<Item> items = null;
+    // put con clone
     private Map<String, Enemy> enemies = null;
     private Map<String, String> examinables = null;
     // indica se il giocatore ha gia` visitato la stanza
@@ -159,7 +160,7 @@ public class Room {
 
         enemies = new TreeMap<>();
         for (String enemyKey : roomSave.getEnemies())
-            enemies.put(enemyKey, allEnemies.get(enemyKey));
+            enemies.put(enemyKey, allEnemies.get(enemyKey).clone());
 
         visited = roomSave.isVisited();
     }

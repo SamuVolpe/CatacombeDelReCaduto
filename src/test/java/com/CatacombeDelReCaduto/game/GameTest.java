@@ -79,6 +79,15 @@ class GameTest {
         assertTrue(outContent.toString().contains("Oggetto buttato"));
     }
 
+    @Test
+    void commandThrowMedallion() {
+        Item item = new Item("medaglione del re", "", 0);
+        inventory.addItem(item);
+
+        game.commandThrow("medaglione del re");
+        assertNotNull(inventory.getItem("medaglione del re"));
+    }
+
     //test di Equip
     @Test
     void commandEquipNotPresent() {
