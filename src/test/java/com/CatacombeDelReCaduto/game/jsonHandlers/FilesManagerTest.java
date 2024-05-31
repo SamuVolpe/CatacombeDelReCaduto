@@ -80,7 +80,7 @@ class FilesManagerTest {
     }
 
     @Test
-    void loadRoomsItemsEnemies() throws IOException {
+    void loadRoomsWithItemsEnemies() throws IOException {
         String json = "{\"Entrata\":{\"description\":\"descrizione entrata\",\"dangerLevel\":0,\"nearRooms\":[null,\"Stanza buia\",null,null],\"examinables\":{\"muro\":\"descrizione muro\",\"stendardo\":\"descrizione stendardo\"},\"items\":[],\"enemies\":[]}" +
                 ",\"Stanza buia\":{\"description\":\"descrizione stanza buia\",\"dangerLevel\":5,\"nearRooms\":[\"Entrata\",null,null,null],\"examinables\":{},\"items\":[\"mela\"],\"enemies\":[\"scheletro\",\"golem\"]}}\n";
         JsonNode rootNode = mapper.readTree(json);
