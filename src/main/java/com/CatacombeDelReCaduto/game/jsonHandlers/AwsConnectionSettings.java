@@ -7,10 +7,13 @@ import software.amazon.awssdk.regions.Region;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Classe di utilita` per la lettura dei dati di connessione ad AWS
+ */
 public class AwsConnectionSettings {
     public static final String DEFAULT_CONNECTION_FILE_PATH = FilesManager.GAME_ROOT + "\\" + "awsConnectionSettings.json";
 
-    // is loaded
+    // serve per verificare se e' gia` stata caricata una configurazione
     private static boolean loaded = false;
 
     // dati connessione
@@ -19,10 +22,19 @@ public class AwsConnectionSettings {
     private static Region region = null;
     private static String bucketName = null;
 
+    /**
+     * Carica dati dal file di default
+     * @throws IOException eccezione se la lettura non va a buon fine
+     */
     public static void load() throws IOException {
         load(DEFAULT_CONNECTION_FILE_PATH);
     }
 
+    /**
+     * Carica dati dal file dato
+     * @param filePath percorso file json da cui caricare i dati
+     * @throws IOException eccezione se la lettura non va a buon fine
+     */
     public static void load(String filePath) throws IOException{
         loaded = false;
         ObjectMapper objectMapper = new ObjectMapper();
@@ -35,6 +47,10 @@ public class AwsConnectionSettings {
         loaded = true;
     }
 
+    /**
+     * Verifica se e` gia` stata caricata una configurazione
+     * @return true se e` stata caricata, false altrimenti
+     */
     public static boolean isloaded(){
         return loaded;
     }

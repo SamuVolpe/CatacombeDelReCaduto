@@ -2,6 +2,9 @@ package com.CatacombeDelReCaduto.game.jsonHandlers;
 
 import java.util.List;
 
+/**
+ * Classe di utilita` per gestire il salvataggio del giocatore
+ */
 public class PlayerSave {
     private int health;
     private int score;

@@ -2,6 +2,9 @@ package com.CatacombeDelReCaduto.game.jsonHandlers;
 
 import java.util.List;
 
+/**
+ * Classe di utilita` per gestire il salvataggio di una stanza
+ */
 public class RoomSave {
     private List<String> items;
     private List<String> enemies;

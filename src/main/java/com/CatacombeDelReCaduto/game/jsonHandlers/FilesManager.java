@@ -4,7 +4,6 @@ import com.CatacombeDelReCaduto.game.entities.Enemy;
 import com.CatacombeDelReCaduto.game.entities.Player;
 import com.CatacombeDelReCaduto.game.items.*;
 import com.CatacombeDelReCaduto.game.rooms.Room;
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,10 +28,19 @@ public class FilesManager {
     public static final String ROOMS_FILE_PATH = GAME_ROOT + "\\rooms.json";
     public static final String SAVES_FILE_PATH = PLAYER_ROOT + "\\" + SAVES_FILE_NAME;
 
+    /**
+     * Ritorna il nome del file di salvataggio del gioco
+     * @param id id gioco
+     * @param name nome giocatore
+     * @return nome del file
+     */
     public static String gameFileName(long id, String name){
         return name + "_" + id + ".json";
     }
 
+    /**
+     * Crea cartella che contiene i dati di salvataggio se non esiste
+     */
     public static void makeSavesDir(){
         // crea cartella di salvataggio se non esiste
         File directory = new File(PLAYER_ROOT);
@@ -114,7 +122,7 @@ public class FilesManager {
     }
 
     /**
-     * Carica dati oggetti
+     * Carica dati oggetti dal file di default
      * @return map - key : identificativo oggetto, value : oggetto
      */
     public static Map<String, Item> loadItems(){
@@ -130,6 +138,11 @@ public class FilesManager {
         }
     }
 
+    /**
+     * Carica dati oggetti da JsonNode
+     * @param rootNode JsonNode contenente i dati da leggere
+     * @return map - key : identificativo oggetto, value : oggetto
+     */
     public static Map<String, Item> loadItems(JsonNode rootNode) {
         Map<String, Item> result = new TreeMap<>();
 
@@ -176,6 +189,12 @@ public class FilesManager {
         }
     }
 
+    /**
+     * Carica dati nemici da JsonNode
+     * @param rootNode JsonNode contenente i dati da leggere
+     * @param items tutti gli oggetti di gioco
+     * @return map - key : identificativo nemico, value : nemico
+     */
     public static Map<String, Enemy> loadEnemies(JsonNode rootNode, Map<String, Item> items) {
         Map<String, Enemy> result = new TreeMap<>();
 
@@ -236,6 +255,13 @@ public class FilesManager {
         }
     }
 
+    /**
+     * Carica dati stanze da JsonNode
+     * @param rootNode JsonNode contenente i dati da leggere
+     * @param items tutti gli oggetti di gioco
+     * @param enemies tutti i nemici di gioco
+     * @return map - key : identificativo stanza, value : stanza
+     */
     public static Map<String, Room> loadRooms(JsonNode rootNode, Map<String, Item> items, Map<String, Enemy> enemies) {
         Map<String, Room> result = new TreeMap<>();
         // mappa di supporto salvataggio nearRooms

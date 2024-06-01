@@ -2,12 +2,10 @@ package com.CatacombeDelReCaduto.game.jsonHandlers;
 
 import java.util.Map;
 
-// gestisce json salvataggio
+/**
+ * Classe di utilita` per gestire il salvataggio del gioco
+ */
 public class Save {
-    // da salvare come sono messe le stanze (oggetti dentro..)
-    // progressi con npc e storia
-    // dati giocatore
-
     private PlayerSave player;
     private Map<String, RoomSave> rooms;
 
