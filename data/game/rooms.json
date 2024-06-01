@@ -1,21 +1,21 @@
 {
 	"Entrata" : {
-		"description": "Sei in un’ampia stanza di pietra dalle pareti fredde e umide. Il soffitto basso è coperto di ragnatele, e il pavimento è cosparso di detriti e ossa.\nNell'aria densa si respira un odore di muffa e decomposizione, e il silenzio è rotto solo dal gocciolio dell'acqua che filtra dalle crepe nel soffitto.\nAll’entrata si può vedere lo stendardo del regno del re caduto.",
+		"description": "Sei in un'ampia stanza di pietra dalle pareti fredde e umide. Il soffitto basso è coperto di ragnatele, e il pavimento è cosparso di detriti e ossa.\nNell'aria densa si respira un odore di muffa e decomposizione, e il silenzio è rotto solo dal gocciolio dell'acqua che filtra dalle crepe nel soffitto.\nAll'entrata si può vedere lo stendardo del regno del re caduto.",
 		"dangerLevel": 0,
 		"nearRooms": [null, "Stanza buia", null, null],
 		"examinables" : {
-			"muro" : "Queste ragnatele e il muro fanno pensare che sia passato molto tempo dall’ultima visita",
-			"stendardo del re caduto" : "Lo stendardo del Re Caduto presenta un corvo nero, simbolo di morte e transizione, su un campo grigio, rappresentando il lutto e la tristezza.\n Il corvo tiene tra le sue zampe una corona spezzata, un ricordo del regno perduto. Questo stendardo, sebbene cupo, serve come un potente promemoria della caduta del re e della transitorietà del potere."
+			"muro" : "Queste ragnatele e il muro fanno pensare che sia passato molto tempo dall'ultima visita",
+			"stendardo del re caduto" : "Lo stendardo del Re Caduto presenta un corvo nero, simbolo di morte e transizione, su un campo grigio, rappresentando il lutto e la tristezza.\nIl corvo tiene tra le sue zampe una corona spezzata, un ricordo del regno perduto.\nQuesto stendardo, sebbene cupo, serve come un potente promemoria della caduta del re e della transitorietà del potere."
 		},
 		"items" : ["coltello arrugginito", "pane"],
 		"enemies" : []
 	},
 	"Stanza buia" : {
-		"description": "La stanza e’ buia ma scorgi un baule che potrebbe contenere qualcosa",
+		"description": "La stanza e' buia ma scorgi un baule che potrebbe contenere qualcosa",
 		"dangerLevel": 5,
-		"nearRooms": ["Entrata", "Stanza del sarcofago", null, "Gesta del re"],
+		"nearRooms": ["Entrata", "Stanza del sarcofago", "Gesta del re", null],
 		"examinables" : {
-			"baule" : "Controlla se ci sono oggetti nella stanza..."
+			"baule" : "Controlla se ci sono oggetti nella stanza."
 		},
 		"items" : ["mela", "coltello normale", "armatura arrugginita"],
 		"enemies" : ["scheletro", "scheletro pane"]
@@ -23,7 +23,7 @@
 	"Gesta del re" : {
 		"description": "La stanza presenta delle strane incisioni",
 		"dangerLevel": 9,
-		"nearRooms": [null, null, "Stanza buia", null],
+		"nearRooms": [null, null, null, "Stanza buia"],
 		"examinables" : {
 			"incisioni" : "Le incisioni sulle pareti narrano la storia del regno del Re Caduto, mostrando inizialmente scene di gloria e prosperità di Arindor.\nMan mano, le immagini diventano più oscure, raffigurando guerre, carestie e la crescente ossessione del re per il potere e l'immortalità.\nVerso la fine, le incisioni mostrano rituali magici proibiti e creature oscure, con iscrizioni che indicano la rovina portata dal re al suo popolo."
 
@@ -34,7 +34,7 @@
 	"Stanza del sarcofago" : {
 		"description": "Sei dentro la stanza del sarcofago del re, su un piedistallo di pietra, si erge un antico sarcofago coperto di polvere e ragnatele",
 		"dangerLevel": 2,
-		"nearRooms": ["Stanza buia", "Stanza del golem", "Stanza umida", "Corridoio"],
+		"nearRooms": ["Stanza buia", "Stanza del golem", "Corridoio", "Stanza umida"],
 		"examinables" : {
 			"sarcofago" : "Avvicinandoti, noti una stretta fessura sul lato del sarcofago. Infilando la mano, senti un oggetto freddo e metallico: il medaglione del re."
 		},
@@ -44,9 +44,9 @@
 	"Stanza umida" : {
 		"description": "La stanza si apre davanti a te, oscura e umida, con pareti coperte di muschio, oggetti abbandonati e sinistri scricchiolii che risuonano nell'aria.",
 		"dangerLevel": 3,
-		"nearRooms": [null, null, null, "Stanza del sarcofago"],
+		"nearRooms": [null, null, "Stanza del sarcofago", null],
 		"examinables" : {
-			"muro" : "Il muro è coperto di muschio e licheni, dando l’impressione di un luogo abbandonato.",
+			"muro" : "Il muro è coperto di muschio e licheni, dando l'impressione di un luogo abbandonato.",
 			"trappole" : "Le trappole sono già state innescate"
 		},
 		"items" : [],
@@ -65,7 +65,7 @@
 	"Corridoio" : {
 		"description": "La poca luce presente mi permette di scorgere tra i muri segni di artigli… Potrebbe esserci una creatura qui intorno.",
 		"dangerLevel": 4,
-		"nearRooms": [null, null, "Stanza del sarcofago", "Corridoio lungo"],
+		"nearRooms": [null, null, "Corridoio lungo", "Stanza del sarcofago"],
 		"examinables" : {
 			"candelabro" : "Un antico candelabro di ferro, con residui di cera indurita, usata nel passato per illuminare le catacombe."
 		},
@@ -75,7 +75,7 @@
 	"Corridoio lungo" : {
 		"description": "Il corridoio prosegue",
 		"dangerLevel": 4,
-		"nearRooms": [null, "Altare", "Corridoio", "Stanza della chimera"],
+		"nearRooms": [null, "Altare", "Stanza della chimera", "Corridoio"],
 		"examinables" : {
 			"scrigno" : "Uno scrigno antico, coperto di polvere e ruggine, prometteva tesori nascosti.",
 			"gabbia" : "Sono le vecchie gabbie del regno dove mettevano i prigionieri.",
@@ -85,9 +85,9 @@
 		"enemies" : ["scheletro", "ghoul"]
 	},
 	"Stanza della chimera" : {
-		"description": "C’è molto sangue e molti scheletri qua dentro, probabilmente il re utilizzò la stanza per esperimenti su delle creature.",
+		"description": "C'è molto sangue e molti scheletri qua dentro, probabilmente il re utilizzò la stanza per esperimenti su delle creature.",
 		"dangerLevel": 10,
-		"nearRooms": [null, null, "Corridoio lungo", null],
+		"nearRooms": [null, null, null, "Corridoio lungo"],
 		"examinables" : {
 
 		},
