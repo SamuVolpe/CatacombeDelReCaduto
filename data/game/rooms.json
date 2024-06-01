@@ -25,7 +25,7 @@
 		"dangerLevel": 9,
 		"nearRooms": [null, null, "Stanza buia", null],
 		"examinables" : {
-			"incisioni" : "Le incisioni sulle pareti narrano la storia del regno del Re Caduto, mostrando inizialmente scene di gloria e prosperità di Arindor.Man mano, le immagini diventano più oscure, raffigurando guerre, carestie e la crescente ossessione del re per il potere e l'immortalità.\nVerso la fine, le incisioni mostrano rituali magici proibiti e creature oscure, con iscrizioni che indicano la rovina portata dal re al suo popolo."
+			"incisioni" : "Le incisioni sulle pareti narrano la storia del regno del Re Caduto, mostrando inizialmente scene di gloria e prosperità di Arindor.\nMan mano, le immagini diventano più oscure, raffigurando guerre, carestie e la crescente ossessione del re per il potere e l'immortalità.\nVerso la fine, le incisioni mostrano rituali magici proibiti e creature oscure, con iscrizioni che indicano la rovina portata dal re al suo popolo."
 
 		},
 		"items" : [],
@@ -36,24 +36,24 @@
 		"dangerLevel": 2,
 		"nearRooms": ["Stanza buia", "Stanza del golem", "Stanza umida", "Corridoio"],
 		"examinables" : {
-			"sarcofago" : "Avvicinandoti, noti una stretta fessura sul lato del sarcofago. Infilando la mano, senti un oggetto freddo e metallico: il medaglione del re..."
+			"sarcofago" : "Avvicinandoti, noti una stretta fessura sul lato del sarcofago. Infilando la mano, senti un oggetto freddo e metallico: il medaglione del re."
 		},
 		"items" : [],
 		"enemies" : ["ragno","ragno spada"]
 	},
 	"Stanza umida" : {
-		"description": "\"La stanza si apre davanti a te, oscura e umida, con pareti coperte di muschio, oggetti abbandonati e sinistri scricchiolii che risuonano nell'aria.\"",
+		"description": "La stanza si apre davanti a te, oscura e umida, con pareti coperte di muschio, oggetti abbandonati e sinistri scricchiolii che risuonano nell'aria.",
 		"dangerLevel": 3,
 		"nearRooms": [null, null, null, "Stanza del sarcofago"],
 		"examinables" : {
-			"muro" : "Il muro è coperto di muschio e licheni, dando l’impressione di un luogo abbandonato",
+			"muro" : "Il muro è coperto di muschio e licheni, dando l’impressione di un luogo abbandonato.",
 			"trappole" : "Le trappole sono già state innescate"
 		},
 		"items" : [],
 		"enemies" : ["ghoul ascia armatura", "scheletro pane", "occhio errante mele spada","occhio errante"]
 	},
 	"Stanza del golem" : {
-		"description": "\"La stanza e' molto spaziosa e alta probabilmente contiene qualcosa di grande.\"",
+		"description": "La stanza e' molto spaziosa e alta probabilmente contiene qualcosa di grande.",
 		"dangerLevel": 10,
 		"nearRooms": ["Stanza del sarcofago", null, null, null],
 		"examinables" : {
@@ -63,29 +63,29 @@
 		"enemies" : ["golem"]
 	},
 	"Corridoio" : {
-		"description": "\"La poca luce presente mi permette di scorgere tra i muri segni di artigli… Potrebbe esserci una creatura qui intorno\"",
+		"description": "La poca luce presente mi permette di scorgere tra i muri segni di artigli… Potrebbe esserci una creatura qui intorno.",
 		"dangerLevel": 4,
 		"nearRooms": [null, null, "Stanza del sarcofago", "Corridoio lungo"],
 		"examinables" : {
-			"candelabro" : "Un antico candelabro di ferro, con residui di cera indurita, usata nel passato per illuminare le catacombe"
+			"candelabro" : "Un antico candelabro di ferro, con residui di cera indurita, usata nel passato per illuminare le catacombe."
 		},
 		"items" : ["ascia arrugginita", "mela", "spada normale"],
 		"enemies" : ["occhio errante", "occhio errante", "ragno"]
 	},
 	"Corridoio lungo" : {
-		"description": "\"Il corridoio prosegue\"",
+		"description": "Il corridoio prosegue",
 		"dangerLevel": 4,
 		"nearRooms": [null, "Altare", "Corridoio", "Stanza della chimera"],
 		"examinables" : {
 			"scrigno" : "Uno scrigno antico, coperto di polvere e ruggine, prometteva tesori nascosti.",
-			"gabbia" : "Sono le vecchie gabbie del regno dove mettevano i prigionieri",
-			"statuetta di pietra" : "La statuetta è finemente scolpita, nonostante sia ricoperta da uno strato di polvere e ragnatele. Raffigura il vecchio re"
+			"gabbia" : "Sono le vecchie gabbie del regno dove mettevano i prigionieri.",
+			"statuetta di pietra" : "La statuetta è finemente scolpita, nonostante sia ricoperta da uno strato di polvere e ragnatele. Raffigura il vecchio re."
 		},
 		"items" : ["armatura normale", "pane", "pane"],
 		"enemies" : ["scheletro", "ghoul"]
 	},
 	"Stanza della chimera" : {
-		"description": "\"C’è molto sangue e molti scheletri qua dentro, probabilmente il re utilizzò la stanza per esperimenti su delle creature\"",
+		"description": "C’è molto sangue e molti scheletri qua dentro, probabilmente il re utilizzò la stanza per esperimenti su delle creature.",
 		"dangerLevel": 10,
 		"nearRooms": [null, null, "Corridoio lungo", null],
 		"examinables" : {
@@ -95,7 +95,7 @@
 		"enemies" : ["chimera"]
 	},
 	"Altare" : {
-		"description": "La stanza dell'altare è avvolta da un'aura di mistero. Al centro, un antico altare di pietra è circondato da candele consumate e simboli incisi, di fianco un libro",
+		"description": "La stanza dell'altare è avvolta da un'aura di mistero. Al centro, un antico altare di pietra è circondato da candele consumate e simboli incisi, di fianco un libro.",
 		"dangerLevel": 0,
 		"nearRooms": ["Corridoio lungo", "Sala del tesoro", null, null],
 		"examinables" : {
