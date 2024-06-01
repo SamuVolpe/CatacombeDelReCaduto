@@ -524,8 +524,9 @@ public class Game {
                 if (player.getInventory().getItem("medaglione del re") == null) {
                     System.out.println(desc);
 
-                    // aggiunge medaglione alla stanza
-                    currentRoom.getItems().add(items.get("medaglione del re"));
+                    // aggiunge medaglione alla stanza se non presente
+                    if (currentRoom.getItems().stream().noneMatch(x -> x.getName().equals("medaglione del re")))
+                        currentRoom.getItems().add(items.get("medaglione del re"));
                     System.out.print("oggetti nella stanza: ");
                     // visualizza oggetti nella stanza
                     commandLook("oggetti");
