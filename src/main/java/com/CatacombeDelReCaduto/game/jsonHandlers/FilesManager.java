@@ -269,7 +269,7 @@ public class FilesManager {
             if (exNode != null) {
                 Map<String, String> examinables = new TreeMap<>();
                 exNode.fields().forEachRemaining(entry -> {
-                    examinables.put(entry.getKey(), entry.getValue().toString());
+                    examinables.put(entry.getKey(), entry.getValue().asText());
                 });
 
                 room.setExaminables(examinables);
