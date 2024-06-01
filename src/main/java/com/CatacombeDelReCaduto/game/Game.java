@@ -13,6 +13,9 @@ import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+/**
+ * Classe per la gestione della partita
+ */
 public class Game {
     // comandi di gioco
     private final List<Command> commands = List.of(

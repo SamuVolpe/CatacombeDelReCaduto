@@ -8,7 +8,7 @@ import com.CatacombeDelReCaduto.game.prompts.*;
 import java.util.List;
 
 /**
- * Mostra menu di gestione del gioco
+ * Mostra menu di gestione delle partite
  */
 public class MainMenu extends CommandMenu {
 
