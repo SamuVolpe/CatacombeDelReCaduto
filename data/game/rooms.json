@@ -4,6 +4,7 @@
 		"dangerLevel": 0,
 		"nearRooms": [null, "Stanza buia", null, null],
 		"examinables" : {
+			"intro": "Nel prospero regno di Arindor si trovano le Catacombe del Re Caduto, un oscuro labirinto creato dal malvagio Re Aric.\nOssessionato dall'immortalità, Aric utilizzò la magia oscura e compì orribili esperimenti, ma fu cacciato dal regno a causa del malcontento dei sudditi.\nRifugiatosi sottoterra con i suoi tesori, creò le catacombe e scomparve.\nAnni dopo, un giovane avventuriero decide di esplorare le catacombe alla ricerca di tesori e fortuna.",
 			"muro" : "Queste ragnatele e il muro fanno pensare che sia passato molto tempo dall'ultima visita",
 			"stendardo del re caduto" : "Lo stendardo del Re Caduto presenta un corvo nero, simbolo di morte e transizione, su un campo grigio, rappresentando il lutto e la tristezza.\nIl corvo tiene tra le sue zampe una corona spezzata, un ricordo del regno perduto.\nQuesto stendardo, sebbene cupo, serve come un potente promemoria della caduta del re e della transitorietà del potere."
 		},
