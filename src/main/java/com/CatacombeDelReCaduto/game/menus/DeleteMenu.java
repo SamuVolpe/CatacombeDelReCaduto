@@ -80,7 +80,7 @@ public class DeleteMenu extends Menu {
         }
 
         // elimina il file di gioco se esiste
-        file = new File(FilesManager.PLAYER_ROOT + "\\" + FilesManager.gameFileName(gameId, playerName));
+        file = new File(FilesManager.DATA_ROOT + "\\" + FilesManager.gameFileName(gameId, playerName));
         if (file.exists()) {
             boolean isDeleted = file.delete();
             if (!isDeleted) {
@@ -92,7 +92,7 @@ public class DeleteMenu extends Menu {
         // web
         try (BucketManager bucket = BucketManager.loadExistConnection()){
             // elimina file di gioco
-            bucket.deleteFile(FilesManager.gameFileName(gameId, playerName), FilesManager.PLAYER_ROOT + "\\" + FilesManager.gameFileName(gameId, playerName));
+            bucket.deleteFile(FilesManager.gameFileName(gameId, playerName), FilesManager.DATA_ROOT + "\\" + FilesManager.gameFileName(gameId, playerName));
             // aggiorna file salvataggi
             bucket.uploadFile(FilesManager.SAVES_FILE_NAME, FilesManager.SAVES_FILE_PATH);
         } catch (Exception e){

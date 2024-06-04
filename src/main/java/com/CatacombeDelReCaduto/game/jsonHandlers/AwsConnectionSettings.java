@@ -6,12 +6,13 @@ import software.amazon.awssdk.regions.Region;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Classe di utilita` per la lettura dei dati di connessione ad AWS
  */
 public class AwsConnectionSettings {
-    public static final String DEFAULT_CONNECTION_FILE_PATH = FilesManager.GAME_ROOT + "\\" + "awsConnectionSettings.json";
+    public static final String CONNECTION_FILE_PATH = "awsConnectionSettings.json";
 
     // serve per verificare se e' gia` stata caricata una configurazione
     private static boolean loaded = false;
@@ -27,24 +28,30 @@ public class AwsConnectionSettings {
      * @throws IOException eccezione se la lettura non va a buon fine
      */
     public static void load() throws IOException {
-        load(DEFAULT_CONNECTION_FILE_PATH);
+        loaded = false;
+        JsonNode rootNode = null;
+        // Carica il file dalle risorse
+        try (InputStream inputStream = AwsConnectionSettings.class.getClassLoader().getResourceAsStream(CONNECTION_FILE_PATH)) {
+            if (inputStream == null) {
+                throw new IOException("File not found in resources: " + CONNECTION_FILE_PATH);
+            }
+            ObjectMapper objectMapper = new ObjectMapper();
+            rootNode = objectMapper.readTree(inputStream);
+        }
+        // carica dati da JsonNode
+        load(rootNode);
+        loaded = true;
     }
 
     /**
      * Carica dati dal file dato
-     * @param filePath percorso file json da cui caricare i dati
-     * @throws IOException eccezione se la lettura non va a buon fine
+     * @param rootNode nodo json da cui caricare i dati
      */
-    public static void load(String filePath) throws IOException{
-        loaded = false;
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode rootNode = objectMapper.readTree(new File(filePath));
-
+    private static void load(JsonNode rootNode) {
         accessKey = rootNode.get("accessKey").asText();
         secretKey = rootNode.get("secretKey").asText();
         region = Region.of(rootNode.get("region").asText());
         bucketName = rootNode.get("bucketName").asText();
-        loaded = true;
     }
 
     /**

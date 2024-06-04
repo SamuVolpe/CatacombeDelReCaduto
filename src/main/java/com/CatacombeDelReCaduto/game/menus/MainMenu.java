@@ -63,7 +63,7 @@ public class MainMenu extends CommandMenu {
         // scarica file di gioco scelto aggiornato
         try (BucketManager bucket = BucketManager.loadExistConnection()){
             bucket.downloadFile(FilesManager.gameFileName(chosedGame.getKey(), chosedGame.getValue())
-                    , FilesManager.PLAYER_ROOT + "\\" + FilesManager.gameFileName(chosedGame.getKey(), chosedGame.getValue()));
+                    , FilesManager.DATA_ROOT + "\\" + FilesManager.gameFileName(chosedGame.getKey(), chosedGame.getValue()));
         }catch (Exception e){
             System.out.println("Impossibile scaricare il file di gioco");
             e.printStackTrace();

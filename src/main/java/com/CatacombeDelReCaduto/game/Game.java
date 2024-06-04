@@ -315,7 +315,7 @@ public class Game {
             // carica file
             try (BucketManager bucket = BucketManager.loadExistConnection()) {
                 // aggiorna file salvataggio
-                bucket.uploadFile(player.getSaveFileName(), FilesManager.PLAYER_ROOT + "\\" + player.getSaveFileName());
+                bucket.uploadFile(player.getSaveFileName(), FilesManager.DATA_ROOT + "\\" + player.getSaveFileName());
             }
             System.out.println("Gioco salvato");
         }catch (Exception e){

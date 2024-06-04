@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 
 /**
@@ -18,15 +19,13 @@ import java.util.*;
 public class FilesManager {
     // folders
     public static final String DATA_ROOT = "data";
-    public static final String PLAYER_ROOT = DATA_ROOT + "\\player";
-    public static final String GAME_ROOT = DATA_ROOT + "\\game";
 
     // files
     public static final String SAVES_FILE_NAME = "saves.json";
-    public static final String ITEMS_FILE_PATH = GAME_ROOT + "\\items.json";
-    public static final String ENEMIES_FILE_PATH = GAME_ROOT + "\\enemies.json";
-    public static final String ROOMS_FILE_PATH = GAME_ROOT + "\\rooms.json";
-    public static final String SAVES_FILE_PATH = PLAYER_ROOT + "\\" + SAVES_FILE_NAME;
+    public static final String ITEMS_FILE_PATH = "items.json";
+    public static final String ENEMIES_FILE_PATH = "enemies.json";
+    public static final String ROOMS_FILE_PATH = "rooms.json";
+    public static final String SAVES_FILE_PATH = DATA_ROOT + "\\" + SAVES_FILE_NAME;
 
     /**
      * Ritorna il nome del file di salvataggio del gioco
@@ -43,7 +42,7 @@ public class FilesManager {
      */
     public static void makeSavesDir(){
         // crea cartella di salvataggio se non esiste
-        File directory = new File(PLAYER_ROOT);
+        File directory = new File(DATA_ROOT);
         if (!directory.exists()) {
             boolean maked = directory.mkdir();
             if (!maked)
@@ -101,7 +100,7 @@ public class FilesManager {
     public static void saveGame (String saveFileName, Save save) {
         ObjectMapper mapper = new ObjectMapper();
         try {
-            mapper.writeValue(new File(PLAYER_ROOT + "\\" + saveFileName), save);
+            mapper.writeValue(new File(DATA_ROOT + "\\" + saveFileName), save);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -115,7 +114,7 @@ public class FilesManager {
     public static Save loadGame(String loadFileName) {
         ObjectMapper mapper = new ObjectMapper();
         try {
-            return mapper.readValue(new File(PLAYER_ROOT + "\\" + loadFileName), Save.class);
+            return mapper.readValue(new File(DATA_ROOT + "\\" + loadFileName), Save.class);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -126,16 +125,21 @@ public class FilesManager {
      * @return map - key : identificativo oggetto, value : oggetto
      */
     public static Map<String, Item> loadItems(){
-        // Crea un ObjectMapper
-        ObjectMapper mapper = new ObjectMapper();
-
-        try {
-            // Leggi il file JSON e converti in JsonNode
-            JsonNode rootNode = mapper.readTree(new File(ITEMS_FILE_PATH));
-            return loadItems(rootNode);
+        JsonNode rootNode = null;
+        // carica il file json dalle risorse
+        try (InputStream inputStream = FilesManager.class.getClassLoader().getResourceAsStream(ITEMS_FILE_PATH)) {
+            if (inputStream == null) {
+                throw new IOException("File not found in resources: " + ITEMS_FILE_PATH);
+            }
+            // leggi il file
+            ObjectMapper mapper = new ObjectMapper();
+            rootNode = mapper.readTree(inputStream);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        // carica oggetti
+        return loadItems(rootNode);
     }
 
     /**
@@ -177,16 +181,21 @@ public class FilesManager {
      * @return map - key : identificativo nemico, value : nemico
      */
     public static Map<String, Enemy> loadEnemies(Map<String, Item> items){
-        // Crea un ObjectMapper
-        ObjectMapper mapper = new ObjectMapper();
-
-        try {
-            // Leggi il file JSON e converti in JsonNode
-            JsonNode rootNode = mapper.readTree(new File(ENEMIES_FILE_PATH));
-            return loadEnemies(rootNode, items);
+        JsonNode rootNode = null;
+        // carica il file json dalle risorse
+        try (InputStream inputStream = FilesManager.class.getClassLoader().getResourceAsStream(ENEMIES_FILE_PATH)) {
+            if (inputStream == null) {
+                throw new IOException("File not found in resources: " + ENEMIES_FILE_PATH);
+            }
+            // leggi il file
+            ObjectMapper mapper = new ObjectMapper();
+            rootNode = mapper.readTree(inputStream);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        // carica nemici
+        return loadEnemies(rootNode, items);
     }
 
     /**
@@ -243,16 +252,21 @@ public class FilesManager {
      */
     public static Map<String, Room> loadRooms(Map<String, Item> items, Map<String, Enemy> enemies)
     {
-        // Crea un ObjectMapper
-        ObjectMapper mapper = new ObjectMapper();
-
-        try {
-            // Leggi il file JSON e converti in JsonNode
-            JsonNode rootNode = mapper.readTree(new File(ROOMS_FILE_PATH));
-            return loadRooms(rootNode, items, enemies);
+        JsonNode rootNode = null;
+        // carica il file json dalle risorse
+        try (InputStream inputStream = FilesManager.class.getClassLoader().getResourceAsStream(ROOMS_FILE_PATH)) {
+            if (inputStream == null) {
+                throw new IOException("File not found in resources: " + ROOMS_FILE_PATH);
+            }
+            // leggi il file
+            ObjectMapper mapper = new ObjectMapper();
+            rootNode = mapper.readTree(inputStream);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        // carica stanze
+        return loadRooms(rootNode, items, enemies);
     }
 
     /**
