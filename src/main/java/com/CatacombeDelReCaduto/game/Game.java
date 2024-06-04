@@ -170,6 +170,10 @@ public class Game {
             // aggiorna file salvataggi
             bucket.uploadFile(FilesManager.SAVES_FILE_NAME, FilesManager.SAVES_FILE_PATH);
         }
+
+        // stampa intro
+        commandExamine("intro");
+        System.out.println();
     }
 
     /**
