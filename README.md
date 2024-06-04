@@ -1,8 +1,7 @@
 # CatacombeDelReCaduto
 Gioco d'avventura testuale ambientato nelle oscure catacombe del Re caduto del regno di Arindor.
 
-Per giocare è necessaria una connessione ad internet i progressi vengono salvati su AWS s3 bucket sul bucket configurato
-in src/main/resources/awsConnectionSettings.json.
+Per giocare è necessaria una connessione ad internet i progressi vengono salvati su AWS s3 bucket.
 
 Il gioco è avviabile dal file out/artifacts/CatacombeDelReCaduto_jar/CatacombeDelReCaduto.jar
 tramite cmd con il comando : "java -jar CatacombeDelReCaduto.jar" o se supportato con il doppio click sul file.
