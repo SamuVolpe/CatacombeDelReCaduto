@@ -169,6 +169,8 @@ public class Game {
         try (BucketManager bucket = BucketManager.loadExistConnection()){
             // aggiorna file salvataggi
             bucket.uploadFile(FilesManager.SAVES_FILE_NAME, FilesManager.SAVES_FILE_PATH);
+        }catch (IllegalArgumentException e){
+            // il gioco è offline
         }
     }
 
@@ -316,7 +318,10 @@ public class Game {
             try (BucketManager bucket = BucketManager.loadExistConnection()) {
                 // aggiorna file salvataggio
                 bucket.uploadFile(player.getSaveFileName(), FilesManager.DATA_ROOT + "\\" + player.getSaveFileName());
+            }catch (IllegalArgumentException e){
+                // il gioco è offline
             }
+
             System.out.println("Gioco salvato");
         }catch (Exception e){
             System.out.println("Impossibile salvare il gioco");

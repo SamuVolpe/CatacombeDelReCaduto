@@ -64,7 +64,9 @@ public class MainMenu extends CommandMenu {
         try (BucketManager bucket = BucketManager.loadExistConnection()){
             bucket.downloadFile(FilesManager.gameFileName(chosedGame.getKey(), chosedGame.getValue())
                     , FilesManager.DATA_ROOT + "\\" + FilesManager.gameFileName(chosedGame.getKey(), chosedGame.getValue()));
-        }catch (Exception e){
+        }catch (IllegalArgumentException e){
+            // il gioco è offline
+        } catch (Exception e){
             System.out.println("Impossibile scaricare il file di gioco");
             e.printStackTrace();
             return false;

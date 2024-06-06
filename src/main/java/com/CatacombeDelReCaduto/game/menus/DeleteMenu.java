@@ -95,6 +95,8 @@ public class DeleteMenu extends Menu {
             bucket.deleteFile(FilesManager.gameFileName(gameId, playerName), FilesManager.DATA_ROOT + "\\" + FilesManager.gameFileName(gameId, playerName));
             // aggiorna file salvataggi
             bucket.uploadFile(FilesManager.SAVES_FILE_NAME, FilesManager.SAVES_FILE_PATH);
+        }catch (IllegalArgumentException e){
+            // il gioco è offline
         } catch (Exception e){
             e.printStackTrace();
         }

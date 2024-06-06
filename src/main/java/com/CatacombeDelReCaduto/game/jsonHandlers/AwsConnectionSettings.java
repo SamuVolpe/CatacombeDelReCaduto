@@ -14,7 +14,7 @@ import java.io.InputStream;
 public class AwsConnectionSettings {
     public static final String CONNECTION_FILE_PATH = "awsConnectionSettings.json";
 
-    // serve per verificare se e' gia` stata caricata una configurazione
+    // serve per verificare se e' gia` stata caricata una configurazione valida
     private static boolean loaded = false;
 
     // dati connessione
@@ -28,19 +28,14 @@ public class AwsConnectionSettings {
      * @throws IOException eccezione se la lettura non va a buon fine
      */
     public static void load() throws IOException {
-        loaded = false;
+        setLoaded(false);
         JsonNode rootNode = null;
         // Carica il file dalle risorse
-        try (InputStream inputStream = AwsConnectionSettings.class.getClassLoader().getResourceAsStream(CONNECTION_FILE_PATH)) {
-            if (inputStream == null) {
-                throw new IOException("File not found in resources: " + CONNECTION_FILE_PATH);
-            }
-            ObjectMapper objectMapper = new ObjectMapper();
-            rootNode = objectMapper.readTree(inputStream);
-        }
+        File file = new File(CONNECTION_FILE_PATH);
+        ObjectMapper objectMapper = new ObjectMapper();
+        rootNode = objectMapper.readTree(file);
         // carica dati da JsonNode
         load(rootNode);
-        loaded = true;
     }
 
     /**
@@ -61,6 +56,12 @@ public class AwsConnectionSettings {
     public static boolean isloaded(){
         return loaded;
     }
+
+    /**
+     * Segnala che la configurazione caricata è valida
+     * @param loaded true se valida
+     */
+    public static void setLoaded(boolean loaded) { AwsConnectionSettings.loaded = loaded; }
 
     public static String getAccessKey() {
         return accessKey;
