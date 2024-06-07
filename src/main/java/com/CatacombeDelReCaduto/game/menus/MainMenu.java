@@ -60,18 +60,6 @@ public class MainMenu extends CommandMenu {
         if (chosedGame == null)
             return false;
 
-        // scarica file di gioco scelto aggiornato
-        try (BucketManager bucket = BucketManager.loadExistConnection()){
-            bucket.downloadFile(FilesManager.gameFileName(chosedGame.getKey(), chosedGame.getValue())
-                    , FilesManager.DATA_ROOT + "\\" + FilesManager.gameFileName(chosedGame.getKey(), chosedGame.getValue()));
-        }catch (IllegalArgumentException e){
-            // il gioco è offline
-        } catch (Exception e){
-            System.out.println("Impossibile scaricare il file di gioco");
-            e.printStackTrace();
-            return false;
-        }
-
         // carica dati gioco
         Game game = new Game(chosedGame.getKey(), chosedGame.getValue());
         // avvia gioco

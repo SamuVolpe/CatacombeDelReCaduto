@@ -7,6 +7,7 @@ import com.CatacombeDelReCaduto.game.menus.MainMenu;
 import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
 
 import java.io.File;
+import java.util.Map;
 
 /**
  * Classe di avvio del gioco.
@@ -19,17 +20,19 @@ public class Main {
 
             // Scarica il file di salvataggio se esiste
             try (BucketManager bucket = BucketManager.loadConnection()){
-                bucket.downloadFile(FilesManager.SAVES_FILE_NAME, FilesManager.SAVES_FILE_PATH);
+                System.out.println("Connessione con AWS...");
+                //sync saves
+                if (bucket.syncFile(FilesManager.SAVES_FILE_NAME, FilesManager.SAVES_FILE_PATH)){
+                    //sync all files se saves è stato sincronizzato
+                    Map<Long, String> games = FilesManager.loadGames();
+                    for (var game : games.entrySet()){
+                        bucket.syncFile(FilesManager.gameFileName(game.getKey(), game.getValue()),
+                                FilesManager.DATA_ROOT + "\\" + FilesManager.gameFileName(game.getKey(), game.getValue()));
+                    }
+                }
                 AwsConnectionSettings.setLoaded(true);
-            }
-            catch (NoSuchKeyException e) {
-                // Se il file di configurazione non è trovato, elimina il file di salvataggio se esiste
-                File savesFile = new File(FilesManager.SAVES_FILE_PATH);
-                if (savesFile.exists())
-                    savesFile.delete();
-                AwsConnectionSettings.setLoaded(true);
-            }
-            catch (Exception e){
+                System.out.println("Connessione con AWS avvenuta con successo");
+            } catch (Exception e){
                 AwsConnectionSettings.setLoaded(false);
                 System.out.println("Impossibile connettersi ad AWS. Il gioco verrà avviato in modalità offline.");
             }

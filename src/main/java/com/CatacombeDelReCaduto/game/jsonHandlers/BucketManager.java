@@ -10,7 +10,10 @@ import software.amazon.awssdk.services.s3.model.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.attribute.FileTime;
+import java.time.Instant;
 
 /**
  * Gestisce la connessione con Amazon S3.
@@ -106,6 +109,57 @@ public class BucketManager implements AutoCloseable {
 
         s3Client.deleteObject(deleteObjectRequest);
         logger.info(deleteFilePath + " deleted");
+    }
+
+    /**
+     * Sincronizza un file locale con quello su S3.
+     *
+     * @param key La chiave (nome) del file su S3.
+     * @param localFilePath Il percorso del file locale.
+     * @return true se il file è stato sincronizzato, false se il file non esiste in locale/bucket
+     */
+    public boolean syncFile(String key, String localFilePath) {
+        File localFile = new File(localFilePath);
+        try {
+            // Recupera i metadati del file su S3
+            HeadObjectRequest headObjectRequest = HeadObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(key)
+                    .build();
+            HeadObjectResponse headObjectResponse = s3Client.headObject(headObjectRequest);
+            Instant s3LastModified = headObjectResponse.lastModified();
+
+            // Recupera i metadati del file locale
+            Instant localLastModified = null;
+            if (localFile.exists()) {
+                FileTime localLastModifiedTime = Files.getLastModifiedTime(Paths.get(localFilePath));
+                localLastModified = localLastModifiedTime.toInstant();
+            }
+
+            // Confronta le date di modifica e sincronizza
+            if (localLastModified == null || s3LastModified.isAfter(localLastModified)) {
+                downloadFile(key, localFilePath);
+                logger.info("File synchronized: downloaded from S3");
+            } else if (s3LastModified.isBefore(localLastModified)) {
+                uploadFile(key, localFilePath);
+                logger.info("File synchronized: uploaded to S3");
+            } else {
+                logger.info("File is already synchronized");
+            }
+        } catch (NoSuchKeyException e) {
+            // Se il file non esiste su S3, lo carica
+            if (localFile.exists()) {
+                uploadFile(key, localFilePath);
+                logger.info("File uploaded to S3 as it did not exist");
+            }else {
+                logger.info("File doesn't exist local and in the bucket");
+                return false;
+            }
+        } catch (IOException e) {
+            logger.error("Error in synchronizing file", e);
+            throw new RuntimeException(e);
+        }
+        return true;
     }
 
     /**

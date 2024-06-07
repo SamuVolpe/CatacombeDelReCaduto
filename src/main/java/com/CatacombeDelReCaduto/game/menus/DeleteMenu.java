@@ -99,6 +99,7 @@ public class DeleteMenu extends Menu {
             // il gioco è offline
         } catch (Exception e){
             e.printStackTrace();
+            System.out.println("Impossibile eliminare la partita su AWS");
         }
     }
 }
