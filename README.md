@@ -3,10 +3,13 @@ Gioco d'avventura testuale ambientato nelle oscure catacombe del Re caduto del r
 
 ### Requisiti
 Versione di Java minima : Java 16.
-Per giocare è necessaria una connessione ad internet, i progressi vengono salvati su AWS s3 bucket.
+
+### Configurazione AWS s3 bucket
+Per giocare salvando su AWS s3 bucket è necessario creare e configurare un file "awsConnectionSettings.json",
+vedi il file d'esempio "CatacombeDelReCaduto/awsConnectionSettings.json".
 
 ### Avvio del gioco
-Il gioco è avviabile dal file out/artifacts/CatacombeDelReCaduto_jar/CatacombeDelReCaduto.jar
+Il gioco è avviabile dal file "out/artifacts/CatacombeDelReCaduto_jar/CatacombeDelReCaduto.jar"
 tramite cmd con il comando : "java -jar CatacombeDelReCaduto.jar" o se supportato con il doppio click sul file.
 
 ### Istruzioni sul gioco
