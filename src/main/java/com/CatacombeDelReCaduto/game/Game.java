@@ -169,6 +169,11 @@ public class Game {
         try (BucketManager bucket = BucketManager.loadExistConnection()){
             // aggiorna file salvataggi
             bucket.uploadFile(FilesManager.SAVES_FILE_NAME, FilesManager.SAVES_FILE_PATH);
+        }catch (IllegalArgumentException e){
+            // il gioco è offline
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println("Impossibile salvare il nuovo gioco su AWS");
         }
 
         // stampa intro
@@ -298,34 +303,35 @@ public class Game {
      */
     private void commandSave() {
         // salva gioco su file
-        try {
-            // dati giocatore da salvare
-            PlayerSave playerSave = player.save();
+        // dati giocatore da salvare
+        PlayerSave playerSave = player.save();
 
-            // dati stanze da salvare
-            Map<String, RoomSave> roomsSave = new TreeMap<>();
-            for (var entry : rooms.entrySet()) {
-                roomsSave.put(entry.getKey(), entry.getValue().save());
-            }
-
-            // crea Salvataggio
-            Save save = new Save();
-            save.setPlayer(playerSave);
-            save.setRooms(roomsSave);
-
-            // salva sul file
-            FilesManager.saveGame(player.getSaveFileName(), save);
-
-            // carica file
-            try (BucketManager bucket = BucketManager.loadExistConnection()) {
-                // aggiorna file salvataggio
-                bucket.uploadFile(player.getSaveFileName(), FilesManager.DATA_ROOT + "\\" + player.getSaveFileName());
-            }
-            System.out.println("Gioco salvato");
-        }catch (Exception e){
-            System.out.println("Impossibile salvare il gioco");
-            e.printStackTrace();
+        // dati stanze da salvare
+        Map<String, RoomSave> roomsSave = new TreeMap<>();
+        for (var entry : rooms.entrySet()) {
+            roomsSave.put(entry.getKey(), entry.getValue().save());
         }
+
+        // crea Salvataggio
+        Save save = new Save();
+        save.setPlayer(playerSave);
+        save.setRooms(roomsSave);
+
+        // salva sul file
+        FilesManager.saveGame(player.getSaveFileName(), save);
+
+        // carica file
+        try (BucketManager bucket = BucketManager.loadExistConnection()) {
+            // aggiorna file salvataggio
+            bucket.uploadFile(player.getSaveFileName(), FilesManager.DATA_ROOT + "\\" + player.getSaveFileName());
+        } catch (IllegalArgumentException e) {
+            // il gioco è offline
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Impossibile salvare il gioco su AWS, controllare la connessione");
+        }
+
+        System.out.println("Gioco salvato");
     }
 
     /**
