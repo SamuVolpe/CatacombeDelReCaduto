@@ -5,7 +5,7 @@ Gioco d'avventura testuale ambientato nelle oscure catacombe del Re caduto del r
 Versione di Java minima : Java 16.
 
 ### Configurazione AWS s3 bucket
-Per giocare salvando su AWS s3 bucket è necessario creare e configurare un file "awsConnectionSettings.json",
+Per giocare salvando su AWS s3 bucket è necessario creare e configurare un file "awsConnectionSettings.json" nella cartella di avvio del programma,
 vedi il file d'esempio "CatacombeDelReCaduto/awsConnectionSettings.json".
 
 ### Avvio del gioco
