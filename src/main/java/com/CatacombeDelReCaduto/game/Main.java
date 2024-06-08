@@ -4,9 +4,7 @@ import com.CatacombeDelReCaduto.game.jsonHandlers.AwsConnectionSettings;
 import com.CatacombeDelReCaduto.game.jsonHandlers.BucketManager;
 import com.CatacombeDelReCaduto.game.jsonHandlers.FilesManager;
 import com.CatacombeDelReCaduto.game.menus.MainMenu;
-import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
 
-import java.io.File;
 import java.util.Map;
 
 /**

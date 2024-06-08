@@ -1,8 +1,6 @@
 package com.CatacombeDelReCaduto.game.menus;
 
 import com.CatacombeDelReCaduto.game.Game;
-import com.CatacombeDelReCaduto.game.jsonHandlers.BucketManager;
-import com.CatacombeDelReCaduto.game.jsonHandlers.FilesManager;
 import com.CatacombeDelReCaduto.game.prompts.*;
 
 import java.util.List;

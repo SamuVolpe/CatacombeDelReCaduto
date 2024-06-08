@@ -6,7 +6,6 @@ import software.amazon.awssdk.regions.Region;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * Classe di utilita` per la lettura dei dati di connessione ad AWS
